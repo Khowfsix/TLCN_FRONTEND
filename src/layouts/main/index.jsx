@@ -1,17 +1,23 @@
-import Header from './header';
-import Footer from './footer';
-import Menu from './menu';
 import { Box } from '@mui/material';
 import PropTypes from 'prop-types';
+
+import Header from './header';
+import Footer from './footer';
+import SideBar from './sidebar';
+import Rightbar from './rightbar';
+import Navbar from './navbar';
 
 function MainLayout({ children }) {
 	return (
 		<Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
-			<Header />
 			<Box sx={{ display: 'flex', height: 1 }}>
-				<Menu />
+				<Header />
+
+				<SideBar />
 
 				<Box>{children}</Box>
+
+				<Rightbar />
 
 				<Footer />
 			</Box>

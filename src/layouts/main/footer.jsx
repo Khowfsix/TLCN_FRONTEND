@@ -1,16 +1,12 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Toolbar, Typography } from '@mui/material';
 
 function Footer() {
-  return (
-    <AppBar position="static" color="primary">
-      <Toolbar>
-        <Typography variant="body1" color="inherit">
-          This is the footer
-        </Typography>
-      </Toolbar>
-    </AppBar>
-  );
+	return (
+		<Box>
+			<p>FOOTER</p>
+		</Box>
+	);
 }
 
 export default Footer;
