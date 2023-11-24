@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import Header from './header';
@@ -9,19 +9,19 @@ import Navbar from './navbar';
 
 function MainLayout({ children }) {
 	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
-			<Box sx={{ display: 'flex', height: 1 }}>
-				<Header />
+		<Stack>
+			<Header />
+			<SideBar />
 
-				<SideBar />
-
+			{/* content */}
+			<Stack direction="row" spacing={5} justifyContent={'center'}>
+				<Navbar />
 				<Box>{children}</Box>
-
 				<Rightbar />
+			</Stack>
 
-				<Footer />
-			</Box>
-		</Box>
+			<Footer />
+		</Stack>
 	);
 }
 

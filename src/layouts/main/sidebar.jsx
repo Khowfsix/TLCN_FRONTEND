@@ -2,7 +2,7 @@ import { AppBar, Box } from '@mui/material';
 
 function SideBar() {
 	return (
-		<Box>
+		<Box sx={{ backgroundColor: 'pink' }}>
 			<p>SideBar</p>
 		</Box>
 	);

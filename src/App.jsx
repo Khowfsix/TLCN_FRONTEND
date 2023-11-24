@@ -11,7 +11,7 @@ function App() {
 
 	return (
 		<>
-			<MainLayout>LAYOUT</MainLayout>
+			<MainLayout>LOAD CONTENT</MainLayout>
 		</>
 	);
 }

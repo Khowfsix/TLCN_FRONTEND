@@ -2,7 +2,7 @@ import { AppBar, Box } from '@mui/material';
 
 function Rightbar() {
 	return (
-		<Box>
+		<Box sx={{ backgroundColor: 'orange' }}>
 			<p>RIGHTBAR</p>
 		</Box>
 	);
