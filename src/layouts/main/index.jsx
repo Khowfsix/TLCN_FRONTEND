@@ -6,13 +6,13 @@ import Topbar from '../components/topbar/Topbar';
 
 function MainLayout({ children }) {
 	return (
-		<Container>
+		<>
 			<Topbar />
 			<div className="container">
 				<Sidebar />
-				{children}
+				<div className="content">CONTENT</div>
 			</div>
-		</Container>
+		</>
 	);
 }
 
