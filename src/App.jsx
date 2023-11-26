@@ -5,20 +5,15 @@ import { useState } from 'react';
 
 import './App.css';
 import MainLayout from './layouts/main';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
+import { router } from './routes';
 
 function App() {
 	const [count, setCount] = useState(0);
 
 	return (
 		<>
-			<BrowserRouter>
-				<Routes>
-					<Route path="/" element={<MainLayout />}>
-						LOAD CONTENT
-					</Route>
-				</Routes>
-			</BrowserRouter>
+			<RouterProvider router={router} />
 		</>
 	);
 }
