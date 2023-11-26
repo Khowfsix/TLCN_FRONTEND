@@ -1,8 +1,9 @@
 # React + Vite
 
 How to run:
-`
+`shell
   npm i
+  
   npm run dev
 `
 
