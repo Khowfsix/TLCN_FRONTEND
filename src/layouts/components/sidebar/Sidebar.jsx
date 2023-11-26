@@ -13,13 +13,14 @@ import {
 	WorkOutline,
 	Report,
 } from '@material-ui/icons';
+import { Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 export default function Sidebar() {
 	return (
-		<div className="sidebar">
-			<div className="sidebarWrapper">
-				<div className="sidebarMenu">
+		<Box className="sidebar">
+			<Box className="sidebarWrapper">
+				<Box className="sidebarMenu">
 					<h3 className="sidebarTitle">Dashboard</h3>
 					<ul className="sidebarList">
 						<Link to="/" className="link">
@@ -37,8 +38,8 @@ export default function Sidebar() {
 							Sales
 						</li>
 					</ul>
-				</div>
-				<div className="sidebarMenu">
+				</Box>
+				<Box className="sidebarMenu">
 					<h3 className="sidebarTitle">Quick Menu</h3>
 					<ul className="sidebarList">
 						<Link to="/users" className="link">
@@ -62,8 +63,8 @@ export default function Sidebar() {
 							Reports
 						</li>
 					</ul>
-				</div>
-				<div className="sidebarMenu">
+				</Box>
+				<Box className="sidebarMenu">
 					<h3 className="sidebarTitle">Notifications</h3>
 					<ul className="sidebarList">
 						<li className="sidebarListItem">
@@ -79,8 +80,8 @@ export default function Sidebar() {
 							Messages
 						</li>
 					</ul>
-				</div>
-				<div className="sidebarMenu">
+				</Box>
+				<Box className="sidebarMenu">
 					<h3 className="sidebarTitle">Staff</h3>
 					<ul className="sidebarList">
 						<li className="sidebarListItem">
@@ -96,8 +97,8 @@ export default function Sidebar() {
 							Reports
 						</li>
 					</ul>
-				</div>
-			</div>
-		</div>
+				</Box>
+			</Box>
+		</Box>
 	);
 }

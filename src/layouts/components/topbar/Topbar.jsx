@@ -1,34 +1,37 @@
 import React from 'react';
 import './topbar.css';
 import { NotificationsNone, Language, Settings } from '@material-ui/icons';
+import { Box } from '@mui/material';
+import { Typography } from '@mui/material';
+import { Avatar } from '@mui/material';
 
 function Topbar() {
 	return (
-		<div className="topbar">
-			<div className="topbarWrapper">
-				<div className="topLeft">
-					<span className="logo">lamaadmin</span>
-				</div>
-				<div className="topRight">
-					<div className="topbarIconContainer">
+		<Box className="topbar">
+			<Box className="topbarWrapper">
+				<Box className="topLeft">
+					<Typography className="logo">lamaadmin</Typography>
+				</Box>
+				<Box className="topRight">
+					<Box className="topbarIconContainer">
 						<NotificationsNone />
-						<span className="topIconBadge">2</span>
-					</div>
-					<div className="topbarIconContainer">
+						<Typography className="topIconBadge">2</Typography>
+					</Box>
+					<Box className="topbarIconContainer">
 						<Language />
-						<span className="topIconBadge">2</span>
-					</div>
-					<div className="topbarIconContainer">
+						<Typography className="topIconBadge">2</Typography>
+					</Box>
+					<Box className="topbarIconContainer">
 						<Settings />
-					</div>
-					<img
+					</Box>
+					<Avatar
 						src="https://images.pexels.com/photos/1526814/pexels-photo-1526814.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
 						alt=""
 						className="topAvatar"
 					/>
-				</div>
-			</div>
-		</div>
+				</Box>
+			</Box>
+		</Box>
 	);
 }
 
