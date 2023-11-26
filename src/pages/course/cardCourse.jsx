@@ -6,16 +6,18 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-export default function cardCourse(props) {
+export default function CardCourse(props) {
 	return (
 		<Card sx={{ maxWidth: 345 }}>
-			<CardMedia sx={{ height: 140 }} image={props.img} title="green iguana" />
+			<CardMedia sx={{ height: 140 }} image="https://source.unsplash.com/random" title="green iguana" />
 			<CardContent>
-				<Typography gutterBottom variant="h5" component="div">
-					{props.courseName}
+				<Typography gutterBottom variant="h5" component="div" color={'black'}>
+					{props.course.courseName}
+					{/* Course Name */}
 				</Typography>
 				<Typography variant="body2" color="text.secondary">
-					{props.description}
+					{props.course.description}
+					{/* Description */}
 				</Typography>
 			</CardContent>
 			<CardActions>

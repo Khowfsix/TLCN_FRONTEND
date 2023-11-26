@@ -150,7 +150,7 @@ export default function TopBar() {
 						<MenuIcon />
 					</IconButton>
 					<Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
-						MUI
+						LEARNINGWEB
 					</Typography>
 					<Search>
 						<SearchIconWrapper>

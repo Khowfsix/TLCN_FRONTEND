@@ -1,29 +1,38 @@
-import React from 'react';
-import { Box, Typography, Container } from '@material-ui/core';
-import { Link } from '@material-ui/core';
-import { SvgIcon } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import CardCourse from './cardCourse';
 
-import cardCourse from './cardCourse';
+function listCourses() {
+	const [coursesList, setCourseList] = useState([]);
 
-const listCoursesData = [
-	{
-		id: 1,
-		name: 'ReactJS',
-	},
-	{
-		id: 2,
-		name: 'NodeJS',
-	},
-	{
-		id: 3,
-		name: 'Java',
-	},
-	{
-		id: 4,
-		name: 'Python',
-	},
-];
+	useEffect(() => {
+		async function getListCourses() {
+			try {
+				const request = 'http://127.0.0.1:5000/api/course/getAll';
+				const response = await fetch(request);
+				const dataJson = await response.json();
 
-export default function listCourses() {
-	return <Container>SOMETHING</Container>;
+				// console.log(dataJson);
+				setCourseList(dataJson);
+			} catch (error) {
+				console.log(error.message);
+			}
+		}
+
+		getListCourses();
+	}, []);
+
+	return (
+		<div>
+			<ul>
+				{coursesList.map((course) => (
+					<li key={course.cid}>
+						<CardCourse course={course}></CardCourse>
+					</li>
+				))}
+			</ul>
+		</div>
+	);
 }
+
+export default listCourses;
