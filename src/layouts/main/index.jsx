@@ -1,10 +1,8 @@
-import { Container } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import Sidebar from '../components/sidebar/Sidebar';
 import Topbar from '../components/topbar/Topbar';
 import { Outlet } from 'react-router-dom';
-import Box from '@mui/material/Box';
 
 function MainLayout({ children }) {
 	return (
@@ -12,15 +10,13 @@ function MainLayout({ children }) {
 			sx={{
 				width: '100vh',
 				minHeight: '100vh',
-			}}
-		>
+			}}>
 			<Topbar />
-			<div className="container">
-				<Sidebar />
-				<div className="content">
+			<Container>
+				<Box className="content" sx={{ marginTop: '100px' }}>
 					<Outlet />
-				</div>
-			</div>
+				</Box>
+			</Container>
 		</Box>
 	);
 }
