@@ -1,5 +1,6 @@
 import './home.css';
+import { Box } from '@material-ui/core';
 
 export default function Home() {
-	return <div className="home">home</div>;
+	return <Box className="home">This is home page</Box>;
 }
