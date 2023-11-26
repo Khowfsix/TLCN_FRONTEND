@@ -13,11 +13,9 @@ export default function CardCourse(props) {
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div" color={'black'}>
 					{props.course.courseName}
-					{/* Course Name */}
 				</Typography>
 				<Typography variant="body2" color="text.secondary">
 					{props.course.description}
-					{/* Description */}
 				</Typography>
 			</CardContent>
 			<CardActions>

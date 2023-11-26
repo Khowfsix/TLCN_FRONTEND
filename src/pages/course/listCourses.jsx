@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import CardCourse from './cardCourse';
+import CardCourse from '../../components/course/cardCourse';
 
 function listCourses() {
 	const [coursesList, setCourseList] = useState([]);
