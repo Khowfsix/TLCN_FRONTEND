@@ -2,7 +2,7 @@
 
 How to run:
 ```shell
-npm i
+npm i --force
 npm run dev
 ```
 
