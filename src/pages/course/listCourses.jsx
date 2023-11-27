@@ -8,7 +8,7 @@ function listCourses() {
 	useEffect(() => {
 		async function getListCourses() {
 			try {
-				const request = 'http://127.0.0.1:5000/api/course/getAll';
+				const request = 'http://backendtlcn.devforfuture.com//api/course/getAll';
 				const response = await fetch(request);
 				const dataJson = await response.json();
 
