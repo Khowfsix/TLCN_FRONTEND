@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../apis/axiosConfig';
 
 export default function CourseDetail() {
 	const [detail, setDetail] = useState([]);
@@ -8,7 +8,7 @@ export default function CourseDetail() {
 
 	useEffect(() => {
 		axios
-			.get(`http://backendtlcn.devforfuture.com/api/course/getById/${params.get('cid')}`)
+			.get(`/course/getById/${params.get('cid')}`)
 			.then((response) => {
 				setDetail(response.data);
 			})
