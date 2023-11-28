@@ -5,6 +5,7 @@ import MainLayout from '../layouts/main';
 import Profile from '../pages/account/profile';
 import Login from '../pages/auth/login';
 import ListCourses from '../pages/course/listCourses';
+import CourseDetail from '../pages/course/courseDetail';
 
 export const router = createBrowserRouter([
 	{
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
 			{
 				path: 'listCourses',
 				element: <ListCourses />,
+			},
+			{
+				path: 'courseDetail',
+				element: <CourseDetail />,
 			},
 		],
 	},

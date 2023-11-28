@@ -147,7 +147,7 @@ export default function TopBar() {
 			<AppBar position="fixed">
 				<Toolbar>
 					<IconButton size="large" edge="start" color="inherit" aria-label="open drawer" sx={{ mr: 2 }}>
-						<MenuIcon />
+						{/* <MenuIcon /> */}
 					</IconButton>
 					<Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
 						LEARNINGWEB
