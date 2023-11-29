@@ -23,6 +23,7 @@ p {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
+	/* width: 100; */
 }
 
 ol,
@@ -36,7 +37,13 @@ ul {
 	padding: 0;
 	border: none;
 	text-align: center;
+	width: 100%;
 }
+
+/* body {
+	width: 100%;
+} */
+
 /* 
 .logo {
 	height: 6em;
@@ -74,4 +81,4 @@ ul {
 	color: #888;
 }
 
-@import 'bootstrap/dist/css/bootstrap.min.css';
+/* @import 'bootstrap/dist/css/bootstrap.min.css'; */

@@ -10,29 +10,10 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import sha256 from 'crypto-js/sha256';
 
+import axios from '../../apis/axiosConfig';
+
 export default function Login() {
 	// const hashedPassword = sha256(myPassword).toString();
-
-	useEffect(() => {
-		async function getListCourses() {
-			try {
-				if (userName == null) {
-					return '';
-				}
-
-				const request = 'http://backendtlcn.devforfuture.com/api/auth/login';
-				const response = await fetch(request);
-				const dataJson = await response.json();
-
-				// console.log(dataJson);
-				setCourseList(dataJson);
-			} catch (error) {
-				console.log(error.message);
-			}
-		}
-
-		getListCourses();
-	}, []);
 
 	// const navigate = useNavigate();
 	const [username, setUsername] = useState('');
@@ -507,6 +488,7 @@ export default function Login() {
 					</Box>
 				</Container>
 			</Stack>
+
 			<Snackbar open={errorSnackbar} autoHideDuration={5000} onClose={() => setErrorSnackbar(false)} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
 				<Alert severity="error" onClose={() => setErrorSnackbar(false)}>
 					{/* {newError.message} */}

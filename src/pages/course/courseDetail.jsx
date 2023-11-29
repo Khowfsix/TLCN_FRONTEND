@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from '../../apis/axiosConfig';
+import { Box } from '@material-ui/core';
 
 export default function CourseDetail() {
 	const [detail, setDetail] = useState([]);
@@ -18,5 +19,5 @@ export default function CourseDetail() {
 			});
 	}, []);
 
-	return <div>{detail.courseName}</div>;
+	return <Box>someting</Box>;
 }

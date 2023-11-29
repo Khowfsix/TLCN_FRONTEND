@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import CardCourse from '../../components/course/cardCourse';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
+import CardClass from '../../components/class/classCard';
+// import { styled } from '@mui/material/styles';
+// import Paper from '@mui/material/Paper';
 import Masonry from '@mui/lab/Masonry';
 import { Box } from '@mui/material';
 
@@ -16,13 +16,13 @@ import axios from '../../apis/axiosConfig';
 // }));
 
 function listCourses() {
-	const [coursesList, setCourseList] = useState([]);
+	const [classList, setClassList] = useState([]);
 
 	useEffect(() => {
 		axios
-			.get(`/course/getAll`)
+			.get(`/class/getAll`)
 			.then((response) => {
-				setCourseList(response.data);
+				setClassList(response.data);
 			})
 			.catch((error) => {
 				// Handle the error
@@ -33,12 +33,9 @@ function listCourses() {
 	return (
 		<Box>
 			<Masonry columns={3} spacing={2}>
-				{coursesList.map((course) => {
-					console.log(course.isDeleted);
-					if (course.isDeleted === false) {
-						return <CardCourse key={course.cid} course={course}></CardCourse>;
-					}
-				})}
+				{classList.map((classItem) => (
+					<CardClass key={classItem.cid} class={classItem}></CardClass>
+				))}
 			</Masonry>
 		</Box>
 	);

@@ -4,7 +4,6 @@ import { useState } from 'react';
 // import viteLogo from '/vite.svg';
 
 import './App.css';
-import MainLayout from './layouts/main';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './routes';
 

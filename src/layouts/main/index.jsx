@@ -1,28 +1,31 @@
 import { Container, Box } from '@mui/material';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 import Topbar from '../components/topbar/Topbar';
 import { Outlet } from 'react-router-dom';
 
-function MainLayout({ children }) {
+function MainLayout() {
 	return (
-		<Box
-			sx={{
-				width: '100vh',
-				minHeight: '100vh',
-			}}>
+		<Container maxWidth={false}>
 			<Topbar />
-			<Container>
-				<Box className="content" sx={{ marginTop: '100px' }}>
-					<Outlet />
-				</Box>
+			{/* <Box> */}
+			<Container
+				maxWidth={false}
+				className="content"
+				sx={{
+					width: '100%',
+					marginTop: '100px',
+					width: '100%',
+				}}>
+				<Outlet />
 			</Container>
-		</Box>
+			{/* </Box> */}
+		</Container>
 	);
 }
 
 export default MainLayout;
 
-MainLayout.propTypes = {
-	children: PropTypes.node,
-};
+// MainLayout.propTypes = {
+// 	children: PropTypes.node,
+// };
