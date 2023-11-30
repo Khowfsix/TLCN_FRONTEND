@@ -21,7 +21,6 @@ instance.interceptors.request.use(
 		}
 
 		const accessToken = localStorage.getItem('accessToken');
-		// Lấy token từ localStorage
 
 		if (accessToken) {
 			config.headers['Authorization'] = `Bearer ${accessToken}`;
@@ -34,38 +33,36 @@ instance.interceptors.request.use(
 	},
 );
 
-instance.interceptors.response.use(
-	(response) => {
-		return response;
-	},
-	async (error) => {
-		const originalRequest = error.config;
+// instance.interceptors.response.use(
+// 	(response) => {
+// 		return response;
+// 	},
+// 	async (error) => {
+// 		const originalRequest = error.config;
 
-		if (error.response.status === 401 && !originalRequest._retry) {
-			originalRequest._retry = true;
+// 		if (error.response.status === 401 && !originalRequest._retry) {
+// 			originalRequest._retry = true;
 
-			const refreshToken = localStorage.getItem('refreshToken');
+// 			const refreshToken = localStorage.getItem('refreshToken');
 
-			await instance
-				.post('/auth/prefresh-token', { token: refreshToken })
-				.then((refreshResponse) => {
-					const { data } = refreshResponse.data;
+// 			await instance
+// 				.post('/auth/prefresh-token', { token: refreshToken })
+// 				.then((refreshResponse) => {
+// 					const { data } = refreshResponse.data;
 
-					// Update tokens in localStorage
+// 					localStorage.setItem('accessToken', data.accessToken);
 
-					localStorage.setItem('accessToken', data.accessToken);
-
-					// Retry the original request with the new token
-					originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`;
-					return instance(originalRequest);
-				})
-				.catch((error) => {
-					return Promise.reject(error);
-				});
-		} else {
-			return Promise.reject(error);
-		}
-	},
-);
+// 					// Retry the original request with the new token
+// 					originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`;
+// 					return instance(originalRequest);
+// 				})
+// 				.catch((error) => {
+// 					return Promise.reject(error);
+// 				});
+// 		} else {
+// 			return Promise.reject(error);
+// 		}
+// 	},
+// );
 
 export default instance;

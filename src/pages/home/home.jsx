@@ -1,10 +1,22 @@
-import { Box, Typography, Button, Container } from '@material-ui/core';
+import { Box, Typography, Container } from '@material-ui/core';
+import { useEffect } from 'react';
 
 import axios from '../../apis/axiosConfig';
 
 export default function Home() {
-	axios.post(`/auth/whoami`).then((response) => {
-		console.log(response.data);
+	const accessToken = localStorage.getItem('accessToken');
+
+	useEffect(() => {
+		if (accessToken != null) {
+			axios
+				.post('/auth/whoami')
+				.then((response) => {
+					console.log(response.data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		}
 	});
 
 	return (

@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import CardClass from '../../components/class/classCard';
+import CardClass from '../../../components/class/classCard';
 // import { styled } from '@mui/material/styles';
 // import Paper from '@mui/material/Paper';
 import Masonry from '@mui/lab/Masonry';
 import { Box } from '@mui/material';
 
-import axios from '../../apis/axiosConfig';
-
-// const Item = styled(Paper)(({ theme }) => ({
-// 	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-// 	...theme.typography.body2,
-// 	padding: theme.spacing(0.5),
-// 	textAlign: 'center',
-// 	color: theme.palette.text.secondary,
-// }));
+import axios from '../../../apis/axiosConfig';
 
 function listCourses() {
 	const [classList, setClassList] = useState([]);
@@ -31,7 +23,10 @@ function listCourses() {
 	}, []);
 
 	return (
-		<Box>
+		<Box
+			sx={{
+				marginTop: '200px',
+			}}>
 			<Masonry columns={4} spacing={5}>
 				{classList.map((classs) => {
 					console.log(classs.isDeleted);

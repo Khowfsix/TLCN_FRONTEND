@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { FormControl } from '@material-ui/core';
-import { Grid, TextField, Button, Typography, Box, Container, InputAdornment, Checkbox, FormControlLabel, createTheme, IconButton, Stack, Snackbar, Alert } from '@mui/material';
+// import { FormControl } from '@material-ui/core';
+import { Grid, TextField, Button, Typography, Box, Container, InputAdornment, Stack, Snackbar, Alert } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
+
+import { Select, MenuItem, InputLabel } from '@mui/material';
+
 import CircularProgress from '@mui/material/CircularProgress';
 import { alpha } from '@mui/material/styles';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
@@ -10,7 +13,7 @@ import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import sha256 from 'crypto-js/sha256';
 
 import axios from '../../apis/axiosConfig';
@@ -24,7 +27,10 @@ export default function Login() {
 	const [password, setPassword] = useState('');
 	const [validPassword, setValidPassword] = useState(true);
 	const [showPassword, setShowPassword] = useState(false);
-	const [check, setCheck] = useState(false);
+	// const [check, setCheck] = useState(false);
+
+	const [role, setRole] = useState('');
+
 	const [errorSnackbar, setErrorSnackbar] = useState(false);
 	const [loading, setLoading] = useState(false);
 
@@ -55,15 +61,21 @@ export default function Login() {
 		event.preventDefault();
 	};
 
+	const handleChangeRole = (event) => {
+		let newRole = event.target.value;
+		console.log(newRole);
+		setRole(newRole);
+	};
+
 	const handleLogin = (event) => {
 		const hashedPassword = sha256(password).toString();
 		event.preventDefault();
 
-		if (validUsername && username != '' && validPassword && password != '') {
+		if (validUsername && username != '' && validPassword && password != '' && ['student', 'teacher'].includes(role)) {
 			const req = {
 				username: username,
 				password: hashedPassword,
-				role: 'student',
+				role: role,
 			};
 
 			setLoading(true);
@@ -79,13 +91,9 @@ export default function Login() {
 					console.error(error);
 				});
 
-			axios.post(`/auth/setToken`, { token: localStorage.getItem('accessToken') }).then((response) => {
-				console.log(response.data);
-			});
-
-			navigate('/home');
-
 			setLoading(false);
+			navigate('/Home');
+
 			// dispatch({
 			// 	type: 'saga/userLogin',
 			// 	payload: { username, password, check },
@@ -126,11 +134,6 @@ export default function Login() {
 		// 	payload: { status: 'idle', message: '' },
 		// });
 		navigate('/register');
-	};
-
-	const handleCheck = (event) => {
-		event.preventDefault();
-		setCheck(!check);
 	};
 
 	return (
@@ -214,7 +217,7 @@ export default function Login() {
 										textAlign: 'center',
 										fontWeight: '450',
 									}}>
-									Log In
+									Đăng nhập
 								</Typography>
 
 								<Grid
@@ -239,7 +242,7 @@ export default function Login() {
 											//required
 											fullWidth
 											type="text"
-											label={validUsername ? <Typography color={'black'}>Username</Typography> : <Typography color={'red'}>Username</Typography>}
+											label={validUsername ? <Typography color={'black'}>Tên đăng nhập</Typography> : <Typography color={'red'}>Username</Typography>}
 											autoComplete="new-text"
 											value={username}
 											onChange={handleUsernameChange}
@@ -362,101 +365,6 @@ export default function Login() {
 										/>
 									</Grid>
 
-									{!validPassword && (
-										<Grid
-											item
-											xs={12}
-											sx={{
-												display: 'flex',
-												justifyContent: 'left',
-												alignItems: 'center',
-											}}>
-											<Box color={'red'} display={'flex'} marginLeft={'16px'} marginRight={'15px'}>
-												<ErrorOutlineOutlinedIcon
-													sx={{
-														fontSize: 15,
-														paddingLeft: '2px',
-														marginTop: '2px',
-													}}
-												/>
-
-												<Typography color="red" fontSize="12px" lineHeight="20px" paddingLeft={'5px'}>
-													Password is required
-												</Typography>
-											</Box>
-										</Grid>
-									)}
-
-									<Grid
-										item
-										xs={12}
-										sx={{
-											margin: '15px 20px 15px',
-											fontSize: '.9em',
-											color: '#fff',
-											display: 'flex',
-											justifyContent: 'space-between',
-											alignContent: 'center',
-											textAlign: 'center',
-										}}>
-										<FormControlLabel
-											control={
-												<Checkbox
-													checked={check}
-													onClick={handleCheck}
-													sx={{
-														color: 'black',
-														'&.Mui-checked': {
-															color: 'black',
-														},
-														'& .MuiSvgIcon-root': {
-															fontSize: 18,
-														},
-
-														height: '8px',
-														width: '8px',
-														marginLeft: '9px',
-													}}
-												/>
-											}
-											label={
-												<Typography
-													variant="small"
-													sx={{
-														lineHeight: '15px',
-														marginLeft: '3px',
-													}}>
-													Remember me
-												</Typography>
-											}
-											sx={{
-												color: '#000',
-												textDecoration: 'none',
-												display: 'flex',
-												justifyContent: 'space-between',
-												alignContent: 'center',
-												textAlign: 'center',
-											}}
-										/>
-										<Box
-											sx={{
-												alignContent: 'center',
-												textAlign: 'center',
-											}}>
-											<Typography
-												onClick={handleClickForgot}
-												variant="small"
-												sx={{
-													color: 'black',
-													lineHeight: '15px',
-													textDecoration: 'underline',
-													cursor: 'pointer',
-												}}>
-												Forgot password?{' '}
-											</Typography>
-										</Box>
-									</Grid>
-
 									<Grid
 										item
 										xs={12}
@@ -464,27 +372,76 @@ export default function Login() {
 											display: 'flex',
 											justifyContent: 'center',
 											alignItems: 'center',
+											marginBottom: '3px',
+											marginTop: '5px',
 										}}>
-										{loading ? (
-											<CircularProgress sx={{ color: 'black' }} />
-										) : (
-											<Button
-												type="submit"
-												// theme={theme}
-												variant="contained"
-												color="secondary"
-												sx={{
-													height: '40px',
-													color: 'white',
-													borderRadius: '10px',
-													fontSize: '1em',
-													fontWeight: 600,
-													width: '90%',
-												}}>
-												Log in
-											</Button>
-										)}
+										<InputLabel sx={{ color: 'black', marginRight: '50px' }}>Đăng nhập với quyền: </InputLabel>
+										<Select value={role} onChange={handleChangeRole}>
+											<MenuItem value="student">Học viên</MenuItem>
+											<MenuItem value="teacher">Giảng viên</MenuItem>
+										</Select>
 									</Grid>
+								</Grid>
+
+								<Grid
+									item
+									xs={12}
+									sx={{
+										margin: '15px 20px 15px',
+										fontSize: '.9em',
+										color: '#fff',
+										display: 'flex',
+										justifyContent: 'center',
+										alignContent: 'center',
+										textAlign: 'center',
+									}}>
+									<Box
+										sx={{
+											alignContent: 'center',
+											textAlign: 'center',
+										}}>
+										<Typography
+											onClick={handleClickForgot}
+											variant="small"
+											sx={{
+												color: 'black',
+												lineHeight: '15px',
+												textDecoration: 'underline',
+												cursor: 'pointer',
+											}}>
+											Quên pass rồi à con gà?{' '}
+										</Typography>
+									</Box>
+								</Grid>
+
+								<Grid
+									item
+									xs={12}
+									sx={{
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center',
+									}}>
+									{loading ? (
+										<CircularProgress sx={{ color: 'black' }} />
+									) : (
+										<Button
+											type="submit"
+											variant="contained"
+											color="primary"
+											// color="secondary"
+											sx={{
+												height: '40px',
+												color: 'white',
+												borderRadius: '10px',
+												fontSize: '1em',
+												fontWeight: 600,
+												width: '90%',
+											}}>
+											Log in
+										</Button>
+									)}
+									{/* <CircularProgress /> */}
 								</Grid>
 
 								<Grid container justifyContent="center">
@@ -500,14 +457,14 @@ export default function Login() {
 											fontSize: '.9em',
 										}}>
 										<Typography variant="small" sx={{ color: 'black' }}>
-											Didn't have an account?{' '}
+											Bạn đếu có tài khoản ư?{' '}
 											<Typography
 												// component={Link}
 												// to="/register"
 												onClick={handleClickSignUp}
 												variant="small"
 												sx={{ cursor: 'pointer', textDecoration: 'underline', color: 'black' }}>
-												Sign up
+												Đúng vậy
 											</Typography>
 										</Typography>
 									</Grid>
