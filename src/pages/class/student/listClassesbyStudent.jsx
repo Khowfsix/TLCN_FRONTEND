@@ -9,27 +9,37 @@ import axios from '../../../apis/axiosConfig';
 
 function listCourses() {
 	const [classList, setClassList] = useState([]);
+	const dataClasses = localStorage.getItem('listClasses');
 
-	useEffect(() => {
-		axios
-			.get(`/class/getAll`)
-			.then((response) => {
-				setClassList(response.data);
-			})
-			.catch((error) => {
-				// Handle the error
-				console.error(error);
-			});
-	}, []);
+	if (dataClasses.length < 1) {
+		setClassList(data);
+	} else {
+		useEffect(() => {
+			axios
+				.get(`/class/getAll`)
+				.then((response) => {
+					setClassList(response.data);
+					localStorage.setItem('listClasses', response.data);
+				})
+				.catch((error) => {
+					// Handle the error
+					console.error(error);
+				});
+		}, []);
+	}
 
 	return (
 		<Box
 			sx={{
+				width: '100vw',
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
 				marginTop: '200px',
 			}}>
-			<Masonry columns={4} spacing={5}>
+			<Masonry columns={4} spacing={2}>
 				{classList.map((classs) => {
-					console.log(classs.isDeleted);
+					// console.log(classs.isDeleted);
 					if (classs.isDeleted === false) {
 						return <CardClass key={classs.cid} class={classs}></CardClass>;
 					}

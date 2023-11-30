@@ -28,7 +28,7 @@ export default function CardCourse(props) {
 				<Button
 					size="small"
 					onClick={() => {
-						navigate('/courseDetail?cid=' + props.course.cid);
+						navigate('/course?cid=' + props.course.cid);
 					}}>
 					Learn More
 				</Button>

@@ -68,10 +68,10 @@ export default function TopBar() {
 	const [anchorElUser, setAnchorElUser] = React.useState(null);
 
 	const pages = [
-		{ name: 'Courses', link: '/listCourses' },
-		{ name: 'Classes', link: '/listClasses' },
+		{ name: 'Khóa học', link: '/listCourses' },
+		{ name: 'Lớp', link: '/listClasses' },
 		{ name: 'Blogs', link: '/blogs' },
-		{ name: 'About', link: '/about' },
+		{ name: 'Thông tin', link: '/about' },
 	];
 
 	const isMenuOpen = Boolean(anchorEl);
@@ -170,7 +170,7 @@ export default function TopBar() {
 						{/* <MenuIcon /> */}
 					</IconButton>
 					<Typography onClick={() => navigate('/Home')} variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
-						LEARNINGWEB
+						LEARNING WEB
 					</Typography>
 					<Search>
 						<SearchIconWrapper>
@@ -179,9 +179,18 @@ export default function TopBar() {
 						<StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
 					</Search>
 
-					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, color: 'white' }}>
+					<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 						{pages.map((page) => (
-							<Button href={page.link} key={page.name} onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
+							<Button
+								href={page.link}
+								key={page.name}
+								onClick={handleCloseNavMenu}
+								sx={{
+									// my: 2,
+									color: '#ffffff',
+									display: 'block',
+									'&:hover': { color: 'white' },
+								}}>
 								{page.name}
 							</Button>
 						))}

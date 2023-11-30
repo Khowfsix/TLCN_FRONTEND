@@ -28,7 +28,7 @@ export default function CardClass(props) {
 				<Button
 					size="small"
 					onClick={() => {
-						navigate('/lessionsOfClass?cid=' + props.class.cid);
+						navigate('/class?cid=' + props.class.cid);
 					}}>
 					Vào lớp
 				</Button>
