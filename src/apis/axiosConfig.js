@@ -6,17 +6,7 @@ const instance = axios.create({
 	headers: { 'Content-Type': 'application/json' },
 });
 
-const noToken = [
-	'/auth/login',
-	'/auth/prefresh-token',
-	'/auth/sendotp-forgotpass',
-	'/auth/checkotp-forgotpass',
-	'/auth/forgetpass',
-	'/type-room/',
-	'type-room/get-type-room-by-id/',
-	'/room/get-number-available-rooms/',
-	'/room/get-parameters-room/',
-];
+const noToken = ['/auth/login', '/auth/prefresh-token', '/auth/sendotp-forgotpass', '/auth/checkotp-forgotpass', '/auth/forgetpass'];
 
 instance.interceptors.request.use(
 	async (config) => {
@@ -30,7 +20,8 @@ instance.interceptors.request.use(
 			return config;
 		}
 
-		const accessToken = localStorage.getItem('accessToken'); // Lấy token từ localStorage
+		const accessToken = localStorage.getItem('accessToken');
+		// Lấy token từ localStorage
 
 		if (accessToken) {
 			config.headers['Authorization'] = `Bearer ${accessToken}`;

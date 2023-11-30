@@ -32,10 +32,13 @@ function listCourses() {
 
 	return (
 		<Box>
-			<Masonry columns={3} spacing={2}>
-				{classList.map((classItem) => (
-					<CardClass key={classItem.cid} class={classItem}></CardClass>
-				))}
+			<Masonry columns={4} spacing={5}>
+				{classList.map((classs) => {
+					console.log(classs.isDeleted);
+					if (classs.isDeleted === false) {
+						return <CardClass key={classs.cid} class={classs}></CardClass>;
+					}
+				})}
 			</Masonry>
 		</Box>
 	);

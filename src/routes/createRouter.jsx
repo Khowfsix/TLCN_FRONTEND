@@ -9,6 +9,8 @@ import ListCourses from '../pages/course/listCourses';
 import CourseDetail from '../pages/course/courseDetail';
 import ListClasses from '../pages/class/listClasses';
 
+const token = localStorage.getItem('token');
+
 export const router = createBrowserRouter([
 	{
 		path: '',

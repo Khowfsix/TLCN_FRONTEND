@@ -32,7 +32,7 @@ function listCourses() {
 
 	return (
 		<Box>
-			<Masonry columns={3} spacing={2}>
+			<Masonry columns={4} spacing={2}>
 				{coursesList.map((course) => {
 					console.log(course.isDeleted);
 					if (course.isDeleted === false) {

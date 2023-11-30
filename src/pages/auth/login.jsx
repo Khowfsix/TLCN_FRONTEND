@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { FormControl } from '@material-ui/core';
 import { Grid, TextField, Button, Typography, Box, Container, InputAdornment, Checkbox, FormControlLabel, createTheme, IconButton, Stack, Snackbar, Alert } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
@@ -8,6 +9,8 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
+
+import { useDispatch } from 'react-redux';
 import sha256 from 'crypto-js/sha256';
 
 import axios from '../../apis/axiosConfig';
@@ -15,7 +18,7 @@ import axios from '../../apis/axiosConfig';
 export default function Login() {
 	// const hashedPassword = sha256(myPassword).toString();
 
-	// const navigate = useNavigate();
+	const navigate = useNavigate();
 	const [username, setUsername] = useState('');
 	const [validUsername, setValidUsername] = useState(true);
 	const [password, setPassword] = useState('');
@@ -53,16 +56,43 @@ export default function Login() {
 	};
 
 	const handleLogin = (event) => {
+		const hashedPassword = sha256(password).toString();
 		event.preventDefault();
 
 		if (validUsername && username != '' && validPassword && password != '') {
-			setPassword('asdf');
+			const req = {
+				username: username,
+				password: hashedPassword,
+				role: 'student',
+			};
+
 			setLoading(true);
+			axios
+				.post(`/auth/login`, req)
+				.then((response) => {
+					console.log(response.data);
+					localStorage.setItem('accessToken', response.data.Authorization);
+					console.log(localStorage.getItem('accessToken'));
+				})
+				.catch((error) => {
+					// Handle the error
+					console.error(error);
+				});
+
+			axios.post(`/auth/setToken`, { token: localStorage.getItem('accessToken') }).then((response) => {
+				console.log(response.data);
+			});
+
+			navigate('/home');
+
+			setLoading(false);
 			// dispatch({
 			// 	type: 'saga/userLogin',
 			// 	payload: { username, password, check },
 			// });
 			//dispatch({ type: "saga/getUserId", payload: null})
+
+			console.log(`username: ${username} \n password: ${password} \n passwordHashed: ${hashedPassword}`);
 		} else {
 			if (!validUsername || username == '') {
 				setValidUsername(false);
@@ -75,26 +105,26 @@ export default function Login() {
 	};
 
 	const handleClickHome = () => {
-		dispatch({
-			type: 'error/setError',
-			payload: { status: 'idle', message: '' },
-		});
+		// dispatch({
+		// 	type: 'error/setError',
+		// 	payload: { status: 'idle', message: '' },
+		// });
 		navigate('/home');
 	};
 
 	const handleClickForgot = () => {
-		dispatch({
-			type: 'error/setError',
-			payload: { status: 'idle', message: '' },
-		});
+		// dispatch({
+		// 	type: 'error/setError',
+		// 	payload: { status: 'idle', message: '' },
+		// });
 		navigate('/recovery');
 	};
 
 	const handleClickSignUp = () => {
-		dispatch({
-			type: 'error/setError',
-			payload: { status: 'idle', message: '' },
-		});
+		// dispatch({
+		// 	type: 'error/setError',
+		// 	payload: { status: 'idle', message: '' },
+		// });
 		navigate('/register');
 	};
 
@@ -454,7 +484,6 @@ export default function Login() {
 												Log in
 											</Button>
 										)}
-										{/* <CircularProgress /> */}
 									</Grid>
 								</Grid>
 

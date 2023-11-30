@@ -1,6 +1,12 @@
 import { Box, Typography, Button, Container } from '@material-ui/core';
 
+import axios from '../../apis/axiosConfig';
+
 export default function Home() {
+	axios.post(`/auth/whoami`).then((response) => {
+		console.log(response.data);
+	});
+
 	return (
 		<>
 			<Container className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">

@@ -13,9 +13,12 @@ function MainLayout() {
 				maxWidth={false}
 				className="content"
 				sx={{
-					width: '100%',
-					marginTop: '100px',
-					width: '100%',
+					// marginTop: '200px',
+					width: '100vw',
+					// height: '100vh',
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
 				}}>
 				<Outlet />
 			</Container>
