@@ -9,9 +9,9 @@ import CourseDetail from '../pages/course/courseDetail';
 import ListClasses from '../pages/class/student/listClassesbyStudent';
 import ClassContent from '../pages/class/classContent';
 
-const token = localStorage.getItem('token');
+const token = localStorage.getItem('accessToken');
 
-export const router = createBrowserRouter([
+export const publicRouter = createBrowserRouter([
 	{
 		path: '',
 		element: <MainLayout />,
@@ -28,30 +28,34 @@ export const router = createBrowserRouter([
 				path: 'about',
 				element: <About />,
 			},
-			{
-				path: 'account',
-				element: <Profile />,
-			},
+
 			{
 				path: 'login',
 				element: <Login />,
 			},
-			{
-				path: 'listCourses',
-				element: <ListCourses />,
-			},
-			{
-				path: 'course',
-				element: <CourseDetail />,
-			},
-			{
-				path: 'listClasses',
-				element: <ListClasses />,
-			},
-			{
-				path: 'class',
-				element: <ClassContent />,
-			},
 		],
+	},
+]);
+
+export const privateRouter = createBrowserRouter([
+	{
+		path: 'listCourses',
+		element: <ListCourses />,
+	},
+	{
+		path: 'course',
+		element: <CourseDetail />,
+	},
+	{
+		path: 'listClasses',
+		element: <ListClasses />,
+	},
+	{
+		path: 'class',
+		element: <ClassContent />,
+	},
+	{
+		path: 'account',
+		element: <Profile />,
 	},
 ]);

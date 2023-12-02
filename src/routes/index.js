@@ -1,1 +1,1 @@
-export { router } from './createRouter.jsx';
+export { publicRouter, privateRouter } from './createRouter.jsx';

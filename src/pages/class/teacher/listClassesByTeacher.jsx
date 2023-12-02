@@ -25,6 +25,8 @@ function listCourses() {
 		<Box
 			sx={{
 				marginTop: '200px',
+				justifyContent: 'center',
+				alignItems: 'center',
 			}}>
 			<Masonry columns={4} spacing={5}>
 				{classList.map((classs) => {

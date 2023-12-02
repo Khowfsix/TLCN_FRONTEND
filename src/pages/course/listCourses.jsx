@@ -31,7 +31,12 @@ function listCourses() {
 	}, []);
 
 	return (
-		<Box sx={{ marginTop: '200px' }}>
+		<Box
+			sx={{
+				marginTop: '200px',
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}>
 			<Masonry columns={4} spacing={2}>
 				{coursesList.map((course) => {
 					console.log(course.isDeleted);

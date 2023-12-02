@@ -1,17 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Box } from '@material-ui/core';
-import { Breadcrumbs, Link, Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Box, Container, List, ListItem } from '@material-ui/core';
+import { Breadcrumbs, Typography } from '@material-ui/core';
+import { Link } from '@mui/material';
 
 function handleClickBreadCums(event) {
 	event.preventDefault();
 	console.info('You clicked a breadcrumb.');
 }
 
-function ClassContent(props) {
+function ClassContent() {
+	const [classContents, setClassContents] = useState(null);
+
+	// if (cacheClassContents) {
+	// }
+
 	return (
 		<Box>
-			<div role="presentation" onClick={handleClickBreadCums}>
+			<Box position={'fixed'} onClick={handleClickBreadCums}>
 				<Breadcrumbs aria-label="breadcrumb">
 					<Link underline="hover" color="inherit" href="/">
 						MUI
@@ -19,36 +24,36 @@ function ClassContent(props) {
 					<Link underline="hover" color="inherit" href="/material-ui/getting-started/installation/">
 						Core
 					</Link>
-					<Typography color="text.primary">Breadcrumbs</Typography>
+					<Typography>Breadcrumbs</Typography>
 				</Breadcrumbs>
-			</div>
+			</Box>
 
-			<div className="branding">
-				<div className="container-fluid">
-					<div className="branding-inner">
-						<a href="https://utex.hcmute.edu.vn" className="site-name has-logo">
+			<Box className="branding">
+				<Container className="container-fluid">
+					<Box className="branding-inner">
+						<Link className="site-name has-logo">
 							<img className="site-logo" src="" alt="UTEx - HCMUTE" />
-						</a>
+						</Link>
 
-						<ul className="main-nav d-none d-md-block">
-							<li className="nav-item">
-								<a className="nav-item nav-link" href="http://hcmute.edu.vn">
+						<List className="main-nav d-none d-md-block">
+							<ListItem className="nav-item">
+								<Link className="nav-item nav-link" href="http://hcmute.edu.vn">
 									Đại học Sư Phạm Kỹ thuật
-								</a>
-							</li>
-							<li className="nav-item">
-								<a className="nav-item nav-link" href="https://utex.hcmute.edu.vn/course/">
+								</Link>
+							</ListItem>
+							<ListItem className="nav-item">
+								<Link className="nav-item nav-link" href="https://utex.hcmute.edu.vn/course/">
 									Các khóa học
-								</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
+								</Link>
+							</ListItem>
+						</List>
+					</Box>
+				</Container>
+			</Box>
+
+			<Container></Container>
 		</Box>
 	);
 }
-
-ClassContent.propTypes = {};
 
 export default ClassContent;

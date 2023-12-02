@@ -14,8 +14,6 @@ function MainLayout() {
 				sx={{
 					width: '100vw',
 					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
 				}}>
 				<Outlet />
 			</Container>
