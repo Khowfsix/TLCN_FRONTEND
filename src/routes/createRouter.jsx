@@ -1,4 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
+import ProtectedRoute from '../components/Protected';
+
 import Home from '../pages/home/home';
 import About from '../pages/home/about';
 import MainLayout from '../layouts/main';
@@ -9,10 +11,9 @@ import CourseDetail from '../pages/course/courseDetail';
 import ListClasses from '../pages/class/student/listClassesbyStudent';
 import ClassContent from '../pages/class/classContent';
 
-const token = localStorage.getItem('accessToken');
-
-export const publicRouter = createBrowserRouter([
+export const router = createBrowserRouter([
 	{
+		id: 'public',
 		path: '',
 		element: <MainLayout />,
 		children: [
@@ -35,27 +36,51 @@ export const publicRouter = createBrowserRouter([
 			},
 		],
 	},
-]);
-
-export const privateRouter = createBrowserRouter([
 	{
-		path: 'listCourses',
-		element: <ListCourses />,
-	},
-	{
-		path: 'course',
-		element: <CourseDetail />,
-	},
-	{
-		path: 'listClasses',
-		element: <ListClasses />,
-	},
-	{
-		path: 'class',
-		element: <ClassContent />,
-	},
-	{
-		path: 'account',
-		element: <Profile />,
+		id: 'protected',
+		path: '',
+		element: <MainLayout />,
+		children: [
+			{
+				path: 'listCourses',
+				element: (
+					<ProtectedRoute allowed={['admin', 'teacher', 'student']}>
+						<ListCourses />
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: 'course',
+				element: (
+					<ProtectedRoute allowed={['admin', 'teacher', 'student']}>
+						<CourseDetail />
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: 'listClasses',
+				element: (
+					<ProtectedRoute allowed={['admin', 'teacher', 'student']}>
+						<ListClasses />
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: 'class',
+				element: (
+					<ProtectedRoute allowed={['admin', 'teacher', 'student']}>
+						<ClassContent />
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: 'account',
+				element: (
+					<ProtectedRoute allowed={['admin', 'teacher', 'student']}>
+						<Profile />
+					</ProtectedRoute>
+				),
+			},
+		],
 	},
 ]);

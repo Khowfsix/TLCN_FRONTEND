@@ -1,23 +1,14 @@
 import { Box, Typography, Container } from '@material-ui/core';
 import { useEffect } from 'react';
+import useGetRole from '../../hooks/useGetRole';
 
 import axios from '../../apis/axiosConfig';
 
 export default function Home() {
 	const accessToken = localStorage.getItem('accessToken');
 
-	useEffect(() => {
-		if (accessToken != null) {
-			axios
-				.post('/auth/whoami')
-				.then((response) => {
-					console.log(response.data);
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		}
-	});
+	let role = useGetRole();
+	console.log(role);
 
 	return (
 		<>

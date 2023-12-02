@@ -8,30 +8,32 @@ const instance = axios.create({
 
 const noToken = ['/auth/login', '/auth/prefresh-token', '/auth/sendotp-forgotpass', '/auth/checkotp-forgotpass', '/auth/forgetpass'];
 
-instance.interceptors.request.use(
-	async (config) => {
-		if (
-			noToken.some((item) => {
-				if (config.url.indexOf(item) >= 0) {
-					return true;
-				}
-			})
-		) {
-			return config;
-		}
+instance.defaults.headers['Authorization'] = localStorage.getItem('accessToken');
 
-		const accessToken = localStorage.getItem('accessToken');
+// instance.interceptors.request.use(
+// 	async (config) => {
+// 		if (
+// 			noToken.some((item) => {
+// 				if (config.url.indexOf(item) >= 0) {
+// 					return true;
+// 				}
+// 			})
+// 		) {
+// 			return config;
+// 		}
 
-		if (accessToken) {
-			config.headers['Authorization'] = `Bearer ${accessToken}`;
-		}
+// 		const accessToken = localStorage.getItem('accessToken');
 
-		return config;
-	},
-	(error) => {
-		return Promise.reject(error);
-	},
-);
+// 		if (accessToken) {
+// 			config.headers['Authorization'] = `Bearer ${accessToken}`;
+// 		}
+
+// 		return config;
+// 	},
+// 	(error) => {
+// 		return Promise.reject(error);
+// 	},
+// );
 
 // instance.interceptors.response.use(
 // 	(response) => {

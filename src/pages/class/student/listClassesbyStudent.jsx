@@ -7,7 +7,7 @@ import { Box } from '@mui/material';
 
 import axios from '../../../apis/axiosConfig';
 
-function listCourses() {
+function listClasses() {
 	const [classList, setClassList] = useState([]);
 	const dataClasses = localStorage.getItem('listClasses');
 
@@ -47,4 +47,4 @@ function listCourses() {
 	);
 }
 
-export default listCourses;
+export default listClasses;

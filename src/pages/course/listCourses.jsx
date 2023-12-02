@@ -22,6 +22,7 @@ function listCourses() {
 		axios
 			.get(`/course/getAll`)
 			.then((response) => {
+				console.log(response.data);
 				setCourseList(response.data);
 			})
 			.catch((error) => {
