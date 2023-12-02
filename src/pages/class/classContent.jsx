@@ -13,7 +13,7 @@ function ClassContent() {
 
 	return (
 		<Box>
-			<Box position={'fixed'} onClick={handleClickBreadCums}>
+			{/* <Box position={'fixed'} onClick={handleClickBreadCums}>
 				<Breadcrumbs aria-label="breadcrumb">
 					<Link underline="hover" color="inherit" href="/">
 						MUI
@@ -23,9 +23,9 @@ function ClassContent() {
 					</Link>
 					<Typography>Breadcrumbs</Typography>
 				</Breadcrumbs>
-			</Box>
+			</Box> */}
 
-			<Container></Container>
+			<Box></Box>
 		</Box>
 	);
 }

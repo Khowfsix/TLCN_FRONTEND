@@ -9,7 +9,11 @@ function useGetRole() {
 		axios
 			.post(`/auth/whoami`)
 			.then((response) => {
-				localStorage.setItem('userlocal', response.data);
+				localStorage.setItem('roleUserId', response.data.object.id);
+				localStorage.setItem('userId', response.data.sub);
+
+				let roldUSID = localStorage.getItem('roleUserId');
+				console.log(roldUSID);
 
 				if (response.data.role == 'STUDENT') {
 					setRole('student');

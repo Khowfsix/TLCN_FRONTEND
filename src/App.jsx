@@ -16,7 +16,7 @@ import Profile from './pages/account/profile';
 import Login from './pages/auth/login';
 import ListCourses from './pages/course/listCourses';
 import CourseDetail from './pages/course/courseDetail';
-import ListClasses from './pages/class/student/listClassesbyStudent';
+import ListClasses from './pages/class/listClasses';
 import ClassContent from './pages/class/classContent';
 
 function App() {
