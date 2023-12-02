@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import useGetRole from '../../hooks/useGetRole';
 // import { FormControl } from '@material-ui/core';
 import { IconButton } from '@mui/material';
 import { Grid, TextField, Button, Typography, Box, Container, InputAdornment, Stack, Snackbar, Alert } from '@mui/material';
@@ -64,7 +65,7 @@ export default function Login() {
 
 	const handleChangeRole = (event) => {
 		let newRole = event.target.value;
-		console.log(newRole);
+
 		setRole(newRole);
 	};
 
@@ -78,30 +79,24 @@ export default function Login() {
 				password: hashedPassword,
 				role: role,
 			};
-
 			setLoading(true);
-			axios
-				.post(`/auth/login`, req)
-				.then((response) => {
-					console.log(response.data);
-					localStorage.setItem('accessToken', response.data.Authorization);
-					console.log(localStorage.getItem('accessToken'));
-				})
-				.catch((error) => {
-					// Handle the error
-					console.error(error);
-				});
+
+			useEffect(() => {
+				axios
+					.post(`/auth/login`, req)
+					.then((response) => {
+						console.log(response.data);
+						localStorage.setItem('accessToken', response.data.Authorization);
+						console.log(localStorage.getItem('accessToken'));
+					})
+					.catch((error) => {
+						// Handle the error
+						console.error(error);
+					});
+			});
 
 			setLoading(false);
 			navigate('/Home');
-
-			// dispatch({
-			// 	type: 'saga/userLogin',
-			// 	payload: { username, password, check },
-			// });
-			//dispatch({ type: "saga/getUserId", payload: null})
-
-			console.log(`username: ${username} \n password: ${password} \n passwordHashed: ${hashedPassword}`);
 		} else {
 			if (!validUsername || username == '') {
 				setValidUsername(false);
@@ -109,7 +104,6 @@ export default function Login() {
 			if (!validPassword || password == '') {
 				setValidPassword(false);
 			}
-			//setUsername("");
 		}
 	};
 
@@ -380,6 +374,7 @@ export default function Login() {
 										<Select value={role} onChange={handleChangeRole}>
 											<MenuItem value="student">Học viên</MenuItem>
 											<MenuItem value="teacher">Giảng viên</MenuItem>
+											<MenuItem value="admin">Nhân viên hệ thống</MenuItem>
 										</Select>
 									</Grid>
 								</Grid>

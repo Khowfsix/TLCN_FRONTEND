@@ -11,9 +11,6 @@ function handleClickBreadCums(event) {
 function ClassContent() {
 	const [classContents, setClassContents] = useState(null);
 
-	// if (cacheClassContents) {
-	// }
-
 	return (
 		<Box>
 			<Box position={'fixed'} onClick={handleClickBreadCums}>
@@ -26,29 +23,6 @@ function ClassContent() {
 					</Link>
 					<Typography>Breadcrumbs</Typography>
 				</Breadcrumbs>
-			</Box>
-
-			<Box className="branding">
-				<Container className="container-fluid">
-					<Box className="branding-inner">
-						<Link className="site-name has-logo">
-							<img className="site-logo" src="" alt="UTEx - HCMUTE" />
-						</Link>
-
-						<List className="main-nav d-none d-md-block">
-							<ListItem className="nav-item">
-								<Link className="nav-item nav-link" href="http://hcmute.edu.vn">
-									Đại học Sư Phạm Kỹ thuật
-								</Link>
-							</ListItem>
-							<ListItem className="nav-item">
-								<Link className="nav-item nav-link" href="https://utex.hcmute.edu.vn/course/">
-									Các khóa học
-								</Link>
-							</ListItem>
-						</List>
-					</Box>
-				</Container>
 			</Box>
 
 			<Container></Container>

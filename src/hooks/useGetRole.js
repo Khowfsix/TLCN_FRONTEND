@@ -1,22 +1,21 @@
 import { useState, useEffect } from 'react';
-// import { useSelector } from 'react-redux';
-// import { useDispatch } from 'react-redux';
 import axios from '../apis/axiosConfig';
 
 function useGetRole() {
-	const accessToken = localStorage.getItem('accessToken');
+	// const userlocal = localStorage.getItem('userlocal');
 	const [role, setRole] = useState(null);
 
 	useEffect(() => {
-		// if (userlocal) {
 		axios
-			.get(`/authgetRoleByToken/${accessToken}`)
+			.post(`/auth/whoami`)
 			.then((response) => {
-				if (response.data.role == 'student') {
+				localStorage.setItem('userlocal', response.data);
+
+				if (response.data.role == 'STUDENT') {
 					setRole('student');
-				} else if (response.data.role == 'teacher') {
+				} else if (response.data.role == 'TEACHER') {
 					setRole('teacher');
-				} else if (response.data.role == 'admin') {
+				} else if (response.data.role == 'ADMIN') {
 					setRole('admin');
 				} else {
 					setRole(null);
@@ -25,12 +24,11 @@ function useGetRole() {
 			.catch((error) => {
 				console.log('error: ', error);
 			});
-		// } else {
-		// 	setRole(null);
-		// }
 	});
 
 	console.log(`My role is: ${role}`);
+	localStorage.setItem('role', role);
+
 	return role;
 }
 

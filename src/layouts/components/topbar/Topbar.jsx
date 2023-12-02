@@ -115,8 +115,9 @@ export default function TopBar() {
 			}}
 			open={isMenuOpen}
 			onClose={handleMenuClose}>
-			<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-			<MenuItem onClick={handleMenuClose}>My account</MenuItem>
+			<MenuItem onClick={handleMenuClose}>Thông tin cá nhân</MenuItem>
+			<MenuItem onClick={handleMenuClose}>Tài khoản</MenuItem>
+			<MenuItem onClick={handleMenuClose}>Đăng xuất</MenuItem>
 		</Menu>
 	);
 

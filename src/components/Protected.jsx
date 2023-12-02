@@ -1,22 +1,25 @@
 import React, { useEffect } from 'react';
-import useGetRole from '../hooks/useGetRole';
 import Unauthorized from './Unauthorized';
 import { useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 const ProtectedRoute = (props) => {
 	const { allowed } = props;
-	const role = useGetRole();
+	const role = localStorage.getItem('role');
 	const navigate = useNavigate();
 
+	console.log(role);
+
+	if (role && allowed.includes(role)) {
+		return <Outlet />;
+	}
 	if (role == null) {
 		useEffect(() => {
-			navigate(`/login`);
-		}, []);
-	} else if (role && allowed.includes(role)) {
-		return <Outlet />;
-	} else {
-		return <Unauthorized />;
+			navigate('/login');
+		});
 	}
+
+	return <Unauthorized />;
 };
 
 export default ProtectedRoute;

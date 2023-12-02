@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from '../components/Protected';
 
 import Home from '../pages/home/home';
@@ -11,76 +11,25 @@ import CourseDetail from '../pages/course/courseDetail';
 import ListClasses from '../pages/class/student/listClassesbyStudent';
 import ClassContent from '../pages/class/classContent';
 
-export const router = createBrowserRouter([
-	{
-		id: 'public',
-		path: '',
-		element: <MainLayout />,
-		children: [
-			{
-				path: '',
-				element: <Home />,
-			},
-			{
-				path: 'home',
-				element: <Home />,
-			},
-			{
-				path: 'about',
-				element: <About />,
-			},
+export const MyAppRouter = () => {
+	<BrowserRouter>
+		<Routes>
+			<Route path="/" element={<MainLayout />}>
+				{/* No autho */}
+				<Route path="" element={<Home />} />
+				<Route path="home" element={<Home />} />
+				<Route path="about" element={<About />} />
+				<Route path="login" element={<Login />} />
 
-			{
-				path: 'login',
-				element: <Login />,
-			},
-		],
-	},
-	{
-		id: 'protected',
-		path: '',
-		element: <MainLayout />,
-		children: [
-			{
-				path: 'listCourses',
-				element: (
-					<ProtectedRoute allowed={['admin', 'teacher', 'student']}>
-						<ListCourses />
-					</ProtectedRoute>
-				),
-			},
-			{
-				path: 'course',
-				element: (
-					<ProtectedRoute allowed={['admin', 'teacher', 'student']}>
-						<CourseDetail />
-					</ProtectedRoute>
-				),
-			},
-			{
-				path: 'listClasses',
-				element: (
-					<ProtectedRoute allowed={['admin', 'teacher', 'student']}>
-						<ListClasses />
-					</ProtectedRoute>
-				),
-			},
-			{
-				path: 'class',
-				element: (
-					<ProtectedRoute allowed={['admin', 'teacher', 'student']}>
-						<ClassContent />
-					</ProtectedRoute>
-				),
-			},
-			{
-				path: 'account',
-				element: (
-					<ProtectedRoute allowed={['admin', 'teacher', 'student']}>
-						<Profile />
-					</ProtectedRoute>
-				),
-			},
-		],
-	},
-]);
+				{/* student and teacher and admin */}
+				<Route path="/" element={<ProtectedRoute allowed={['admin', 'teacher', 'student']} />}>
+					<Route path="listCourses" element={<ListCourses />} />
+					<Route path="course" element={<CourseDetail />} />
+					<Route path="listClasses" element={<ListClasses />} />
+					<Route path="class" element={<ClassContent />} />
+					<Route path="account" element={<Profile />} />
+				</Route>
+			</Route>
+		</Routes>
+	</BrowserRouter>;
+};

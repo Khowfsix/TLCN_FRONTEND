@@ -1,1 +1,1 @@
-export { router } from './createRouter.jsx';
+export { MyAppRouter } from './createRouter.jsx';
