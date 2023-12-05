@@ -73,7 +73,7 @@ export default function Login() {
 		const hashedPassword = sha256(password).toString();
 		event.preventDefault();
 
-		if (validUsername && username != '' && validPassword && password != '' && ['student', 'teacher'].includes(role)) {
+		if (validUsername && username != '' && validPassword && password != '' && ['student', 'teacher', 'admin'].includes(role)) {
 			const req = {
 				username: username,
 				password: hashedPassword,
@@ -81,19 +81,19 @@ export default function Login() {
 			};
 			setLoading(true);
 
-			useEffect(() => {
-				axios
-					.post(`/auth/login`, req)
-					.then((response) => {
-						console.log(response.data);
-						localStorage.setItem('accessToken', response.data.Authorization);
-						console.log(localStorage.getItem('accessToken'));
-					})
-					.catch((error) => {
-						// Handle the error
-						console.error(error);
-					});
-			});
+			// useEffect(() => {
+			axios
+				.post(`/auth/login`, req)
+				.then((response) => {
+					console.log(response.data);
+					localStorage.setItem('accessToken', response.data.Authorization);
+					console.log(localStorage.getItem('accessToken'));
+				})
+				.catch((error) => {
+					// Handle the error
+					console.error(error);
+				});
+			// });
 
 			setLoading(false);
 			navigate('/Home');

@@ -18,6 +18,7 @@ import ListCourses from './pages/course/listCourses';
 import CourseDetail from './pages/course/courseDetail';
 import ListClasses from './pages/class/listClasses';
 import ClassContent from './pages/class/classContent';
+import Register from './pages/auth/register';
 
 function App() {
 	return (
@@ -30,6 +31,7 @@ function App() {
 						<Route path="home" element={<Home />} />
 						<Route path="about" element={<About />} />
 						<Route path="login" element={<Login />} />
+						<Route path="register" element={<Register />} />
 
 						{/* student and teacher and admin */}
 						<Route path="/" element={<ProtectedRoute allowed={['admin', 'teacher', 'student']} />}>

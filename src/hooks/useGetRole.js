@@ -2,26 +2,38 @@ import { useState, useEffect } from 'react';
 import axios from '../apis/axiosConfig';
 
 function useGetRole() {
-	// const userlocal = localStorage.getItem('userlocal');
+	const [userId, setUserId] = useState(null);
 	const [role, setRole] = useState(null);
+	const [roleUserId, setRoleUserId] = useState(null);
+
+	const token = localStorage.getItem('accessToken');
+
+	// Chưa có token thì là chưa đăng nhập
+	if (token == null) {
+		return null;
+	}
 
 	useEffect(() => {
 		axios
 			.post(`/auth/whoami`)
 			.then((response) => {
-				localStorage.setItem('roleUserId', response.data.object.id);
-				localStorage.setItem('userId', response.data.sub);
+				setUserId(response.data.sub);
+				setRole(response.data.role);
 
-				let roldUSID = localStorage.getItem('roleUserId');
-				console.log(roldUSID);
+				if (response.data.sub == -1) {
+					return null;
+				}
 
 				if (response.data.role == 'STUDENT') {
 					setRole('student');
+					setRoleUserId(response.data.object.stid);
 				} else if (response.data.role == 'TEACHER') {
 					setRole('teacher');
+					setRoleUserId(response.data.object.lid);
 				} else if (response.data.role == 'ADMIN') {
 					setRole('admin');
 				} else {
+					// Token hết hạn
 					setRole(null);
 				}
 			})
@@ -30,10 +42,11 @@ function useGetRole() {
 			});
 	});
 
-	console.log(`My role is: ${role}`);
+	localStorage.setItem('userId', userId);
 	localStorage.setItem('role', role);
+	localStorage.setItem('roleUserId', roleUserId);
 
-	return role;
+	return [userId, role, roleUserId];
 }
 
 export default useGetRole;

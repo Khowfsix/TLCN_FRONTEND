@@ -5,7 +5,6 @@ import useGetRole from '../../hooks/useGetRole';
 import axios from '../../apis/axiosConfig';
 
 export default function Home() {
-	console.log(`my role: ${useGetRole()}`);
 	return (
 		<Container className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
 			<Box className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">

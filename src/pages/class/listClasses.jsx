@@ -41,7 +41,7 @@ function listClasses() {
 	};
 
 	const getListClasses_Admin = () => {
-		useEffect(() => {
+		useEffectively(() => {
 			axios
 				.get(`/class/getAll`)
 				.then((response) => {
@@ -58,7 +58,7 @@ function listClasses() {
 		getListClasses_Student();
 	} else if (myRole === 'teacher') {
 		getListClasses_Teacher();
-	} else if (myrole === 'admin') {
+	} else if (myRole === 'admin') {
 		getListClasses_Admin();
 	}
 
@@ -70,12 +70,12 @@ function listClasses() {
 				alignItems: 'center',
 			}}>
 			<Masonry columns={4} spacing={2}>
-				{classList.map((classs) => {
-					// console.log(classs.isDeleted);
-					if (classs.isDeleted === false) {
-						return <CardClass key={classs.cid} class={classs}></CardClass>;
-					}
-				})}
+				{classList &&
+					classList.map((classs) => {
+						if (classs.isDeleted === false) {
+							return <CardClass key={classs.cid} class={classs}></CardClass>;
+						}
+					})}
 			</Masonry>
 		</Box>
 	);

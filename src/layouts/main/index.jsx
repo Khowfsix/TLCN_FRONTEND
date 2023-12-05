@@ -13,6 +13,9 @@ function MainLayout() {
 				className="content"
 				sx={{
 					width: '100vw',
+					height: '100wh',
+					marginTop: '100px',
+					justifyContent: 'center',
 					display: 'flex',
 				}}>
 				<Outlet />
