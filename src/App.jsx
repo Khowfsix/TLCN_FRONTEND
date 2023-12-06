@@ -8,6 +8,8 @@ import { Box } from '@material-ui/core';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/Protected';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Home from './pages/home/home';
 import About from './pages/home/about';
@@ -20,9 +22,14 @@ import ListClasses from './pages/class/listClasses';
 import ClassContent from './pages/class/classContent';
 import Register from './pages/auth/register';
 
+import ListBlog from './pages/blog/listBlog';
+
 function App() {
+	localStorage.setItem('testing', 'true');
+
 	return (
 		<Box>
+			<ToastContainer />
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<MainLayout />}>
@@ -32,15 +39,21 @@ function App() {
 						<Route path="about" element={<About />} />
 						<Route path="login" element={<Login />} />
 						<Route path="register" element={<Register />} />
+						<Route path="blogs" element={<ListBlog />} />
 
 						{/* student and teacher and admin */}
-						<Route path="/" element={<ProtectedRoute allowed={['admin', 'teacher', 'student']} />}>
+						<Route path="/" element={<ProtectedRoute allowed={['admin', 'lecturer', 'student']} />}>
 							<Route path="listCourses" element={<ListCourses />} />
 							<Route path="course" element={<CourseDetail />} />
 							<Route path="listClasses" element={<ListClasses />} />
 							<Route path="class" element={<ClassContent />} />
 							<Route path="account" element={<Profile />} />
 						</Route>
+						{/* admin and lecturer role */}
+						<Route path="/" element={<ProtectedRoute allowed={['admin', 'lecturer']} />}></Route>
+
+						{/* admin and student role */}
+						<Route path="/" element={<ProtectedRoute allowed={['admin', 'student']} />}></Route>
 					</Route>
 				</Routes>
 			</BrowserRouter>

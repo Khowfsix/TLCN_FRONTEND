@@ -20,6 +20,8 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from '@material-ui/core';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { toast } from 'react-toastify';
+
 import axios from '../../../apis/axiosConfig';
 
 const Search = styled('div')(({ theme }) => ({
@@ -111,6 +113,17 @@ export default function TopBar() {
 			.then((res) => {
 				localStorage.removeItem('accessToken');
 				navigate('/login');
+
+				toast.success('Đã đăng xuất', {
+					position: 'top-right',
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: 'dark',
+				});
 			})
 			.catch((err) => {
 				console.log(err);
@@ -139,7 +152,7 @@ export default function TopBar() {
 			onClose={handleMenuClose}>
 			<MenuItem onClick={handleMenuClose}>Thông tin cá nhân</MenuItem>
 			<MenuItem onClick={handleMenuClose}>Tài khoản</MenuItem>
-			<MenuItem onClick={handleLogoutMenu}>Đăng xuất</MenuItem>
+			{localStorage.getItem('accessToken') && <MenuItem onClick={handleLogoutMenu}>Đăng xuất</MenuItem>}
 		</Menu>
 	);
 

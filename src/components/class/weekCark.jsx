@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -7,6 +7,10 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { ButtonGroup, Grid } from '@material-ui/core';
+import theme from './../../theme';
+
+import DeleteSubjectDialog from '../../components/class/subject/deleteSubject';
 
 export default function WeekCard(props) {
 	const week = props.content;
@@ -73,25 +77,49 @@ export default function WeekCard(props) {
 		);
 	};
 
+	const handleUpdateSubject = (props) => {
+		console.log(`update topic`);
+	};
+
+	const handleAddTopic = (props) => {
+		console.log(`add topic`);
+	};
+
 	return (
 		<Box sx={{ minWidth: 1000, paddingTop: 1, justifyContent: 'center', alignItems: 'center' }}>
-			<Card variant="outlined" sx={{ backgroundColor: 'lavender' }}>
+			<Card variant="outlined" sx={{ backgroundColor: 'lavenderblush' }}>
 				<CardContent>
 					<Typography variant="h3" color="text.secondary" gutterBottom>
 						{week.key}
 					</Typography>
-					{week.topics &&
-						week.topics.map((topic) => {
-							if (topic.type === 'Lecture') {
-								return <Lecture topic={topic} key={topic.name}></Lecture>;
-							} else if (topic.type === 'Exam') {
-								return <Exam topic={topic} key={topic.name}></Exam>;
-							} else if (topic.type === 'Assessment') {
-								return <Assessment topic={topic} key={topic.name}></Assessment>;
-							}
-						})}
+					<Grid container spacing={2}>
+						<Grid item xs={12}>
+							{week.topics &&
+								week.topics.map((topic) => {
+									if (topic.type === 'Lecture') {
+										return <Lecture topic={topic} key={topic.name}></Lecture>;
+									} else if (topic.type === 'Exam') {
+										return <Exam topic={topic} key={topic.name}></Exam>;
+									} else if (topic.type === 'Assessment') {
+										return <Assessment topic={topic} key={topic.name}></Assessment>;
+									}
+								})}
+						</Grid>
+						<Grid item></Grid>
+					</Grid>
 				</CardContent>
+				<CardActions>
+					<ButtonGroup color="secondary" aria-label="medium secondary button group">
+						<ButtonGroup color="primary" aria-label="small secondary button group">
+							<Button onClick={() => handleAddTopic(props)}>Thêm nội dung</Button>
+							<Button onClick={() => handleUpdateSubject(props)}>Chỉnh sửa</Button>
+							<Button>Xóa chủ để</Button>
+						</ButtonGroup>
+					</ButtonGroup>
+				</CardActions>
 			</Card>
+
+			<DeleteSubjectDialog></DeleteSubjectDialog>
 		</Box>
 	);
 }

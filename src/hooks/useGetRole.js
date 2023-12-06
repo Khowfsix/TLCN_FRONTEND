@@ -27,8 +27,8 @@ function useGetRole() {
 				if (response.data.role == 'STUDENT') {
 					setRole('student');
 					setRoleUserId(response.data.object.stid);
-				} else if (response.data.role == 'TEACHER') {
-					setRole('teacher');
+				} else if (response.data.role == 'LECTURER') {
+					setRole('lecturer');
 					setRoleUserId(response.data.object.lid);
 				} else if (response.data.role == 'ADMIN') {
 					setRole('admin');

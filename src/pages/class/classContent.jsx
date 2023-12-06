@@ -47,21 +47,13 @@ const ClassContent = () => {
 		<Box position={'fixed'} sx={{ width: '100vw', justifyContent: 'center', alignItems: 'center', justifyItems: 'center' }}>
 			<Typography variant="h2">{classInfo && classInfo.className}</Typography>
 
-			{/* <Box onClick={handleClickBreadCums}>
-				<Breadcrumbs aria-label="breadcrumb">
-					<Link underline="hover" color="inherit" href="/">
-						MUI
-					</Link>
-					<Typography>Breadcrumbs</Typography>
-				</Breadcrumbs>
-			</Box> */}
-
 			<Box>
 				{classContents &&
 					classContents.map((content) => {
 						return <WeekCard key={content.key} content={content}></WeekCard>;
 					})}
 			</Box>
+			{/* add topic */}
 		</Box>
 	);
 };

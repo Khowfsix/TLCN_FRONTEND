@@ -15,7 +15,8 @@ import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
-// import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 import sha256 from 'crypto-js/sha256';
 
 import axios from '../../apis/axiosConfig';
@@ -73,7 +74,7 @@ export default function Login() {
 		const hashedPassword = sha256(password).toString();
 		event.preventDefault();
 
-		if (validUsername && username != '' && validPassword && password != '' && ['student', 'teacher', 'admin'].includes(role)) {
+		if (validUsername && username != '' && validPassword && password != '' && ['student', 'lecturer'].includes(role)) {
 			const req = {
 				username: username,
 				password: hashedPassword,
@@ -81,22 +82,44 @@ export default function Login() {
 			};
 			setLoading(true);
 
-			// useEffect(() => {
 			axios
 				.post(`/auth/login`, req)
 				.then((response) => {
-					console.log(response.data);
-					localStorage.setItem('accessToken', response.data.Authorization);
-					console.log(localStorage.getItem('accessToken'));
+					console.log(response.data.status);
+
+					if (response.data && response.data.status === 'success') {
+						localStorage.setItem('accessToken', response.data.Authorization);
+
+						toast.success('Đăng nhập thành công!', {
+							position: 'top-right',
+							autoClose: 3000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							progress: undefined,
+							theme: 'dark',
+						});
+						navigate('/Home');
+					}
+					setLoading(false);
 				})
 				.catch((error) => {
-					// Handle the error
+					setLoading(false);
+					toast.error('Tên tài khoản hoặc mật khẩu không đúng!', {
+						position: 'top-right',
+						autoClose: 3000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+						theme: 'dark',
+					});
+
 					console.error(error);
 				});
 			// });
-
-			setLoading(false);
-			navigate('/Home');
 		} else {
 			if (!validUsername || username == '') {
 				setValidUsername(false);
@@ -373,8 +396,7 @@ export default function Login() {
 										<InputLabel sx={{ color: 'black', marginRight: '50px' }}>Đăng nhập với quyền: </InputLabel>
 										<Select value={role} onChange={handleChangeRole}>
 											<MenuItem value="student">Học viên</MenuItem>
-											<MenuItem value="teacher">Giảng viên</MenuItem>
-											<MenuItem value="admin">Nhân viên hệ thống</MenuItem>
+											<MenuItem value="lecturer">Giảng viên</MenuItem>
 										</Select>
 									</Grid>
 								</Grid>
