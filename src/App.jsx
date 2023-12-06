@@ -22,6 +22,10 @@ import ListClasses from './pages/class/listClasses';
 import ClassContent from './pages/class/classContent';
 import Register from './pages/auth/register';
 
+import Lecture from './pages/class/lecture/lecture';
+import Assessment from './pages/class/assessment/assessment';
+import Exam from './pages/class/exam/exam';
+
 import ListBlog from './pages/blog/listBlog';
 
 function App() {
@@ -48,6 +52,10 @@ function App() {
 							<Route path="listClasses" element={<ListClasses />} />
 							<Route path="class" element={<ClassContent />} />
 							<Route path="account" element={<Profile />} />
+
+							<Route path="lecture" element={<Lecture />} />
+							<Route path="assessment" element={<Assessment />} />
+							<Route path="exam" element={<Exam />} />
 						</Route>
 						{/* admin and lecturer role */}
 						<Route path="/" element={<ProtectedRoute allowed={['admin', 'lecturer']} />}></Route>
@@ -57,7 +65,6 @@ function App() {
 					</Route>
 				</Routes>
 			</BrowserRouter>
-			;
 		</Box>
 	);
 }

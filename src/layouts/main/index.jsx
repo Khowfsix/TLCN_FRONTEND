@@ -12,10 +12,10 @@ function MainLayout() {
 				maxWidth={false}
 				className="content"
 				sx={{
-					width: '100vw',
-					height: '100wh',
+					// width: '100vw',
+					// height: '100wh',
 					marginTop: '100px',
-					justifyContent: 'center',
+					// justifyContent: 'center',
 					display: 'flex',
 				}}>
 				<Outlet />

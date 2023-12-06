@@ -45,7 +45,7 @@ const ClassContent = () => {
 
 	return (
 		<Box position={'fixed'} sx={{ width: '100vw', justifyContent: 'center', alignItems: 'center', justifyItems: 'center' }}>
-			<Typography variant="h2">{classInfo && classInfo.className}</Typography>
+			<Typography variant="h3">{classInfo && classInfo.className}</Typography>
 
 			<Box>
 				{classContents &&

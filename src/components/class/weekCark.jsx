@@ -21,14 +21,14 @@ export default function WeekCard(props) {
 		return (
 			<Card variant="outlined">
 				<CardContent>
-					<Typography variant="h5" component="div" color={'blue'}>
+					<Typography variant="h6" component="div" color={'blue'}>
 						{props.topic.name}
 					</Typography>
 					<Typography color="text.secondary">Bài giảng</Typography>
 				</CardContent>
 				<CardActions
 					onClick={() => {
-						console.log('hehe');
+						navigate(`/lecture?lid=${props.topic.id}`);
 					}}
 					sx={{ justifyContent: 'center' }}>
 					<Button size="small">Vào xem</Button>
@@ -41,7 +41,7 @@ export default function WeekCard(props) {
 		return (
 			<Card variant="outlined">
 				<CardContent>
-					<Typography variant="h5" component="div" color={'red'}>
+					<Typography variant="h6" component="div" color={'red'}>
 						{props.topic.name}
 					</Typography>
 					<Typography color="text.secondary">Bài kiểm tra</Typography>
@@ -61,7 +61,7 @@ export default function WeekCard(props) {
 		return (
 			<Card variant="outlined">
 				<CardContent>
-					<Typography variant="h5" component="div" color={'green'}>
+					<Typography variant="h6" component="div" color={'green'}>
 						{props.topic.name}
 					</Typography>
 					<Typography color="text.secondary">Bài tập</Typography>
@@ -86,10 +86,10 @@ export default function WeekCard(props) {
 	};
 
 	return (
-		<Box sx={{ minWidth: 1000, paddingTop: 1, justifyContent: 'center', alignItems: 'center' }}>
-			<Card variant="outlined" sx={{ backgroundColor: 'lavenderblush' }}>
-				<CardContent>
-					<Typography variant="h3" color="text.secondary" gutterBottom>
+		<Box sx={{ minWidth: 1000, paddingTop: 5, justifyContent: 'center', alignItems: 'center' }}>
+			<Card variant="outlined" sx={{ backgroundColor: 'white' }}>
+				<Box>
+					<Typography variant="h4" color="text.secondary" gutterBottom>
 						{week.key}
 					</Typography>
 					<Grid container spacing={2}>
@@ -107,8 +107,9 @@ export default function WeekCard(props) {
 						</Grid>
 						<Grid item></Grid>
 					</Grid>
-				</CardContent>
-				<CardActions>
+				</Box>
+
+				<Box sx={{ paddingBottom: 2 }}>
 					<ButtonGroup color="secondary" aria-label="medium secondary button group">
 						<ButtonGroup color="primary" aria-label="small secondary button group">
 							<Button onClick={() => handleAddTopic(props)}>Thêm nội dung</Button>
@@ -116,10 +117,8 @@ export default function WeekCard(props) {
 							<Button>Xóa chủ để</Button>
 						</ButtonGroup>
 					</ButtonGroup>
-				</CardActions>
+				</Box>
 			</Card>
-
-			<DeleteSubjectDialog></DeleteSubjectDialog>
 		</Box>
 	);
 }
