@@ -29,7 +29,7 @@ import Exam from './pages/class/exam/exam';
 import ListBlog from './pages/blog/listBlog';
 
 function App() {
-	localStorage.setItem('testing', 'true');
+	localStorage.setItem('testing', false);
 
 	return (
 		<Box>

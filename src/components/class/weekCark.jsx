@@ -8,9 +8,6 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { ButtonGroup, Grid } from '@material-ui/core';
-import theme from './../../theme';
-
-import DeleteSubjectDialog from '../../components/class/subject/deleteSubject';
 
 export default function WeekCard(props) {
 	const week = props.content;
@@ -105,7 +102,6 @@ export default function WeekCard(props) {
 									}
 								})}
 						</Grid>
-						<Grid item></Grid>
 					</Grid>
 				</Box>
 

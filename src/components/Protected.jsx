@@ -7,9 +7,9 @@ import useGetRole from '../hooks/useGetRole';
 
 const ProtectedRoute = (props) => {
 	const allowed = props.allowed;
-	const Iam = useGetRole();
-	// const [role, setRole] = useState(null);
 	const navigate = useNavigate();
+
+	const Iam = useGetRole();
 
 	if (Iam == null) {
 		useEffect(() => {

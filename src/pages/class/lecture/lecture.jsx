@@ -12,8 +12,8 @@ import { Stack } from '@mui/material';
 import { DeleteForeverOutlined } from '@material-ui/icons';
 import { UpdateOutlined } from '@material-ui/icons';
 
-// import { EditorState, convertToRaw, ContentState } from 'draft-js';
-// import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 import formatedDateTime from '../../../utils/formatedDateTime';
@@ -22,7 +22,7 @@ import Transition from '../../../utils/transition';
 export default function Lecture() {
 	const [params] = useSearchParams();
 	const [lectureContent, setLectureContent] = useState(null);
-	// const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+	const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
 
 	const [openDelDi, setOpenDelDi] = useState(false);
 	const [openUpdDi, setOpenUpdDi] = useState(false);
@@ -47,7 +47,7 @@ export default function Lecture() {
 	};
 
 	useEffect(() => {
-		if (localStorage.getItem(`testing`) == false) {
+		if (localStorage.getItem(`testing`) != true) {
 			axios
 				.request({
 					method: 'get',
