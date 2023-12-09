@@ -12,7 +12,6 @@ import { ButtonGroup, Grid } from '@material-ui/core';
 export default function WeekCard(props) {
 	const week = props.content;
 	const navigate = useNavigate();
-	console.log(week);
 
 	const Lecture = (props) => {
 		return (
@@ -80,6 +79,7 @@ export default function WeekCard(props) {
 
 	const handleAddTopic = (props) => {
 		console.log(`add topic`);
+		navigate(`/addSomething`);
 	};
 
 	return (

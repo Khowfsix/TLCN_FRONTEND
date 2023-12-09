@@ -1,0 +1,26 @@
+{
+	"questions": [
+		{
+			"questionId": 1,
+			"type": "Short Answer",
+			"choices": ["2024", "0044", "0024", "2044"],
+			"content": "Cần cù bù..."
+		},
+		{
+			"questionId": 2,
+			"type": "Checkboxes",
+			"content": "Đâu là tục ngữ",
+			"checkbox": ["Chó treo mèo đậy", "Có công mài sắt có ngày nên kim", "Đi một ngày đàng học một sàng không"]
+		}
+	],
+	"correct": [
+		{
+			"questionId": 1,
+			"answer": "thông minh"
+		},
+		{
+			"questionId": 2,
+			"answer": ["Có công mài sắt có ngày nên kim", "Đi một ngày đàng học một sàng khôn"]
+		}
+	]
+}

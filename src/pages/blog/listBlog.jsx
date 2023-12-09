@@ -176,7 +176,17 @@ export default function ListBlog() {
 	}, []);
 
 	return (
-		<Box>
+		<Box
+			sx={{
+				height: '75vh',
+				fontFamily: "'Ropa Sans' sans-serif",
+				// width: '100%',
+				textAlign: 'center',
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}>
 			{listBlogs.map((blog) => {
 				return <BlogCard key={blog.bid} blog={blog} />;
 			})}

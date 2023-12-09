@@ -3,20 +3,21 @@ import { Container } from '@mui/material';
 
 import Topbar from '../components/topbar/Topbar';
 import { Outlet } from 'react-router-dom';
+import { Box } from '@material-ui/core';
 
 function MainLayout() {
 	return (
-		<Container maxWidth={false}>
+		<Container>
 			<Topbar />
 			<Container
-				maxWidth={false}
 				className="content"
 				sx={{
-					// width: '100vw',
-					// height: '100wh',
-					marginTop: '100px',
-					// justifyContent: 'center',
 					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					height: '100%',
+					width: '100%',
+					marginTop: '20px',
 				}}>
 				<Outlet />
 			</Container>
@@ -25,7 +26,3 @@ function MainLayout() {
 }
 
 export default MainLayout;
-
-// MainLayout.propTypes = {
-// 	children: PropTypes.node,
-// };

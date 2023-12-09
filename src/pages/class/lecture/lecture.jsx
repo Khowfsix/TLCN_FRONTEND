@@ -97,9 +97,13 @@ export default function Lecture() {
 				</Typography>
 				<Typography>
 					<b>Link: </b>
-					<a href={lectureContent && lectureContent.link} target="_blank">
-						{lectureContent && lectureContent.link}
-					</a>
+					{lectureContent && lectureContent.link ? (
+						<a href={lectureContent && lectureContent.link} target="_blank">
+							{lectureContent && `Link đính kèm nè`}
+						</a>
+					) : (
+						`Hông có link đính kèm`
+					)}
 				</Typography>
 			</Box>
 

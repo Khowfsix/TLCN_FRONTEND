@@ -2,15 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Box, Container, List, ListItem } from '@material-ui/core';
 import { Breadcrumbs, Typography } from '@material-ui/core';
-import { Link } from '@mui/material';
+import { Fab, Link } from '@mui/material';
 import WeekCard from '../../components/class/weekCark';
 
 import axios from '../../apis/axiosConfig';
-
-function handleClickBreadCums(event) {
-	event.preventDefault();
-	console.info('You clicked a breadcrumb.');
-}
+import { AddBox, AddSharp } from '@material-ui/icons';
 
 const ClassContent = () => {
 	const [params] = useSearchParams();
@@ -22,6 +18,7 @@ const ClassContent = () => {
 			axios
 				.get(`/class/getById/${params.get('cid')}`)
 				.then((response) => {
+					0;
 					setClassInfo(response.data);
 				})
 				.catch((error) => {
@@ -44,16 +41,45 @@ const ClassContent = () => {
 	}, []);
 
 	return (
-		<Box position={'fixed'} sx={{ width: '100vw', justifyContent: 'center', alignItems: 'center', justifyItems: 'center' }}>
-			<Typography variant="h3">{classInfo && classInfo.className}</Typography>
+		<Box
+			sx={{
+				position: 'fixed',
+				display: 'flex',
+				flexDirection: 'column',
 
-			<Box>
-				{classContents &&
-					classContents.map((content) => {
-						return <WeekCard key={content.key} content={content}></WeekCard>;
-					})}
+				// height: '100vh',
+				// width: '100vw',
+				// justifyContent: 'center',
+				// alignItems: 'center',
+				// justifyItems: 'center',
+			}}>
+			<Typography variant="h3">{classInfo && classInfo.className}</Typography>
+			<Box sx={{ flexGrow: 1 }}>
+				<Box>
+					{classContents &&
+						classContents.map((content) => {
+							return <WeekCard key={content.key} content={content}></WeekCard>;
+						})}
+				</Box>
 			</Box>
+
 			{/* add topic */}
+
+			<Box
+				sx={{
+					position: 'fixed',
+					bottom: 16,
+					right: 16,
+					// marginBottom: '20px',
+					// marginRight: '20px',
+					// marginTop: '20px',
+					// marginLeft: '20px',
+					// zIndex: 1000,
+				}}>
+				<Fab color="primary" aria-label="add something">
+					<AddSharp />
+				</Fab>
+			</Box>
 		</Box>
 	);
 };
