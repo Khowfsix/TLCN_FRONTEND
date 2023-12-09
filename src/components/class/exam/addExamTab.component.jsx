@@ -1,11 +1,9 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import React, { useState } from 'react';
 
-import { ContentState, EditorState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import NewQuestionForm from './newQuestionForm.component';
 
 export const AddExamTab = () => {
 	const [formData, setFormData] = useState({
@@ -19,19 +17,14 @@ export const AddExamTab = () => {
 		timeAttempt: null,
 	});
 
-	const [numberOfQuestions, setNumberOfQuestions] = useState(1);
+	const [listQuestions, setListQuestions] = useState([]);
+	const defaultQuestion = {
+		question: '',
+		answers: ['', '', '', ''],
+		correctAnswer: [''],
+	};
 
 	const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-
-	const [editorState, setEditorState] = useState(() => EditorState.createWithContent(ContentState.createFromText('')));
-
-	const handleEditorStateChange = (newEditorState) => {
-		setEditorState(newEditorState);
-		setFormData((prevFormData) => ({
-			...prevFormData,
-			content: newEditorState.getCurrentContent().getPlainText(),
-		}));
-	};
 
 	const handleChange = (event) => {
 		setFormData((prevFormData) => ({
@@ -63,6 +56,11 @@ export const AddExamTab = () => {
 		}));
 	};
 
+	const handleAddAnswer = () => {
+		setListQuestions([...listQuestions, defaultQuestion]);
+		console.log(listQuestions);
+	};
+
 	return (
 		<>
 			<Typography variant="h3" marginTop={'20px'}>
@@ -91,39 +89,17 @@ export const AddExamTab = () => {
 						</LocalizationProvider>
 
 						<Typography variant="h5" marginTop={'20px'}>
-							Nội dung
+							Danh sách câu hỏi
 						</Typography>
 
+						<Button variant="contained" onClick={handleAddAnswer}>
+							Thêm câu hỏi
+						</Button>
+
 						<Box sx={{ border: '1px solid #ccc', padding: '16px', borderRadius: '4px' }}>
-							<Editor
-								placeholder="Nội dung câu hỏi"
-								editorState={editorState}
-								onEditorStateChange={handleEditorStateChange}
-								editorStyle={{
-									border: '1px solid #ccc',
-									borderRadius: '4px',
-									height: '100px',
-									overflowY: 'scroll',
-								}}
-							/>
-
-							<FormControl sx={{ marginTop: '20px', marginBottom: '20px' }}>
-								<InputLabel id="question-type-label">Loại Câu Hỏi</InputLabel>
-								<Select labelId="question-type-label" id="question-type-select" label="Loại Câu Hỏi">
-									<MenuItem value="type1">Loại 1</MenuItem>
-									<MenuItem value="type2">Loại 2</MenuItem>
-									<MenuItem value="type3">Loại 3</MenuItem>
-								</Select>
-							</FormControl>
-
-							<Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
-								<Box sx={{ flexGrow: 1, marginRight: '16px' }}>
-									<TextField label="Câu Trả Lời" multiline rows={4} fullWidth />
-								</Box>
-								<Button variant="outlined" size="small">
-									Thêm Câu Trả Lời
-								</Button>
-							</Box>
+							{listQuestions.map((question) => {
+								return <NewQuestionForm question={question} />;
+							})}
 						</Box>
 					</Box>
 					<Button type="submit" variant="contained" color="primary" style={{ marginTop: '20px' }}>

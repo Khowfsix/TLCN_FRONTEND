@@ -57,12 +57,7 @@ function ListClasses() {
 	}, [myRole]);
 
 	return (
-		<Box
-			sx={{
-				marginTop: '200px',
-				justifyContent: 'center',
-				alignItems: 'center',
-			}}>
+		<>
 			{classList && classList.length > 0 ? (
 				<Masonry columns={4} spacing={2}>
 					{classList &&
@@ -73,7 +68,7 @@ function ListClasses() {
 						})}
 				</Masonry>
 			) : null}
-		</Box>
+		</>
 	);
 }
 

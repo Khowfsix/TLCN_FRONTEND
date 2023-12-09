@@ -7,7 +7,11 @@ import { Box } from '@material-ui/core';
 
 function MainLayout() {
 	return (
-		<Container>
+		<Box
+			sx={{
+				display: 'flex',
+				justifyContent: 'center',
+			}}>
 			<Topbar />
 			<Container
 				className="content"
@@ -15,13 +19,13 @@ function MainLayout() {
 					display: 'flex',
 					justifyContent: 'center',
 					alignItems: 'center',
-					height: '100%',
-					width: '100%',
-					marginTop: '20px',
+					// height: '100%',
+					// width: '100%',
+					marginTop: '100px',
 				}}>
 				<Outlet />
 			</Container>
-		</Container>
+		</Box>
 	);
 }
 
