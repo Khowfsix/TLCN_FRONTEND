@@ -1,66 +1,60 @@
 import React, { useEffect, useState } from 'react';
 import CardClass from '../../components/class/classCard';
-// import { styled } from '@mui/material/styles';
-// import Paper from '@mui/material/Paper';
-import Masonry from '@mui/lab/Masonry';
+import { Masonry } from '@mui/lab';
 import { Box } from '@mui/material';
 
 import axios from '../../apis/axiosConfig';
 
-function listClasses() {
+function ListClasses() {
 	const [classList, setClassList] = useState([]);
 	const myRole = localStorage.getItem('role');
 	const myUserId_withRole = localStorage.getItem('roleUserId');
 
 	const getListClasses_Teacher = () => {
-		useEffect(() => {
-			axios
-				.get(`/class/getClassByLecturerID/${myUserId_withRole}`)
-				.then((response) => {
-					setClassList(response.data.data);
-				})
-				.catch((error) => {
-					// Handle the error
-					console.error(error);
-				});
-		}, []);
+		axios
+			.get(`/class/getClassByLecturerID/${myUserId_withRole}`)
+			.then((response) => {
+				setClassList(response.data.data);
+			})
+			.catch((error) => {
+				// Handle the error
+				console.error(error);
+			});
 	};
 
 	const getListClasses_Student = () => {
-		useEffect(() => {
-			axios
-				.get(`/class/getClassByStudentID/${myUserId_withRole}`)
-				.then((response) => {
-					setClassList(response.data.data);
-				})
-				.catch((error) => {
-					// Handle the error
-					console.error(error);
-				});
-		}, []);
+		axios
+			.get(`/class/getClassByStudentID/${myUserId_withRole}`)
+			.then((response) => {
+				setClassList(response.data);
+			})
+			.catch((error) => {
+				// Handle the error
+				console.error(error);
+			});
 	};
 
 	const getListClasses_Admin = () => {
-		useEffectively(() => {
-			axios
-				.get(`/class/getAll`)
-				.then((response) => {
-					setClassList(response.data);
-				})
-				.catch((error) => {
-					// Handle the error
-					console.error(error);
-				});
-		}, []);
+		axios
+			.get(`/class/getAll`)
+			.then((response) => {
+				setClassList(response.data);
+			})
+			.catch((error) => {
+				// Handle the error
+				console.error(error);
+			});
 	};
 
-	if (myRole === 'student') {
-		getListClasses_Student();
-	} else if (myRole === 'teacher') {
-		getListClasses_Teacher();
-	} else if (myRole === 'admin') {
-		getListClasses_Admin();
-	}
+	useEffect(() => {
+		if (myRole === 'student') {
+			getListClasses_Student();
+		} else if (myRole === 'teacher') {
+			getListClasses_Teacher();
+		} else if (myRole === 'admin') {
+			getListClasses_Admin();
+		}
+	}, [myRole]);
 
 	return (
 		<Box
@@ -69,16 +63,18 @@ function listClasses() {
 				justifyContent: 'center',
 				alignItems: 'center',
 			}}>
-			<Masonry columns={4} spacing={2}>
-				{classList &&
-					classList.map((classs) => {
-						if (classs.isDeleted === false) {
-							return <CardClass key={classs.cid} class={classs}></CardClass>;
-						}
-					})}
-			</Masonry>
+			{classList && classList.length > 0 ? (
+				<Masonry columns={4} spacing={2}>
+					{classList &&
+						classList.map((classs) => {
+							if (classs.isDeleted === false) {
+								return <CardClass key={classs.cid} class={classs}></CardClass>;
+							}
+						})}
+				</Masonry>
+			) : null}
 		</Box>
 	);
 }
 
-export default listClasses;
+export default ListClasses;

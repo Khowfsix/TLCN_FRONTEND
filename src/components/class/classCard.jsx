@@ -17,12 +17,12 @@ export default function CardClass(props) {
 			<CardMedia sx={{ height: 140 }} image="https://source.unsplash.com/random" title="green iguana" />
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div" color={'black'}>
-					{props.class.className}
+					{props.class && props.class.className}
 				</Typography>
 
-				{/* <Typography variant="body2" color="text.secondary">
-					{props.course.description}
-				</Typography> */}
+				<Typography variant="body2" color="text.secondary">
+					{props.course && props.course.description}
+				</Typography>
 			</CardContent>
 			<CardActions>
 				<Button

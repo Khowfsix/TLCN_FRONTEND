@@ -87,7 +87,7 @@ export default function Login() {
 				.then((response) => {
 					console.log(response.data.status);
 
-					if (response.data && response.data.status === 'success') {
+					if (response.data && response.data.status === 'Successfully logged in.') {
 						localStorage.setItem('accessToken', response.data.Authorization);
 
 						toast.success('Đăng nhập thành công!', {

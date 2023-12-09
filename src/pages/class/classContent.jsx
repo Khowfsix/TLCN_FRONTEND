@@ -32,7 +32,7 @@ const ClassContent = () => {
 			axios
 				.get(`/class/getClassContentById/${params.get('cid')}`)
 				.then((response) => {
-					setClassContents(response.data.data);
+					setClassContents(response.data);
 				})
 				.catch((error) => {
 					// Handle the error
