@@ -49,7 +49,7 @@ function ListClasses() {
 	useEffect(() => {
 		if (myRole === 'student') {
 			getListClasses_Student();
-		} else if (myRole === 'teacher') {
+		} else if (myRole === 'lecturer') {
 			getListClasses_Teacher();
 		} else if (myRole === 'admin') {
 			getListClasses_Admin();
