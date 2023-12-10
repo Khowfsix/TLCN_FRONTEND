@@ -6,23 +6,18 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
 import { Stack } from '@mui/material';
 
 import { DeleteForeverOutlined } from '@material-ui/icons';
 import { UpdateOutlined } from '@material-ui/icons';
 
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-
 import formatedDateTime from '../../../utils/formatedDateTime';
 import Transition from '../../../utils/transition';
+import EditLecture from '../../../components/class/lecture/editLecture.component';
 
 export default function Lecture() {
 	const [params] = useSearchParams();
 	const [lectureContent, setLectureContent] = useState(null);
-	const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
 
 	const [openDelDi, setOpenDelDi] = useState(false);
 	const [openUpdDi, setOpenUpdDi] = useState(false);
@@ -121,47 +116,6 @@ export default function Lecture() {
 				</Button>
 			</Stack>
 
-			<Dialog
-				open={openUpdDi}
-				onClose={handleCloseUpdDi}
-				TransitionComponent={Transition}
-				keepMounted
-				aria-describedby="alert-dialog-slide-description"
-				sx={{
-					width: '80%', // Độ rộng của dialog
-					maxWidth: 'lg', // Kích thước tối đa của dialog (lg: large, md: medium, etc.)
-				}}>
-				<DialogTitle>Cập nhật bài giảng</DialogTitle>
-				<DialogContent>
-					<DialogContentText></DialogContentText>
-					<TextField
-						autoFocus
-						margin="dense"
-						id="title"
-						label="Tiêu đề"
-						type="text"
-						fullWidth
-						defaultValue={lectureContent && lectureContent.title}
-						onChange={(e) => setTitle(e.target.value)}
-					/>
-					<TextField
-						margin="dense"
-						id="content"
-						label="Nội dung"
-						multiline
-						rows={10}
-						fullWidth
-						variant="standard"
-						defaultValue={lectureContent && lectureContent.content}
-						onChange={(e) => setContent(e.target.value)}
-					/>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleCloseUpdDi}>Hủy</Button>
-					<Button onClick={handleCloseUpdDi}>Lưu bản cập nhật</Button>
-				</DialogActions>
-			</Dialog>
-
 			<Dialog open={openDelDi} onClose={handleCloseDelDi} TransitionComponent={Transition} keepMounted aria-describedby="alert-dialog-slide-description">
 				<DialogTitle>Xóa bài giảng</DialogTitle>
 				<DialogContent>
@@ -172,6 +126,8 @@ export default function Lecture() {
 					<Button onClick={handleCloseDelDi}>Yup, xóa đi</Button>
 				</DialogActions>
 			</Dialog>
+
+			{openUpdDi && <EditLecture initLecture={lectureContent} />}
 		</Box>
 	);
 }

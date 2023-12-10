@@ -38,7 +38,7 @@ const ClassContent = () => {
 		};
 
 		fetchData();
-	}, []);
+	}, [params]);
 
 	return (
 		<Box
@@ -46,19 +46,13 @@ const ClassContent = () => {
 				position: 'fixed',
 				display: 'flex',
 				flexDirection: 'column',
-
-				// height: '100vh',
-				// width: '100vw',
-				// justifyContent: 'center',
-				// alignItems: 'center',
-				// justifyItems: 'center',
 			}}>
 			<Typography variant="h3">{classInfo && classInfo.className}</Typography>
 			<Box sx={{ flexGrow: 1 }}>
 				<Box>
 					{classContents &&
-						classContents.map((content) => {
-							return <WeekCard key={content.key} content={content}></WeekCard>;
+						classContents.map((item, index) => {
+							return <WeekCard key={index} content={item} />;
 						})}
 				</Box>
 			</Box>
@@ -70,11 +64,6 @@ const ClassContent = () => {
 					position: 'fixed',
 					bottom: 16,
 					right: 16,
-					// marginBottom: '20px',
-					// marginRight: '20px',
-					// marginTop: '20px',
-					// marginLeft: '20px',
-					// zIndex: 1000,
 				}}>
 				<Fab color="primary" aria-label="add something">
 					<AddSharp />
