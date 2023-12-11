@@ -64,7 +64,7 @@ export default function WeekCard(props) {
 				</CardContent>
 				<CardActions
 					onClick={() => {
-						console.log('hehe');
+						navigate(`/assessment?aid=${props.topic.id}`);
 					}}
 					sx={{ justifyContent: 'center' }}>
 					<Button size="small">Vào xem</Button>
