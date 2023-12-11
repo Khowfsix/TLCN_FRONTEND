@@ -11,7 +11,7 @@ import { Stack } from '@mui/material';
 import { DeleteForeverOutlined } from '@material-ui/icons';
 import { UpdateOutlined } from '@material-ui/icons';
 
-import formatedDateTime from '../../../utils/formatedDateTime';
+import formatedDateTime from '../../../utils/formatedDatetime';
 import Transition from '../../../utils/transition';
 import EditLecture from '../../../components/class/lecture/editLecture.component';
 
