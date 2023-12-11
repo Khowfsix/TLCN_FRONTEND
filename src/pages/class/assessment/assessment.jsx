@@ -97,7 +97,7 @@ export default function Assessment() {
 				</Typography>
 				<Typography>
 					<b>Link: </b>
-					<a href={lectureContent && lectureContent.link} target="_blank">
+					<a href={lectureContent && lectureContent.link} target="_blank" rel="noreferrer">
 						{lectureContent && lectureContent.link}
 					</a>
 				</Typography>
