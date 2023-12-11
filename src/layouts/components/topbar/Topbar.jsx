@@ -107,11 +107,11 @@ export default function TopBar() {
 	const handleLogoutMenu = () => {
 		setLoading(true);
 
-		// useEffect(() => {
 		axios
 			.get(`/auth/logout/${localStorage.getItem('accessToken')}`)
 			.then((res) => {
-				localStorage.removeItem('accessToken');
+				localStorage.clear();
+
 				navigate('/login');
 
 				toast.success('Đã đăng xuất', {
@@ -128,7 +128,6 @@ export default function TopBar() {
 			.catch((err) => {
 				console.log(err);
 			});
-		// }, []);
 
 		setLoading(false);
 		handleMenuClose();
@@ -150,8 +149,14 @@ export default function TopBar() {
 			}}
 			open={isMenuOpen}
 			onClose={handleMenuClose}>
-			<MenuItem onClick={handleMenuClose}>Thông tin cá nhân</MenuItem>
-			<MenuItem onClick={handleMenuClose}>Tài khoản</MenuItem>
+			<MenuItem
+				onClick={() => {
+					navigate('/account/myProfile');
+					handleMenuClose();
+				}}>
+				Thông tin cá nhân
+			</MenuItem>
+			{!localStorage.getItem('accessToken') && <MenuItem onClick={() => navigate('/login')}>Đăng nhập</MenuItem>}
 			{localStorage.getItem('accessToken') && <MenuItem onClick={handleLogoutMenu}>Đăng xuất</MenuItem>}
 		</Menu>
 	);
@@ -209,16 +214,16 @@ export default function TopBar() {
 							{/* <MenuIcon /> */}
 						</IconButton>
 						<Typography onClick={() => navigate('/Home')} variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
-							LEARNING WEB
+							DEVFORFUTURE
 						</Typography>
-						<Search>
+						{/* <Search>
 							<SearchIconWrapper>
 								<SearchIcon />
 							</SearchIconWrapper>
 							<StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
-						</Search>
+						</Search> */}
 
-						<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+						<Box sx={{ marginLeft: '50px', flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 							{pages.map((page) => (
 								<Button
 									href={page.link}
@@ -238,9 +243,9 @@ export default function TopBar() {
 						{/* <Box sx={{ flexGrow: 1 }} /> */}
 						<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 							<IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-								<Badge badgeContent={17} color="error">
+								{/* <Badge badgeContent={17} color="error">
 									<NotificationsIcon />
-								</Badge>
+								</Badge> */}
 							</IconButton>
 							<IconButton size="large" edge="end" aria-label="account of current user" aria-controls={menuId} aria-haspopup="true" onClick={handleProfileMenuOpen} color="inherit">
 								<AccountCircle />
