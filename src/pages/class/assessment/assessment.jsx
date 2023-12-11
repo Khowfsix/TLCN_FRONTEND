@@ -16,7 +16,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-import formatedDateTime from '../../../utils/formatedDateTime';
+import formatedDateTime from '../../../utils/formatedDatetime';
 import Transition from '../../../utils/transition';
 
 export default function Assessment() {
