@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CardClass from '../../components/class/classCard';
 import { Masonry } from '@mui/lab';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import axios from '../../apis/axiosConfig';
 
@@ -57,7 +57,8 @@ function ListClasses() {
 	}, [myRole]);
 
 	return (
-		<>
+		<Box sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+			<Typography variant="h3">Danh sách lớp</Typography>
 			{classList && classList.length > 0 ? (
 				<Masonry columns={4} spacing={2}>
 					{classList &&
@@ -68,7 +69,7 @@ function ListClasses() {
 						})}
 				</Masonry>
 			) : null}
-		</>
+		</Box>
 	);
 }
 

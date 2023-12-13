@@ -77,9 +77,9 @@ export default function WeekCard(props) {
 		console.log(`update topic`);
 	};
 
-	const handleAddTopic = (props) => {
+	const handleAddTopic = (key) => {
 		console.log(`add topic`);
-		navigate(`/addSomething`);
+		navigate(`/addSomething?subject=${key}`);
 	};
 
 	return (
@@ -87,7 +87,7 @@ export default function WeekCard(props) {
 			<Card variant="outlined" sx={{ backgroundColor: 'white' }}>
 				<Box>
 					<Typography variant="h4" color="text.secondary" gutterBottom>
-						{week.key}
+						{week.name}
 					</Typography>
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
@@ -108,7 +108,7 @@ export default function WeekCard(props) {
 				<Box sx={{ paddingBottom: 2 }}>
 					<ButtonGroup color="secondary" aria-label="medium secondary button group">
 						<ButtonGroup color="primary" aria-label="small secondary button group">
-							<Button onClick={() => handleAddTopic(props)}>Thêm nội dung</Button>
+							<Button onClick={() => handleAddTopic(week.key)}>Thêm nội dung</Button>
 							<Button onClick={() => handleUpdateSubject(props)}>Chỉnh sửa</Button>
 							<Button>Xóa chủ để</Button>
 						</ButtonGroup>

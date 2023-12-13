@@ -125,3 +125,9 @@ export const AddExamTab = () => {
 		</>
 	);
 };
+
+/*
+api:
+
+add lecture
+*/

@@ -39,12 +39,13 @@ function listCourses() {
 				alignItems: 'center',
 			}}>
 			<Masonry columns={4} spacing={2}>
-				{coursesList.map((course) => {
-					console.log(course.isDeleted);
-					if (course.isDeleted === false) {
-						return <CardCourse key={course.cid} course={course}></CardCourse>;
-					}
-				})}
+				{coursesList &&
+					coursesList.map((course) => {
+						console.log(course.isDeleted);
+						if (course.isDeleted === false) {
+							return <CardCourse key={course.cid} course={course}></CardCourse>;
+						}
+					})}
 			</Masonry>
 		</Box>
 	);
