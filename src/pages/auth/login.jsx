@@ -101,6 +101,17 @@ export default function Login() {
 							theme: 'dark',
 						});
 						navigate('/Home');
+					} else {
+						toast.error('Tên tài khoản hoặc mật khẩu không đúng!', {
+							position: 'top-right',
+							autoClose: 3000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							progress: undefined,
+							theme: 'dark',
+						});
 					}
 					setLoading(false);
 				})
@@ -394,7 +405,7 @@ export default function Login() {
 											marginTop: '5px',
 										}}>
 										<InputLabel sx={{ color: 'black', marginRight: '50px' }}>Đăng nhập với quyền: </InputLabel>
-										<Select value={role} onChange={handleChangeRole}>
+										<Select value={role} onChange={handleChangeRole} required>
 											<MenuItem value="student">Học viên</MenuItem>
 											<MenuItem value="lecturer">Giảng viên</MenuItem>
 										</Select>

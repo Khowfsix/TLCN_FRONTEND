@@ -5,6 +5,12 @@ import { Outlet } from 'react-router-dom';
 import Unauthorized from './Unauthorized';
 import useGetRole from '../hooks/useGetRole';
 
+/**
+ * Renders a protected route based on the user's role.
+ *
+ * @param {object} props - The props object containing the allowed roles and navigate function.
+ * @return {JSX.Element} - The rendered protected route component.
+ */
 const ProtectedRoute = (props) => {
 	const allowed = props.allowed;
 	const navigate = useNavigate();

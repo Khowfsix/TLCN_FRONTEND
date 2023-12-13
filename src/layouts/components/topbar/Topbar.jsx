@@ -157,6 +157,7 @@ export default function TopBar() {
 				}}>
 				Thông tin cá nhân
 			</MenuItem>
+			{!localStorage.getItem('accessToken') && <MenuItem onClick={() => navigate('/login')}>Đăng nhập</MenuItem>}
 			{localStorage.getItem('accessToken') && <MenuItem onClick={handleLogoutMenu}>Đăng xuất</MenuItem>}
 		</Menu>
 	);
@@ -216,14 +217,14 @@ export default function TopBar() {
 						<Typography onClick={() => navigate('/Home')} variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
 							LEARNING WEB
 						</Typography>
-						<Search>
+						{/* <Search>
 							<SearchIconWrapper>
 								<SearchIcon />
 							</SearchIconWrapper>
 							<StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
-						</Search>
+						</Search> */}
 
-						<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+						<Box sx={{ marginLeft: '50px', flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
 							{pages.map((page) => (
 								<Button
 									href={page.link}

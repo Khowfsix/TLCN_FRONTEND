@@ -21,7 +21,7 @@ export default function Unauthorized() {
 					margin: '0px',
 					color: 'black',
 				}}>
-				Opps! Forbidden
+				Uầy, không vào được!
 			</Typography>
 
 			<Box
@@ -42,7 +42,7 @@ export default function Unauthorized() {
 					textAlign: 'center',
 					width: '40%',
 				}}>
-				You do not have permission to access this page.
+				Bạn không được phép truy cập trang này!
 			</Typography>
 		</Box>
 	);
