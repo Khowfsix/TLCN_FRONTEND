@@ -150,8 +150,13 @@ export default function TopBar() {
 			}}
 			open={isMenuOpen}
 			onClose={handleMenuClose}>
-			<MenuItem onClick={handleMenuClose}>Thông tin cá nhân</MenuItem>
-			<MenuItem onClick={handleMenuClose}>Tài khoản</MenuItem>
+			<MenuItem
+				onClick={() => {
+					navigate('/account/myProfile');
+					handleMenuClose();
+				}}>
+				Thông tin cá nhân
+			</MenuItem>
 			{localStorage.getItem('accessToken') && <MenuItem onClick={handleLogoutMenu}>Đăng xuất</MenuItem>}
 		</Menu>
 	);

@@ -14,7 +14,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import Home from './pages/home/home';
 import About from './pages/home/about';
 import MainLayout from './layouts/main';
-import Profile from './pages/account/profile';
 import Login from './pages/auth/login';
 import ListCourses from './pages/course/listCourses';
 import CourseDetail from './pages/course/courseDetail';
@@ -28,6 +27,8 @@ import Exam from './pages/class/exam/exam';
 import AddSomething from './pages/class/addSomething';
 
 import ListBlog from './pages/blog/listBlog';
+
+import MyProfile from './pages/account/myProfile';
 
 function App() {
 	localStorage.setItem('testing', false);
@@ -52,13 +53,15 @@ function App() {
 							<Route path="course" element={<CourseDetail />} />
 							<Route path="listClasses" element={<ListClasses />} />
 							<Route path="class" element={<ClassContent />} />
-							<Route path="account" element={<Profile />} />
 
 							<Route path="lecture" element={<Lecture />} />
 							<Route path="assessment" element={<Assessment />} />
 							<Route path="exam" element={<Exam />} />
 							<Route path="addSomething" element={<AddSomething />} />
+
+							<Route path="account/myProfile" element={<MyProfile />} />
 						</Route>
+
 						{/* admin and lecturer role */}
 						<Route path="/" element={<ProtectedRoute allowed={['admin', 'lecturer']} />}></Route>
 
