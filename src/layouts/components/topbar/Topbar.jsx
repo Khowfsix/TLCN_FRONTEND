@@ -112,6 +112,11 @@ export default function TopBar() {
 			.get(`/auth/logout/${localStorage.getItem('accessToken')}`)
 			.then((res) => {
 				localStorage.removeItem('accessToken');
+				localStorage.removeItem('role');
+				localStorage.removeItem('roleUserId');
+				localStorage.removeItem('userId');
+				localStorage.removeItem('exp');
+
 				navigate('/login');
 
 				toast.success('Đã đăng xuất', {
