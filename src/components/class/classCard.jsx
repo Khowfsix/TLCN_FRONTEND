@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 
 import { useNavigate } from 'react-router-dom';
 
-export default function CardClass(props) {
+const CardClass = React.memo((props) => {
 	const navigate = useNavigate();
 
 	return (
@@ -34,4 +34,6 @@ export default function CardClass(props) {
 			</CardActions>
 		</Card>
 	);
-}
+});
+
+export default CardClass;

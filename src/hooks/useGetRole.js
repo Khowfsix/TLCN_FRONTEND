@@ -11,17 +11,19 @@ function useGetRole() {
 	// Chưa có token thì là chưa đăng nhập
 	if (token == null) {
 		return null;
-	} else if (Date.parse(localStorage.getItem('exp')) < Date.now()) {
-		// token hết hạn
-		localStorage.removeItem('accessToken');
-		localStorage.removeItem('exp');
-		localStorage.removeItem('role');
-		localStorage.removeItem('roleUserId');
-		localStorage.removeItem('userId');
 	}
 
-	if (localStorage.getItem('userId') == null) {
-		useEffect(() => {
+	useEffect(() => {
+		if (Date.parse(localStorage.getItem('exp')) < Date.now()) {
+			// token hết hạn
+			localStorage.removeItem('accessToken');
+			localStorage.removeItem('exp');
+			localStorage.removeItem('role');
+			localStorage.removeItem('roleUserId');
+			localStorage.removeItem('userId');
+		}
+
+		if (userId == 'null') {
 			axios
 				.post(`/auth/whoami`)
 				.then((response) => {
@@ -39,8 +41,8 @@ function useGetRole() {
 				.catch((error) => {
 					console.log('error: ', error);
 				});
-		}, [token]);
-	}
+		}
+	}, [token]);
 
 	localStorage.setItem('userId', userId);
 	localStorage.setItem('role', role);
