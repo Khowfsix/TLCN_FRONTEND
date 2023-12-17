@@ -94,11 +94,11 @@ export default function WeekCard(props) {
 							{week.topics &&
 								week.topics.map((topic) => {
 									if (topic.type === 'Lecture') {
-										return <Lecture topic={topic} key={topic.name}></Lecture>;
+										return <Lecture topic={topic} key={topic.id}></Lecture>;
 									} else if (topic.type === 'Exam') {
-										return <Exam topic={topic} key={topic.name}></Exam>;
+										return <Exam topic={topic} key={topic.id}></Exam>;
 									} else if (topic.type === 'Assessment') {
-										return <Assessment topic={topic} key={topic.name}></Assessment>;
+										return <Assessment topic={topic} key={topic.id}></Assessment>;
 									}
 								})}
 						</Grid>

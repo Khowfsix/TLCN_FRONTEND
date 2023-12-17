@@ -13,7 +13,7 @@ const CardClass = React.memo((props) => {
 
 	return (
 		<Card sx={{ width: 300, maxWidth: 500 }}>
-			<CardMedia sx={{ height: 140 }} image="https://source.unsplash.com/random" title="green iguana" />
+			<CardMedia sx={{ height: 140 }} image="https://source.unsplash.com/random" title="green iguana" loading="lazy" />
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div" color={'black'}>
 					{props.class && props.class.className}

@@ -16,11 +16,13 @@ function useGetRole() {
 	useEffect(() => {
 		if (Date.parse(localStorage.getItem('exp')) < Date.now()) {
 			// token hết hạn
-			localStorage.removeItem('accessToken');
-			localStorage.removeItem('exp');
-			localStorage.removeItem('role');
-			localStorage.removeItem('roleUserId');
-			localStorage.removeItem('userId');
+			// localStorage.removeItem('accessToken');
+			// localStorage.removeItem('exp');
+			// localStorage.removeItem('role');
+			// localStorage.removeItem('roleUserId');
+			// localStorage.removeItem('userId');
+
+			localStorage.clear();
 		}
 
 		if (userId == 'null') {

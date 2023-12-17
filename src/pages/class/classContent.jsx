@@ -8,7 +8,7 @@ import WeekCard from '../../components/class/weekCark';
 import axios from '../../apis/axiosConfig';
 import { AddBox, AddSharp } from '@material-ui/icons';
 
-const ClassContent = () => {
+const ClassContent = React.memo(() => {
 	const [params] = useSearchParams();
 	const [classInfo, setClassInfo] = useState(null);
 	const [classContents, setClassContents] = useState([]);
@@ -71,6 +71,6 @@ const ClassContent = () => {
 			</Box>
 		</Box>
 	);
-};
+});
 
 export default ClassContent;

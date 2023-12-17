@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from '../../../apis/axiosConfig';
+import { useNavigate } from 'react-router-dom';
+
 import { Box, Button, Dialog, Typography } from '@material-ui/core';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Stack } from '@mui/material';
+import { toast } from 'react-toastify';
 
 import { DeleteForeverOutlined } from '@material-ui/icons';
 import { UpdateOutlined } from '@material-ui/icons';
@@ -17,6 +20,7 @@ import EditLecture from '../../../components/class/lecture/editLecture.component
 
 export default function Lecture() {
 	const [params] = useSearchParams();
+	const navigate = useNavigate();
 	const [lectureContent, setLectureContent] = useState(null);
 
 	const [openDelDi, setOpenDelDi] = useState(false);
@@ -39,6 +43,58 @@ export default function Lecture() {
 
 	const handleCloseUpdDi = () => {
 		setOpenUpdDi(false);
+	};
+
+	const handleDelete = () => {
+		console.log(`delete this topic`);
+
+		// get struct of week.
+		axios
+			.get(`/classSubject/getById/${lectureContent.classSubject}`)
+			.then((response) => {
+				let classSubject = null;
+				classSubject = response.status == 200 ? response.data : null;
+
+				// remove this topic from week
+				let struct = classSubject.struct;
+				for (let key in struct) {
+					if (struct[key].ID == params.get('lid')) {
+						delete struct[key];
+						break;
+					}
+				}
+				axios
+					.put(`/classSubject/update/${classSubject.ID}`, classSubject)
+					.then(() => {
+						// delete this topic
+						axios
+							.delete(`/lecture/delete/${params.get('lid')}`)
+							.then(() => {
+								toast.success('Đã xóa bài giảng', {
+									position: 'top-right',
+									autoClose: 3000,
+									hideProgressBar: false,
+									closeOnClick: true,
+									pauseOnHover: true,
+									draggable: true,
+									progress: undefined,
+									theme: 'dark',
+								});
+								navigate(`/class?cid=${classSubject.classID}`);
+							})
+							.catch((err) => {
+								// Handle the error
+								console.error(err);
+							});
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			})
+			.catch((error) => {
+				// Handle the error
+				console.error(error);
+			});
 	};
 
 	useEffect(() => {
@@ -123,7 +179,7 @@ export default function Lecture() {
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleCloseDelDi}>Thôi nghĩ lại rồi</Button>
-					<Button onClick={handleCloseDelDi}>Yup, xóa đi</Button>
+					<Button onClick={() => handleDelete()}>Yup, xóa đi</Button>
 				</DialogActions>
 			</Dialog>
 

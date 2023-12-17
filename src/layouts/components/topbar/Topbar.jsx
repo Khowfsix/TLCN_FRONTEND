@@ -107,15 +107,16 @@ export default function TopBar() {
 	const handleLogoutMenu = () => {
 		setLoading(true);
 
-		// useEffect(() => {
 		axios
 			.get(`/auth/logout/${localStorage.getItem('accessToken')}`)
 			.then((res) => {
-				localStorage.removeItem('accessToken');
-				localStorage.removeItem('role');
-				localStorage.removeItem('roleUserId');
-				localStorage.removeItem('userId');
-				localStorage.removeItem('exp');
+				// localStorage.removeItem('accessToken');
+				// localStorage.removeItem('role');
+				// localStorage.removeItem('roleUserId');
+				// localStorage.removeItem('userId');
+				// localStorage.removeItem('exp');
+
+				localStorage.clear();
 
 				navigate('/login');
 
@@ -133,7 +134,6 @@ export default function TopBar() {
 			.catch((err) => {
 				console.log(err);
 			});
-		// }, []);
 
 		setLoading(false);
 		handleMenuClose();
@@ -220,7 +220,7 @@ export default function TopBar() {
 							{/* <MenuIcon /> */}
 						</IconButton>
 						<Typography onClick={() => navigate('/Home')} variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
-							LEARNING WEB
+							P-P Learning web
 						</Typography>
 						{/* <Search>
 							<SearchIconWrapper>
