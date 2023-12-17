@@ -17,19 +17,24 @@ import axios from '../../apis/axiosConfig';
 
 function listCourses() {
 	const [coursesList, setCourseList] = useState([]);
+	const token = localStorage.getItem('accessToken');
 
 	useEffect(() => {
-		axios
-			.get(`/course/getAll`)
-			.then((response) => {
-				console.log(response.data);
-				setCourseList(response.data);
-			})
-			.catch((error) => {
-				// Handle the error
-				console.error(error);
-			});
-	}, []);
+		if (localStorage.getItem('listCourses') && localStorage.getItem('listCourses') !== 'null') {
+			setCourseList(JSON.parse(localStorage.getItem('listCourses')));
+		} else {
+			axios
+				.get(`/course/getAll`)
+				.then((response) => {
+					setCourseList(response.data);
+					localStorage.setItem('listCourses', JSON.stringify(response.data));
+				})
+				.catch((error) => {
+					// Handle the error
+					console.error(error);
+				});
+		}
+	}, [token]);
 
 	return (
 		<Box
@@ -41,7 +46,6 @@ function listCourses() {
 			<Masonry columns={4} spacing={2}>
 				{coursesList &&
 					coursesList.map((course) => {
-						console.log(course.isDeleted);
 						if (course.isDeleted === false) {
 							return <CardCourse key={course.cid} course={course}></CardCourse>;
 						}

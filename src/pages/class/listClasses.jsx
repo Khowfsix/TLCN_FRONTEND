@@ -14,7 +14,8 @@ function ListClasses() {
 		axios
 			.get(`/class/getClassByLecturerID/${myUserId_withRole}`)
 			.then((response) => {
-				setClassList(response.data.data);
+				setClassList(response.data);
+				localStorage.setItem('listClasses', JSON.stringify(response.data));
 			})
 			.catch((error) => {
 				// Handle the error
@@ -27,6 +28,7 @@ function ListClasses() {
 			.get(`/class/getClassByStudentID/${myUserId_withRole}`)
 			.then((response) => {
 				setClassList(response.data);
+				localStorage.setItem('listClasses', JSON.stringify(response.data));
 			})
 			.catch((error) => {
 				// Handle the error
@@ -39,6 +41,7 @@ function ListClasses() {
 			.get(`/class/getAll`)
 			.then((response) => {
 				setClassList(response.data);
+				localStorage.setItem('listClasses', JSON.stringify(response.data));
 			})
 			.catch((error) => {
 				// Handle the error
@@ -47,12 +50,16 @@ function ListClasses() {
 	};
 
 	useEffect(() => {
-		if (myRole === 'student') {
-			getListClasses_Student();
-		} else if (myRole === 'lecturer') {
-			getListClasses_Teacher();
-		} else if (myRole === 'admin') {
-			getListClasses_Admin();
+		if (localStorage.getItem('listClasses') && localStorage.getItem('listClasses') != 'null') {
+			setClassList(JSON.parse(localStorage.getItem('listClasses')));
+		} else {
+			if (myRole === 'student') {
+				getListClasses_Student();
+			} else if (myRole === 'lecturer') {
+				getListClasses_Teacher();
+			} else if (myRole === 'admin') {
+				getListClasses_Admin();
+			}
 		}
 	}, [myRole]);
 

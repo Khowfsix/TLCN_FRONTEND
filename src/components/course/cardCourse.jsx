@@ -9,7 +9,7 @@ import { Link } from '@material-ui/core';
 
 import { useNavigate } from 'react-router-dom';
 
-export default function CardCourse(props) {
+const CardCourse = React.memo((props) => {
 	const navigate = useNavigate();
 
 	return (
@@ -31,4 +31,6 @@ export default function CardCourse(props) {
 			</CardActions>
 		</Card>
 	);
-}
+});
+
+export default CardCourse;
