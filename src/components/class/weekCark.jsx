@@ -110,7 +110,7 @@ export default function WeekCard(props) {
 						<ButtonGroup color="primary" aria-label="small secondary button group">
 							<Button onClick={() => handleAddTopic(week.key)}>Thêm nội dung</Button>
 							<Button onClick={() => handleUpdateSubject(props)}>Chỉnh sửa</Button>
-							<Button>Xóa chủ để</Button>
+							<Button onClick={() => props.delete(week.key)}>Xóa chủ để</Button>
 						</ButtonGroup>
 					</ButtonGroup>
 				</Box>

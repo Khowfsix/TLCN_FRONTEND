@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
 	margin: 0;
 	padding: 0;
@@ -25,17 +29,11 @@ p {
 	font-size: 100%;
 }
 
-ol,
-ul {
-	list-style: none;
-}
-
 #root {
 	margin: 0;
 	padding: 0;
 	border: none;
 	text-align: center;
-	max-width: 100dvw;
-	width: 90vw;
-	overflow: hidden;
+	max-width: 100vw;
+	width: 100vw;
 }

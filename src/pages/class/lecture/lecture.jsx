@@ -63,8 +63,10 @@ export default function Lecture() {
 						break;
 					}
 				}
+
+				console.log(classSubject);
 				axios
-					.put(`/classSubject/update/${classSubject.ID}`, classSubject)
+					.put(`/classSubject/update/${classSubject.csid}`, classSubject)
 					.then(() => {
 						// delete this topic
 						axios
@@ -107,7 +109,6 @@ export default function Lecture() {
 				.then((response) => {
 					if (response.data) {
 						setLectureContent(response.data);
-						console.log(response.data);
 					}
 				})
 				.catch((error) => {
