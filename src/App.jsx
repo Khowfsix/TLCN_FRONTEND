@@ -4,7 +4,7 @@ import { useState } from 'react';
 // import viteLogo from '/vite.svg';
 
 import './App.css';
-import { Box } from '@material-ui/core';
+import { Box, Container } from '@material-ui/core';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/Protected';
@@ -34,7 +34,7 @@ function App() {
 	localStorage.setItem('testing', false);
 
 	return (
-		<Box>
+		<Container>
 			<ToastContainer />
 			<BrowserRouter>
 				<Routes>
@@ -70,7 +70,7 @@ function App() {
 					</Route>
 				</Routes>
 			</BrowserRouter>
-		</Box>
+		</Container>
 	);
 }
 

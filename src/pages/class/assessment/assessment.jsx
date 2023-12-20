@@ -47,11 +47,11 @@ export default function Assessment() {
 	};
 
 	useEffect(() => {
-		if (localStorage.getItem(`testing`) == false) {
+		if (localStorage.getItem(`testing`) === 'false') {
 			axios
 				.request({
 					method: 'get',
-					url: `/Assessment/getById/${params.get('lid')}`,
+					url: `/assessment/getById/${params.get('aid')}`,
 				})
 				.then((response) => {
 					if (response.data) {
