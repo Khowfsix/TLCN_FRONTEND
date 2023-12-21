@@ -3,9 +3,10 @@ import CardCourse from '../../components/course/cardCourse';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Masonry from '@mui/lab/Masonry';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import axios from '../../apis/axiosConfig';
+import theme from './../../theme';
 
 // const Item = styled(Paper)(({ theme }) => ({
 // 	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -43,6 +44,9 @@ function listCourses() {
 				justifyContent: 'center',
 				alignItems: 'center',
 			}}>
+			<Typography variant="h2" sx={{ textAlign: 'center', marginBottom: '50px' }}>
+				Danh sách các khóa học
+			</Typography>
 			<Masonry columns={4} spacing={2}>
 				{coursesList &&
 					coursesList.map((course) => {

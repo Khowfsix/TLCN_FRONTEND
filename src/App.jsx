@@ -1,10 +1,5 @@
-import { useState } from 'react';
-
-// import reactLogo from './assets/react.svg';
-// import viteLogo from '/vite.svg';
-
 import './App.css';
-import { Box, Container } from '@material-ui/core';
+import { Container, Box } from '@material-ui/core';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/Protected';

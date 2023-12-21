@@ -12,7 +12,7 @@ const CardClass = React.memo((props) => {
 	const navigate = useNavigate();
 
 	return (
-		<Card sx={{ width: 300, maxWidth: 500 }}>
+		<Card sx={{ width: 400, maxWidth: 600 }}>
 			<CardMedia sx={{ height: 140 }} image="https://source.unsplash.com/random" title="green iguana" loading="lazy" />
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div" color={'black'}>
