@@ -26,9 +26,6 @@ export default function Lecture() {
 	const [openDelDi, setOpenDelDi] = useState(false);
 	const [openUpdDi, setOpenUpdDi] = useState(false);
 
-	const [title, setTitle] = useState('');
-	const [content, setContent] = useState('');
-
 	const handleOpenDelDi = () => {
 		setOpenDelDi(true);
 	};
@@ -57,8 +54,9 @@ export default function Lecture() {
 
 				// remove this topic from week
 				let struct = classSubject.struct;
+				console.log(struct);
 				for (let key in struct) {
-					if (struct[key].ID == params.get('lid')) {
+					if (struct[key].ID == params.get('lid') && struct[key].type == 'Lecture') {
 						delete struct[key];
 						break;
 					}
@@ -99,7 +97,7 @@ export default function Lecture() {
 			});
 	};
 
-	useEffect(() => {
+	const fetchData = () => {
 		if (localStorage.getItem(`testing`) != true) {
 			axios
 				.request({
@@ -115,22 +113,12 @@ export default function Lecture() {
 					// Handle the error
 					console.error(error);
 				});
-		} else {
-			setLectureContent({
-				lid: 1,
-				title: 'Exploring Quantum Mechanics',
-				link: 'https://example.com/exploring-quantum-mechanics',
-				datetimeUpload: '2023-12-10T08:00:00Z',
-				datetimeTheLastUpdate: '2023-12-15T10:30:00Z',
-				classSubject: 'Quantum Physics',
-				content: `<p><b>Quantum mechanics, a fundamental theory in physics, revolutionized our understanding of the universe at the smallest scales. This lecture delves into the intriguing world of quantum phenomena, covering the principles of superposition, entanglement, and wave-particle duality.</b></p>
-				<p>Starting with the pioneering experiments that led to the inception of quantum theory by Max Planck, Albert Einstein, Niels Bohr, and others, we explore the mathematics and conceptual framework behind this fascinating field. Discussions will touch upon Schrödinger's equation, Heisenberg's uncertainty principle, and the interpretation of quantum states.</p>
-				<p>Furthermore, we'll examine the applications of quantum mechanics in modern technology, from quantum computing and cryptography to quantum teleportation and quantum entanglement's potential for secure communication.</p>
-				<p>This lecture aims to provide a comprehensive overview, inviting both enthusiasts and students of physics to dive into the mesmerizing realm of quantum mechanics.</p>
-				`,
-			});
 		}
-	}, []);
+	};
+
+	useEffect(() => {
+		fetchData();
+	}, [params]);
 
 	return (
 		<Box sx={{ justifyContent: 'center', alignItems: 'center', justifyItems: 'center', position: 'fixed' }}>
@@ -184,7 +172,7 @@ export default function Lecture() {
 				</DialogActions>
 			</Dialog>
 
-			{openUpdDi && <EditLecture initLecture={lectureContent} />}
+			{openUpdDi && <EditLecture initLecture={lectureContent} close={handleCloseUpdDi} fetchData={fetchData} />}
 		</Box>
 	);
 }

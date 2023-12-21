@@ -171,7 +171,7 @@ export default function WeekCard(props) {
 
 	const handleAddTopic = (key) => {
 		console.log(`add topic`);
-		navigate(`/addSomething?subject=${key}`);
+		navigate(`/addSomething?subject=${key}`, { state: { classId: props.classId } });
 	};
 
 	return (

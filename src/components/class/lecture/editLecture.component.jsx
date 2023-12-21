@@ -6,17 +6,25 @@ import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
+import { toast } from 'react-toastify';
+import axios from '../../../apis/axiosConfig';
+
 const EditLecture = (props) => {
-	const [formData, setFormData] = useState(props.initLecture);
+	const [formData, setFormData] = useState({
+		title: props.initLecture.title,
+		link: props.initLecture.link,
+		classSubject: props.initLecture.classSubject,
+		content: props.initLecture.content,
+	});
 
 	const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-
 	const [editorState, setEditorState] = useState(() => EditorState.createWithContent(ContentState.createFromText(formData && formData.content)));
 
 	const getHtml = () => {
 		const contentState = editorState.getCurrentContent();
 		const rawContentState = convertToRaw(contentState);
-		const html = draftToHtml(rawContentState);
+		let html = draftToHtml(rawContentState);
+		html = html.replace(/\n/g, '');
 		return html;
 	};
 
@@ -24,7 +32,7 @@ const EditLecture = (props) => {
 		setEditorState(newEditorState);
 		setFormData((prevFormData) => ({
 			...prevFormData,
-			content: newEditorState.getCurrentContent().getPlainText(),
+			content: getHtml(),
 		}));
 	};
 
@@ -42,9 +50,29 @@ const EditLecture = (props) => {
 
 	const handleConfirm = () => {
 		// Do something with the form data
-		console.log(getHtml());
-
+		console.log(formData);
 		setShowConfirmationDialog(false);
+
+		axios
+			.put(`lecture/update/${props.initLecture.lid}`, formData)
+			.then((response) => {
+				if (response.status == 201) {
+					toast.success('Bài giảng đã được cập nhật thành công', {
+						position: 'top-right',
+						autoClose: 3000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						theme: 'dark',
+					});
+					props.fetchData();
+					props.close();
+				}
+			})
+			.catch((error) => {
+				toast.error(error.response.data.message);
+			});
 	};
 
 	const handleCancel = () => {
