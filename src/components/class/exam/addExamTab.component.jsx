@@ -1,30 +1,80 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 
-import NewQuestionForm from './newQuestionForm.component';
+import ListQuestionsForm from './newQuestionForm.component';
+
+import { toast } from 'react-toastify';
+import axios from '../../../apis/axiosConfig';
 
 export const AddExamTab = () => {
+	const [params] = useSearchParams();
+	const location = useLocation();
+	const navigate = useNavigate();
+
 	const [formData, setFormData] = useState({
 		title: '',
-		question: null,
-		correct: null,
+		question: [],
+		correct: [],
 		datetimeStart: null,
 		datetimeEnd: null,
-		numberAttempt: null,
-		classSubject: '',
-		timeAttempt: null,
+		numberAttempt: 1,
+		gradeMethod: null,
+		classSubject: params.get('subject'),
+		timeAttempt: 45,
 	});
 
 	const [listQuestions, setListQuestions] = useState([]);
-	const defaultQuestion = {
-		question: '',
-		answers: ['', '', '', ''],
-		correctAnswer: [''],
-	};
+	const [listCorrects, setListCorrects] = useState([]);
 
 	const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
+
+	const checkValidTime = () => {
+		if (!formData.datetimeStart || !formData.datetimeEnd) {
+			toast.error('Vui lòng chọn thời gian', {
+				position: 'top-right',
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				theme: 'dark',
+			});
+			return false;
+		}
+
+		if (formData.datetimeStart > formData.datetimeEnd) {
+			toast.error('Thời gian bắt đầu phải trước thời gian kết thúc', {
+				position: 'top-right',
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				theme: 'dark',
+			});
+			return false;
+		}
+
+		listCorrects.forEach((correct) => {
+			if (correct.length < 1) {
+				toast.error('1 câu hỏi phải có tối thiểu 1 đáp án đúng', {
+					position: 'top-right',
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					theme: 'dark',
+				});
+				return false;
+			}
+		});
+
+		return true;
+	};
 
 	const handleChange = (event) => {
 		setFormData((prevFormData) => ({
@@ -35,14 +85,66 @@ export const AddExamTab = () => {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		console.log(formData);
 		setShowConfirmationDialog(true);
+
+		listCorrects.map((correct) => {
+			if (correct.correct.length < 2) {
+				listQuestions.filter((question) => question.questionId === correct.questionId)[0].type = 'Checkboxes';
+			} else {
+				listQuestions.filter((question) => question.questionId === correct.questionId)[0].type = 'Short Answer';
+			}
+		});
+
+		setFormData((prevFormData) => ({
+			...prevFormData,
+			numberAttempt: Number(prevFormData.numberAttempt),
+			question: listQuestions,
+			correct: listCorrects,
+		}));
 	};
 
 	const handleConfirm = () => {
 		// Do something with the form data
-		console.log(formData);
 		setShowConfirmationDialog(false);
+
+		console.log(formData);
+		if (checkValidTime()) {
+			axios
+				.post(`/exam/create`, formData)
+				.then((response) => {
+					if (response.status === 201) {
+						let data = {
+							type: 'Exam',
+							ID: response.data.eid,
+							position: -1,
+						};
+						axios
+							.put(`classSubject/addContentClassSubject/${response.data.classSubject}`, data)
+							.then((response1) => {
+								if (response1.status === 200) {
+									toast.success(`Đã tạo bài kiểm tra ${response.data && response.data.title}`, {
+										position: 'top-right',
+										autoClose: 3000,
+										hideProgressBar: false,
+										closeOnClick: true,
+										pauseOnHover: true,
+										draggable: true,
+										theme: 'dark',
+									});
+									navigate(`/class?cid=${location.state.classId}`);
+								}
+							})
+							.catch((error) => {
+								// Handle the error
+								console.error(error);
+							});
+					}
+				})
+				.catch((error) => {
+					// Handle the error
+					console.error(error);
+				});
+		}
 	};
 
 	const handleCancel = () => {
@@ -56,10 +158,16 @@ export const AddExamTab = () => {
 		}));
 	};
 
-	const handleAddAnswer = () => {
-		setListQuestions([...listQuestions, defaultQuestion]);
-		console.log(listQuestions);
+	const [listGradeMethod, setListGradeMethod] = useState([]);
+	const fetchData = () => {
+		axios.get('gradeMethod/getAll').then((response) => {
+			setListGradeMethod(response.data);
+		});
 	};
+
+	useEffect(() => {
+		fetchData();
+	}, [params]);
 
 	return (
 		<>
@@ -88,20 +196,34 @@ export const AddExamTab = () => {
 							/>
 						</LocalizationProvider>
 
+						<TextField
+							variant="outlined"
+							name="numberAttempt"
+							type="number"
+							label="Số lần nộp cho phép"
+							value={formData.numberAttempt}
+							onChange={handleChange}
+							required
+							inputProps={{ min: 1 }}
+						/>
+
+						<Select name="gradeMethod" label="Phương thức chấm điểm" value={formData.gradeMethod} onChange={handleChange} required>
+							{listGradeMethod.map((option) => (
+								<MenuItem key={option.name} value={option.gid}>
+									{`${option.name} (${option.description})`}
+								</MenuItem>
+							))}
+						</Select>
+
 						<Typography variant="h5" marginTop={'20px'}>
 							Danh sách câu hỏi
 						</Typography>
 
-						<Button variant="contained" onClick={handleAddAnswer}>
-							Thêm câu hỏi
-						</Button>
-
-						<Box sx={{ border: '1px solid #ccc', padding: '16px', borderRadius: '4px' }}>
-							{listQuestions.map((question) => {
-								return <NewQuestionForm question={question} />;
-							})}
+						<Box sx={{ border: '1px solid #ccc', padding: '16px', borderRadius: '4px', backgroundColor: '#E7E0EA' }}>
+							<ListQuestionsForm listQuestions={listQuestions} setListQuestions={setListQuestions} listCorrects={listCorrects} setListCorrects={setListCorrects} />
 						</Box>
 					</Box>
+
 					<Button type="submit" variant="contained" color="primary" style={{ marginTop: '20px' }}>
 						Thêm bài kiểm tra
 					</Button>
@@ -125,9 +247,3 @@ export const AddExamTab = () => {
 		</>
 	);
 };
-
-/*
-api:
-
-add lecture
-*/

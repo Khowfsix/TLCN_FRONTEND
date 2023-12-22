@@ -4,7 +4,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 
-import moment from 'moment';
+// import moment from 'moment';
 
 import { EditorState, ContentState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
@@ -25,9 +25,9 @@ export const AddAssessmentTab = () => {
 	const [formData, setFormData] = useState({
 		title: '',
 		content: null,
-		datetimeStart: null,
-		datetimeEnd: null,
-		datetimeCutoff: null,
+		datetimeStart: Date.now(),
+		datetimeEnd: Date.now(),
+		datetimeCutoff: Date.now(),
 		numberAttempt: 1,
 		classSubject: params.get('subject'),
 	});
@@ -74,45 +74,88 @@ export const AddAssessmentTab = () => {
 		}));
 	};
 
+	const checkValidTime = () => {
+		if (formData.datetimeStart > formData.datetimeEnd) {
+			toast.error('Thời gian bắt đầu phải trước thời gian kết thúc', {
+				position: 'top-right',
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				theme: 'dark',
+			});
+			return false;
+		}
+		if (formData.datetimeCutoff > formData.datetimeEnd) {
+			toast.error('Thời gian thu bài phải trước thời gian kết thúc', {
+				position: 'top-right',
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				theme: 'dark',
+			});
+			return false;
+		}
+
+		if (formData.datetimeCutoff < formData.datetimeStart) {
+			toast.error('Thời gian thu bài phải sau thời gian bắt đầu', {
+				position: 'top-right',
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				theme: 'dark',
+			});
+			return false;
+		}
+		return true;
+	};
+
 	const handleConfirm = () => {
 		// Do something with the form data
 		setShowConfirmationDialog(false);
 
-		axios
-			.post(`/assessment/create`, formData)
-			.then((response) => {
-				if (response.status === 201) {
-					let data = {
-						type: 'Assessment',
-						ID: response.data.aid,
-						position: -1,
-					};
-					axios
-						.put(`classSubject/addContentClassSubject/${response.data.classSubject}`, data)
-						.then((response1) => {
-							if (response1.status === 200) {
-								toast.success(`Đã tạo bài tập ${response.data && response.data.title}`, {
-									position: 'top-right',
-									autoClose: 3000,
-									hideProgressBar: false,
-									closeOnClick: true,
-									pauseOnHover: true,
-									draggable: true,
-									theme: 'dark',
-								});
-								navigate(`/class?cid=${location.state.classId}`);
-							}
-						})
-						.catch((error) => {
-							// Handle the error
-							console.error(error);
-						});
-				}
-			})
-			.catch((error) => {
-				// Handle the error
-				console.error(error);
-			});
+		if (checkValidTime()) {
+			axios
+				.post(`/assessment/create`, formData)
+				.then((response) => {
+					if (response.status === 201) {
+						let data = {
+							type: 'Assessment',
+							ID: response.data.aid,
+							position: -1,
+						};
+						axios
+							.put(`classSubject/addContentClassSubject/${response.data.classSubject}`, data)
+							.then((response1) => {
+								if (response1.status === 200) {
+									toast.success(`Đã tạo bài tập ${response.data && response.data.title}`, {
+										position: 'top-right',
+										autoClose: 3000,
+										hideProgressBar: false,
+										closeOnClick: true,
+										pauseOnHover: true,
+										draggable: true,
+										theme: 'dark',
+									});
+									navigate(`/class?cid=${location.state.classId}`);
+								}
+							})
+							.catch((error) => {
+								// Handle the error
+								console.error(error);
+							});
+					}
+				})
+				.catch((error) => {
+					// Handle the error
+					console.error(error);
+				});
+		}
 	};
 
 	const handleCancel = () => {
@@ -142,7 +185,7 @@ export const AddAssessmentTab = () => {
 								label="Thời gian bắt đầu"
 								value={formData.datetimeStart}
 								onChange={(value) => handleDatetimeChange('datetimeStart', value)}
-								referenceDate={moment().toDate()}
+								// referenceDate={moment().toDate()}
 								renderInput={(params) => <TextField {...params} />}
 							/>
 							<DateTimePicker
