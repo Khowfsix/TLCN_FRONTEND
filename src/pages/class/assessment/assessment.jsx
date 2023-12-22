@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+
 import axios from '../../../apis/axiosConfig';
 import { Box, Button, Dialog, Typography } from '@material-ui/core';
 import DialogActions from '@mui/material/DialogActions';
@@ -12,23 +13,20 @@ import { Stack } from '@mui/material';
 import { DeleteForeverOutlined } from '@material-ui/icons';
 import { UpdateOutlined } from '@material-ui/icons';
 
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { toast } from 'react-toastify';
 
 import formatedDateTime from '../../../utils/formatedDatetime';
 import Transition from '../../../utils/transition';
 
+import EditAssessment from '../../../components/class/assessment/editAssessment.component';
+
 export default function Assessment() {
 	const [params] = useSearchParams();
-	const [lectureContent, setLectureContent] = useState(null);
-	const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+	const navigate = useNavigate();
+	const [assessmentContent, setAssessmentContent] = useState(null);
 
 	const [openDelDi, setOpenDelDi] = useState(false);
 	const [openUpdDi, setOpenUpdDi] = useState(false);
-
-	const [title, setTitle] = useState('');
-	const [content, setContent] = useState('');
 
 	const handleOpenDelDi = () => {
 		setOpenDelDi(true);
@@ -39,11 +37,66 @@ export default function Assessment() {
 	};
 
 	const handleOpenUpdDi = () => {
-		setOpenUpdDi(true);
+		setOpenUpdDi(!openUpdDi);
 	};
 
 	const handleCloseUpdDi = () => {
 		setOpenUpdDi(false);
+	};
+
+	const handleDelete = () => {
+		console.log(`delete this topic`);
+
+		// get struct of week.
+		axios
+			.get(`/classSubject/getById/${assessmentContent.classSubject}`)
+			.then((response) => {
+				let classSubject = null;
+				classSubject = response.status == 200 ? response.data : null;
+
+				// remove this topic from week
+				let struct = classSubject.struct;
+				console.log(struct);
+				for (let key in struct) {
+					if (struct[key].ID == params.get('aid') && struct[key].type == 'Assessment') {
+						delete struct[key];
+						break;
+					}
+				}
+
+				console.log(classSubject);
+				axios
+					.put(`/classSubject/update/${classSubject.csid}`, classSubject)
+					.then(() => {
+						// delete this topic
+						axios
+							.delete(`/assessment/delete/${params.get('aid')}`)
+							.then(() => {
+								toast.success('Đã xóa bài tập', {
+									position: 'top-right',
+									autoClose: 3000,
+									hideProgressBar: false,
+									closeOnClick: true,
+									pauseOnHover: true,
+									draggable: true,
+									progress: undefined,
+									theme: 'dark',
+								});
+								navigate(`/class?cid=${classSubject.classID}`);
+							})
+							.catch((err) => {
+								// Handle the error
+								console.error(err);
+							});
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			})
+			.catch((error) => {
+				// Handle the error
+				console.error(error);
+			});
 	};
 
 	const fetchData = () => {
@@ -55,7 +108,7 @@ export default function Assessment() {
 				})
 				.then((response) => {
 					if (response.data) {
-						setLectureContent(response.data);
+						setAssessmentContent(response.data);
 						console.log(response.data);
 					}
 				})
@@ -73,91 +126,68 @@ export default function Assessment() {
 	return (
 		<Box sx={{ justifyContent: 'center', alignItems: 'center', justifyItems: 'center', position: 'fixed' }}>
 			<Box>
-				<Typography variant="h3">{lectureContent && lectureContent.title}</Typography>
+				<Typography variant="h3">{assessmentContent && assessmentContent.title}</Typography>
 
 				<Typography variant="subtitle1">
-					<b>Ngày đăng: </b>
-					{lectureContent && formatedDateTime(lectureContent.datetimeUpload)}
+					<b>Thời gian bắt đầu: </b>
+					{assessmentContent && formatedDateTime(assessmentContent.datetimeStart)}
 				</Typography>
 				<Typography variant="subtitle1">
-					<b>
-						<b>Ngày cập nhật: </b>
-					</b>
-					{lectureContent && formatedDateTime(lectureContent.datetimeTheLastUpdate)}
+					<b>Thời gian thu bài: </b>
+					{assessmentContent && formatedDateTime(assessmentContent.datetimeCutoff)}
 				</Typography>
-				<Typography>
-					<b>Link: </b>
-					<a href={lectureContent && lectureContent.link} target="_blank" rel="noreferrer">
-						{lectureContent && lectureContent.link}
-					</a>
+				<Typography variant="subtitle1">
+					<b>Thời gian kết thúc: </b>
+					{assessmentContent && formatedDateTime(assessmentContent.datetimeEnd)}
 				</Typography>
 			</Box>
 
-			<Box>
-				<Typography variant="h5">Nội dung:</Typography>
-				<div dangerouslySetInnerHTML={{ __html: lectureContent && lectureContent.content }} />
+			<Box sx={{ marginTop: '20px', textAlign: 'left' }}>
+				{assessmentContent &&
+					assessmentContent.content &&
+					assessmentContent.content.map((item, index) => {
+						if (item.type == 'link') {
+							return (
+								<Box key={index} sx={{ marginTop: '20px' }}>
+									<Typography variant="h5">Link:</Typography>
+									<a href={item && item.value} target="_blank" rel="noreferrer">
+										{item && `Link đính kèm đây`}
+									</a>
+								</Box>
+							);
+						} else if (item.type == 'content') {
+							return (
+								<Box key={index} sx={{ marginTop: '20px', border: '1px solid black', padding: '10px' }}>
+									<Typography variant="h5">Nội dung:</Typography>
+									<div dangerouslySetInnerHTML={{ __html: item && item.value }} />
+								</Box>
+							);
+						}
+					})}
+				<Typography variant="h5"></Typography>
 			</Box>
 
-			<Stack direction="row" spacing={2}>
+			<Stack direction="row" spacing={2} sx={{ justifyContent: 'center', alignItems: 'center', justifyItems: 'center', marginTop: '20px' }}>
 				<Button variant="outlined" startIcon={<DeleteForeverOutlined />} onClick={handleOpenDelDi}>
-					Xóa bài giảng
+					Xóa bài tập
 				</Button>
 				<Button variant="outlined" startIcon={<UpdateOutlined />} onClick={handleOpenUpdDi}>
-					Chính sửa bài giảng
+					Chính sửa bài tập
 				</Button>
 			</Stack>
 
-			<Dialog
-				open={openUpdDi}
-				onClose={handleCloseUpdDi}
-				TransitionComponent={Transition}
-				keepMounted
-				aria-describedby="alert-dialog-slide-description"
-				sx={{
-					width: '80%', // Độ rộng của dialog
-					maxWidth: 'lg', // Kích thước tối đa của dialog (lg: large, md: medium, etc.)
-				}}>
-				<DialogTitle>Cập nhật bài giảng</DialogTitle>
-				<DialogContent>
-					<DialogContentText></DialogContentText>
-					<TextField
-						autoFocus
-						margin="dense"
-						id="title"
-						label="Tiêu đề"
-						type="text"
-						fullWidth
-						defaultValue={lectureContent && lectureContent.title}
-						onChange={(e) => setTitle(e.target.value)}
-					/>
-					<TextField
-						margin="dense"
-						id="content"
-						label="Nội dung"
-						multiline
-						rows={10}
-						fullWidth
-						variant="standard"
-						defaultValue={lectureContent && lectureContent.content}
-						onChange={(e) => setContent(e.target.value)}
-					/>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleCloseUpdDi}>Hủy</Button>
-					<Button onClick={handleCloseUpdDi}>Lưu bản cập nhật</Button>
-				</DialogActions>
-			</Dialog>
-
 			<Dialog open={openDelDi} onClose={handleCloseDelDi} TransitionComponent={Transition} keepMounted aria-describedby="alert-dialog-slide-description">
-				<DialogTitle>Xóa bài giảng</DialogTitle>
+				<DialogTitle>Xóa bài tập</DialogTitle>
 				<DialogContent>
 					<DialogContentText>Chắc chưa bro :))) muốn xóa thật à</DialogContentText>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleCloseDelDi}>Thôi nghĩ lại rồi</Button>
-					<Button onClick={handleCloseDelDi}>Yup, xóa đi</Button>
+					<Button onClick={() => handleDelete()}>Yup, xóa đi</Button>
 				</DialogActions>
 			</Dialog>
+
+			{openUpdDi && <EditAssessment initData={assessmentContent} close={handleCloseUpdDi} fetchData={fetchData} />}
 		</Box>
 	);
 }

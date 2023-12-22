@@ -207,6 +207,20 @@ export const AddExamTab = () => {
 							inputProps={{ min: 1 }}
 						/>
 
+						<TextField
+							variant="outlined"
+							name="timeAttempt"
+							type="number"
+							label="Thời gian làm bài (phút)"
+							value={formData.timeAttempt}
+							onChange={handleChange}
+							required
+							inputProps={{ min: 15, max: 200, step: 15 }}
+						/>
+
+						<Typography variant="h6" marginTop={'20px'}>
+							Phương thức chấm điểm
+						</Typography>
 						<Select name="gradeMethod" label="Phương thức chấm điểm" value={formData.gradeMethod} onChange={handleChange} required>
 							{listGradeMethod.map((option) => (
 								<MenuItem key={option.name} value={option.gid}>
