@@ -2,32 +2,51 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextFie
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import React, { useState } from 'react';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 
-import { ContentState, EditorState } from 'draft-js';
+import moment from 'moment';
+
+import { EditorState, ContentState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
+import draftToHtml from 'draftjs-to-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
+import { toast } from 'react-toastify';
+import axios from '../../../apis/axiosConfig';
+
 export const AddAssessmentTab = () => {
+	const [params] = useSearchParams();
+	const location = useLocation();
+	const navigate = useNavigate();
+
+	const [link, setLink] = useState('adfasd');
+	const [content, setContent] = useState('asdfasd');
+
 	const [formData, setFormData] = useState({
 		title: '',
 		content: null,
 		datetimeStart: null,
 		datetimeEnd: null,
 		datetimeCutoff: null,
-		numberAttempt: null,
-		classSubject: '',
+		numberAttempt: 1,
+		classSubject: params.get('subject'),
 	});
 
 	const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
 	const [editorState, setEditorState] = useState(() => EditorState.createWithContent(ContentState.createFromText('')));
 
+	const getHtml = () => {
+		const contentState = editorState.getCurrentContent();
+		const rawContentState = convertToRaw(contentState);
+		let html = draftToHtml(rawContentState);
+		html = html.replace(/\n/g, '');
+		return html;
+	};
+
 	const handleEditorStateChange = (newEditorState) => {
 		setEditorState(newEditorState);
-		setFormData((prevFormData) => ({
-			...prevFormData,
-			content: newEditorState.getCurrentContent().getPlainText(),
-		}));
+		setValue(getHtml());
 	};
 
 	const handleChange = (event) => {
@@ -37,16 +56,63 @@ export const AddAssessmentTab = () => {
 		}));
 	};
 
+	const handleChange_1 = (event) => {
+		event.target.value = event.target.value;
+	};
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		console.log(formData);
 		setShowConfirmationDialog(true);
+
+		setFormData((prevFormData) => ({
+			...prevFormData,
+			numberAttempt: Number(prevFormData.numberAttempt),
+			content: [
+				{ type: 'link', value: link },
+				{ type: 'content', value: content },
+			],
+		}));
 	};
 
 	const handleConfirm = () => {
 		// Do something with the form data
-		console.log(formData);
 		setShowConfirmationDialog(false);
+
+		axios
+			.post(`/assessment/create`, formData)
+			.then((response) => {
+				if (response.status === 201) {
+					let data = {
+						type: 'Assessment',
+						ID: response.data.aid,
+						position: -1,
+					};
+					axios
+						.put(`classSubject/addContentClassSubject/${params.subject}`, data)
+						.then((response1) => {
+							if (response1.status === 200) {
+								toast.success(`Đã tạo bài tập ${response.data && response.data.title}`, {
+									position: 'top-right',
+									autoClose: 3000,
+									hideProgressBar: false,
+									closeOnClick: true,
+									pauseOnHover: true,
+									draggable: true,
+									theme: 'dark',
+								});
+								navigate(`/class?cid=${location.state.classId}`);
+							}
+						})
+						.catch((error) => {
+							// Handle the error
+							console.error(error);
+						});
+				}
+			})
+			.catch((error) => {
+				// Handle the error
+				console.error(error);
+			});
 	};
 
 	const handleCancel = () => {
@@ -76,6 +142,7 @@ export const AddAssessmentTab = () => {
 								label="Thời gian bắt đầu"
 								value={formData.datetimeStart}
 								onChange={(value) => handleDatetimeChange('datetimeStart', value)}
+								referenceDate={moment().toDate()}
 								renderInput={(params) => <TextField {...params} />}
 							/>
 							<DateTimePicker
@@ -108,7 +175,7 @@ export const AddAssessmentTab = () => {
 						<Typography variant="h5" marginTop={'20px'}>
 							Nội dung
 						</Typography>
-						<TextField variant="standard" name="link" label="Link" value={formData.link} onChange={handleChange} required pattern="https?://.+" />
+						<TextField variant="standard" name="link" label="Link" value={link} onChange={handleChange_1} pattern="https?://.+" />
 						<Editor
 							editorState={editorState}
 							onEditorStateChange={handleEditorStateChange}
