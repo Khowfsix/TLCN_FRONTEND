@@ -19,8 +19,8 @@ export const AddAssessmentTab = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	const [link, setLink] = useState('adfasd');
-	const [content, setContent] = useState('asdfasd');
+	const [link, setLink] = useState(null);
+	const [content, setContent] = useState(null);
 
 	const [formData, setFormData] = useState({
 		title: '',
@@ -46,7 +46,7 @@ export const AddAssessmentTab = () => {
 
 	const handleEditorStateChange = (newEditorState) => {
 		setEditorState(newEditorState);
-		setValue(getHtml());
+		setContent(getHtml());
 	};
 
 	const handleChange = (event) => {
@@ -57,7 +57,7 @@ export const AddAssessmentTab = () => {
 	};
 
 	const handleChange_1 = (event) => {
-		event.target.value = event.target.value;
+		setLink(event.target.value);
 	};
 
 	const handleSubmit = (event) => {
@@ -88,7 +88,7 @@ export const AddAssessmentTab = () => {
 						position: -1,
 					};
 					axios
-						.put(`classSubject/addContentClassSubject/${params.subject}`, data)
+						.put(`classSubject/addContentClassSubject/${response.data.classSubject}`, data)
 						.then((response1) => {
 							if (response1.status === 200) {
 								toast.success(`Đã tạo bài tập ${response.data && response.data.title}`, {
