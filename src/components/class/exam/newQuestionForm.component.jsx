@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Box, TextField, Button } from '@mui/material';
 import { Card, Checkbox, CardContent } from '@mui/material';
 import { IconButton } from '@mui/material';
@@ -95,14 +96,29 @@ const ListQuestionsForm = ({ listQuestions, listCorrects, setListQuestions, setL
 							/>
 
 							<Box sx={{ display: 'flex', flexDirection: 'column', marginTop: '16px' }}>
-								{question.choices.map((answer, index) => (
-									<Card key={index} sx={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-										<Checkbox onChange={(event) => handleCorrectChange(event, question.questionId, answer)} />
-										<CardContent sx={{ flexGrow: 1 }}>
-											<TextField value={answer} onChange={(event) => handleAnswerChange(event, question.questionId, index)} variant="outlined" size="small" fullWidth required />
-										</CardContent>
-									</Card>
-								))}
+								{console.log(question)}
+								{question.choices &&
+									question.choices.map((answer, index) => (
+										<Card key={index} sx={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+											<Checkbox
+												{...(listCorrects.find((item) => item.questionId === question.questionId) &&
+												listCorrects.find((item) => item.questionId === question.questionId).correct.includes(answer)
+													? { checked: true }
+													: {})}
+												onChange={(event) => handleCorrectChange(event, question.questionId, answer)}
+											/>
+											<CardContent sx={{ flexGrow: 1 }}>
+												<TextField
+													value={answer}
+													onChange={(event) => handleAnswerChange(event, question.questionId, index)}
+													variant="outlined"
+													size="small"
+													fullWidth
+													required
+												/>
+											</CardContent>
+										</Card>
+									))}
 							</Box>
 
 							<IconButton aria-label="delete" onClick={() => handleDeleteQuestion(question.questionId)}>
@@ -117,6 +133,17 @@ const ListQuestionsForm = ({ listQuestions, listCorrects, setListQuestions, setL
 			</Button>
 		</>
 	);
+};
+
+ListQuestionsForm.propsTypes = {
+	listQuestions: PropTypes.arrayOf(
+		PropTypes.shape({
+			type: PropTypes.string,
+			choices: PropTypes.arrayOf(PropTypes.string),
+			content: PropTypes.string,
+			questionId: PropTypes.string,
+		}),
+	).isRequired,
 };
 
 export default ListQuestionsForm;

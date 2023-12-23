@@ -18,8 +18,6 @@ import { toast } from 'react-toastify';
 import formatedDateTime from '../../../utils/formatedDatetime';
 import Transition from '../../../utils/transition';
 
-import EditExam from '../../../components/class/exam/editExam.component';
-
 export default function Exam() {
 	const [params] = useSearchParams();
 	const navigate = useNavigate();
@@ -99,6 +97,7 @@ export default function Exam() {
 			});
 	};
 
+	const [listGradeMethod, setListGradeMethod] = useState([]);
 	const fetchData = () => {
 		if (localStorage.getItem(`testing`) === 'false') {
 			axios
@@ -117,6 +116,9 @@ export default function Exam() {
 					console.error(error);
 				});
 		}
+		axios.get('gradeMethod/getAll').then((response) => {
+			setListGradeMethod(response.data);
+		});
 	};
 
 	useEffect(() => {
@@ -129,49 +131,44 @@ export default function Exam() {
 				<Typography variant="h3">{examContent && examContent.title}</Typography>
 
 				<Typography variant="subtitle1">
-					<b>Thời gian bắt đầu: </b>
+					<Typography variant="overline">Thời gian bắt đầu: </Typography>
 					{examContent && formatedDateTime(examContent.datetimeStart)}
 				</Typography>
+
 				<Typography variant="subtitle1">
-					<b>Thời gian thu bài: </b>
-					{examContent && formatedDateTime(examContent.datetimeCutoff)}
+					<Typography variant="overline">Thời gian kết thúc: </Typography>
+					{examContent && formatedDateTime(examContent.datetimeEnd)}
 				</Typography>
 				<Typography variant="subtitle1">
-					<b>Thời gian kết thúc: </b>
-					{examContent && formatedDateTime(examContent.datetimeEnd)}
+					<Typography variant="overline">Thời gian làm bài: </Typography>
+					{examContent && examContent.timeAttempt} phút
+				</Typography>
+				<Typography variant="subtitle1">
+					<Typography variant="overline">Số lần làm bài cho phép: </Typography>
+					{examContent && examContent.numberAttempt}
+				</Typography>
+				<Typography variant="subtitle1">
+					<Typography variant="overline">Phương thức tính điểm: </Typography>
+					{examContent && listGradeMethod.find((item) => item.gid == examContent.gradeMethod).name}
 				</Typography>
 			</Box>
 
-			<Box sx={{ marginTop: '20px', textAlign: 'left' }}>
-				{examContent &&
-					examContent.content &&
-					examContent.content.map((item, index) => {
-						if (item.type == 'link') {
-							return (
-								<Box key={index} sx={{ marginTop: '20px' }}>
-									<Typography variant="h5">Link:</Typography>
-									<a href={item && item.value} target="_blank" rel="noreferrer">
-										{item && `Link đính kèm đây`}
-									</a>
-								</Box>
-							);
-						} else if (item.type == 'content') {
-							return (
-								<Box key={index} sx={{ marginTop: '20px', border: '1px solid black', padding: '10px' }}>
-									<Typography variant="h5">Nội dung:</Typography>
-									<div dangerouslySetInnerHTML={{ __html: item && item.value }} />
-								</Box>
-							);
-						}
-					})}
-				<Typography variant="h5"></Typography>
-			</Box>
+			<Typography sx={{ marginTop: '20px' }} variant="h4">
+				Làm bài kiểm tra:
+			</Typography>
+			<Button variant="outlined">Làm bài</Button>
 
 			<Stack direction="row" spacing={2} sx={{ justifyContent: 'center', alignItems: 'center', justifyItems: 'center', marginTop: '20px' }}>
 				<Button variant="outlined" startIcon={<DeleteForeverOutlined />} onClick={handleOpenDelDi}>
 					Xóa bài tập
 				</Button>
-				<Button variant="outlined" startIcon={<UpdateOutlined />} onClick={handleOpenUpdDi}>
+				<Button
+					variant="outlined"
+					startIcon={<UpdateOutlined />}
+					onClick={() => {
+						console.log(examContent);
+						navigate(`/class/exam/edit?eid=${params.get('eid')}`, { state: { initData: examContent } });
+					}}>
 					Chính sửa bài tập
 				</Button>
 			</Stack>

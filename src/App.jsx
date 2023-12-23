@@ -19,6 +19,7 @@ import Register from './pages/auth/register';
 import Lecture from './pages/class/lecture/lecture';
 import Assessment from './pages/class/assessment/assessment';
 import Exam from './pages/class/exam/exam';
+import { EditExam } from './components/class/exam/editExam.component';
 import AddSomething from './pages/class/addSomething';
 
 import ListBlog from './pages/blog/listBlog';
@@ -52,6 +53,7 @@ function App() {
 							<Route path="lecture" element={<Lecture />} />
 							<Route path="assessment" element={<Assessment />} />
 							<Route path="exam" element={<Exam />} />
+							<Route path="class/exam/edit" element={<EditExam />} />
 							<Route path="addSomething" element={<AddSomething />} />
 
 							<Route path="account/myProfile" element={<MyProfile />} />

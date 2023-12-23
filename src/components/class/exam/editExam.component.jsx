@@ -1,101 +1,152 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 
-// import moment from 'moment';
-
-import { EditorState, ContentState, convertToRaw } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import draftToHtml from 'draftjs-to-html';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import ListQuestionsForm from './newQuestionForm.component';
 
 import { toast } from 'react-toastify';
 import axios from '../../../apis/axiosConfig';
-import Transition from '../../../utils/transition';
 
-const EditExam = (props) => {
+export const EditExam = () => {
+	const [params] = useSearchParams();
+	const location = useLocation();
+	const navigate = useNavigate();
+
 	const [formData, setFormData] = useState({
-		eid: props.initData.eid,
-		title: props.initData.title,
-		content: props.initData.content,
+		title: location.state.initData.title,
+		question: location.state.initData.question,
+		correct: location.state.initData.correct,
 		datetimeStart: null,
 		datetimeEnd: null,
-		datetimeCutoff: null,
-		numberAttempt: props.initData.numberAttempt,
-		classSubject: props.initData.classSubject,
-		isHidden: false,
-		isDeleted: false,
+		numberAttempt: location.state.initData.numberAttempt,
+		gradeMethod: location.state.initData.gradeMethod,
+		classSubject: location.state.initData.classSubject,
+		timeAttempt: location.state.initData.timeAttempt,
+		isHidden: location.state.initData.isHidden,
+		isDeleted: location.state.initData.isDeleted,
 	});
 
-	const [link, setLink] = useState(formData.content ? formData.content.filter((item) => item.type === 'link')[0].value : null);
-	const [content, setContent] = useState(formData.content ? formData.content.filter((item) => item.type === 'content')[0].value : null);
+	const [listQuestions, setListQuestions] = useState(formData.question);
+	const [listCorrects, setListCorrects] = useState(formData.correct);
 
 	const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-	const [editorState, setEditorState] = useState(() => EditorState.createWithContent(ContentState.createFromText(content)));
 
-	const getHtml = () => {
-		const contentState = editorState.getCurrentContent();
-		const rawContentState = convertToRaw(contentState);
-		let html = draftToHtml(rawContentState);
-		html = html.replace(/\n/g, '');
-		return html;
-	};
+	const checkValidTime = () => {
+		if (!formData.datetimeStart || !formData.datetimeEnd) {
+			toast.error('Vui lòng chọn thời gian', {
+				position: 'top-right',
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				theme: 'dark',
+			});
+			return false;
+		}
 
-	const handleEditorStateChange = (newEditorState) => {
-		setEditorState(newEditorState);
-		setContent(newEditorState.getCurrentContent().getPlainText('\n'));
+		if (formData.datetimeStart > formData.datetimeEnd) {
+			toast.error('Thời gian bắt đầu phải trước thời gian kết thúc', {
+				position: 'top-right',
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				theme: 'dark',
+			});
+			return false;
+		}
+
+		listCorrects.forEach((correct) => {
+			if (correct.length < 1) {
+				toast.error('1 câu hỏi phải có tối thiểu 1 đáp án đúng', {
+					position: 'top-right',
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					theme: 'dark',
+				});
+				return false;
+			}
+		});
+
+		return true;
 	};
 
 	const handleChange = (event) => {
 		setFormData((prevFormData) => ({
 			...prevFormData,
 			[event.target.name]: event.target.value,
-			content: [
-				{
-					type: 'link',
-					value: link,
-				},
-				{ type: 'content', value: getHtml() },
-			],
 		}));
-	};
-
-	const handleChange_1 = (event) => {
-		setLink(event.target.value);
 	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		setShowConfirmationDialog(true);
+
+		listCorrects.map((correct) => {
+			if (correct.correct.length < 2) {
+				listQuestions.filter((question) => question.questionId === correct.questionId)[0].type = 'Checkboxes';
+			} else {
+				listQuestions.filter((question) => question.questionId === correct.questionId)[0].type = 'Short Answer';
+			}
+		});
+
+		setFormData((prevFormData) => ({
+			...prevFormData,
+			numberAttempt: Number(prevFormData.numberAttempt),
+			question: listQuestions,
+			correct: listCorrects,
+		}));
 	};
 
 	const handleConfirm = () => {
 		// Do something with the form data
-		console.log(formData);
 		setShowConfirmationDialog(false);
 
-		// axios
-		// 	.put(`lecture/update/${props.initLecture.lid}`, formData)
-		// 	.then((response) => {
-		// 		if (response.status == 201) {
-		// 			toast.success('Bài giảng đã được cập nhật thành công', {
-		// 				position: 'top-right',
-		// 				autoClose: 3000,
-		// 				hideProgressBar: false,
-		// 				closeOnClick: true,
-		// 				pauseOnHover: true,
-		// 				draggable: true,
-		// 				theme: 'dark',
-		// 			});
-		// 			props.fetchData();
-		// 			props.close();
-		// 		}
-		// 	})
-		// 	.catch((error) => {
-		// 		toast.error(error.response.data.message);
-		// 	});
+		console.log(formData);
+		if (checkValidTime()) {
+			axios
+				.post(`/exam/create`, formData)
+				.then((response) => {
+					if (response.status === 201) {
+						let data = {
+							type: 'Exam',
+							ID: response.data.eid,
+							position: -1,
+						};
+						axios
+							.put(`classSubject/addContentClassSubject/${response.data.classSubject}`, data)
+							.then((response1) => {
+								if (response1.status === 200) {
+									toast.success(`Đã tạo bài kiểm tra ${response.data && response.data.title}`, {
+										position: 'top-right',
+										autoClose: 3000,
+										hideProgressBar: false,
+										closeOnClick: true,
+										pauseOnHover: true,
+										draggable: true,
+										theme: 'dark',
+									});
+									navigate(`/class?cid=${location.state.classId}`);
+								}
+							})
+							.catch((error) => {
+								// Handle the error
+								console.error(error);
+							});
+					}
+				})
+				.catch((error) => {
+					// Handle the error
+					console.error(error);
+				});
+		}
 	};
 
 	const handleCancel = () => {
@@ -109,13 +160,24 @@ const EditExam = (props) => {
 		}));
 	};
 
+	const [listGradeMethod, setListGradeMethod] = useState([]);
+	const fetchData = () => {
+		axios.get('gradeMethod/getAll').then((response) => {
+			setListGradeMethod(response.data);
+		});
+	};
+
+	useEffect(() => {
+		fetchData();
+	}, [params]);
+
 	return (
-		<Box sx={{ marginTop: '20px' }}>
-			<Typography variant="h3" marginTop={'20px'}>
-				Thêm bài tập
-			</Typography>
+		<>
 			<Box>
-				<form onSubmit={handleSubmit}>
+				<form onSubmit={handleSubmit} style={{ flexDirection: 'column', gap: '30px' }}>
+					<Typography variant="h3" marginTop={'20px'}>
+						Sửa bài kiểm tra
+					</Typography>
 					<Box sx={{ display: 'flex', flexDirection: 'column', gap: '30px', marginTop: '20px' }}>
 						<TextField variant="standard" name="title" label="Tiêu đề" value={formData.title} onChange={handleChange} required />
 
@@ -134,13 +196,6 @@ const EditExam = (props) => {
 								onChange={(value) => handleDatetimeChange('datetimeEnd', value)}
 								renderInput={(params) => <TextField {...params} />}
 							/>
-							<DateTimePicker
-								name="datetimeCutOff"
-								label="Thời gian cắt"
-								value={formData.datetimeCutoff}
-								onChange={(value) => handleDatetimeChange('datetimeCutoff', value)}
-								renderInput={(params) => <TextField {...params} />}
-							/>
 						</LocalizationProvider>
 
 						<TextField
@@ -154,43 +209,57 @@ const EditExam = (props) => {
 							inputProps={{ min: 1 }}
 						/>
 
-						<Typography variant="h5" marginTop={'20px'}>
-							Nội dung
-						</Typography>
-						<TextField variant="standard" name="link" label="Link" value={link} onChange={handleChange_1} pattern="https?://.+" />
-						<Editor
-							editorState={editorState}
-							onEditorStateChange={handleEditorStateChange}
-							editorStyle={{
-								border: '1px solid #ccc',
-								borderRadius: '4px',
-								height: '200px',
-								overflowY: 'scroll',
-							}}
+						<TextField
+							variant="outlined"
+							name="timeAttempt"
+							type="number"
+							label="Thời gian làm bài (phút)"
+							value={formData.timeAttempt}
+							onChange={handleChange}
+							required
+							inputProps={{ min: 15, max: 200, step: 15 }}
 						/>
+
+						<Typography variant="h6" marginTop={'20px'}>
+							Phương thức chấm điểm
+						</Typography>
+						<Select name="gradeMethod" label="Phương thức chấm điểm" value={formData.gradeMethod} onChange={handleChange} required>
+							{listGradeMethod.map((option) => (
+								<MenuItem key={option.name} value={option.gid}>
+									{`${option.name} (${option.description})`}
+								</MenuItem>
+							))}
+						</Select>
+
+						<Typography variant="h5" marginTop={'20px'}>
+							Danh sách câu hỏi
+						</Typography>
+
+						<Box sx={{ border: '1px solid #ccc', padding: '16px', borderRadius: '4px', backgroundColor: '#E7E0EA' }}>
+							<ListQuestionsForm listQuestions={listQuestions} setListQuestions={setListQuestions} listCorrects={listCorrects} setListCorrects={setListCorrects} />
+						</Box>
 					</Box>
+
 					<Button type="submit" variant="contained" color="primary" style={{ marginTop: '20px' }}>
-						Lưu bài tập
+						Thêm bài kiểm tra
 					</Button>
 				</form>
 			</Box>
 
-			<Dialog open={showConfirmationDialog} onClose={handleCancel} TransitionComponent={Transition} keepMounted aria-describedby="alert-dialog-slide-description">
+			<Dialog open={showConfirmationDialog} onClose={handleCancel}>
 				<DialogTitle>Xác nhận</DialogTitle>
 				<DialogContent>
-					<Typography variant="body1">Nhớ check lại nội dung, sai chính tả là quê lắm á</Typography>
+					<Typography variant="body1">Cái này quan trọng, nhớ kiểm tra cho kĩ</Typography>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleCancel} color="primary">
 						Khoan, để coi kỹ lại
 					</Button>
 					<Button onClick={handleConfirm} color="secondary" variant="outlined" autoFocus>
-						Rồi, chỉnh đi gái
+						Kỹ rồi, thêm đi
 					</Button>
 				</DialogActions>
 			</Dialog>
-		</Box>
+		</>
 	);
 };
-
-export default EditExam;

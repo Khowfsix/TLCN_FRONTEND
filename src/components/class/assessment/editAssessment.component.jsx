@@ -6,7 +6,7 @@ import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 
 // import moment from 'moment';
 
-import { EditorState, ContentState, convertToRaw } from 'draft-js';
+import { EditorState, ContentState, convertToRaw, convertFromHTML } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -33,7 +33,9 @@ const EditAssessment = (props) => {
 	const [content, setContent] = useState(formData.content ? formData.content.filter((item) => item.type === 'content')[0].value : null);
 
 	const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-	const [editorState, setEditorState] = useState(() => EditorState.createWithContent(ContentState.createFromText(content)));
+	//get editor state from html
+	const blocksFromHTML = convertFromHTML(content);
+	const [editorState, setEditorState] = useState(() => EditorState.createWithContent(ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap)));
 
 	const getHtml = () => {
 		const contentState = editorState.getCurrentContent();
@@ -45,7 +47,7 @@ const EditAssessment = (props) => {
 
 	const handleEditorStateChange = (newEditorState) => {
 		setEditorState(newEditorState);
-		setContent(newEditorState.getCurrentContent().getPlainText('\n'));
+		setContent(getHtml());
 	};
 
 	const handleChange = (event) => {
@@ -71,31 +73,73 @@ const EditAssessment = (props) => {
 		setShowConfirmationDialog(true);
 	};
 
+	const checkValidTime = () => {
+		if (formData.datetimeStart > formData.datetimeEnd) {
+			toast.error('Thời gian bắt đầu phải trước thời gian kết thúc', {
+				position: 'top-right',
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				theme: 'dark',
+			});
+			return false;
+		}
+		if (formData.datetimeCutoff > formData.datetimeEnd) {
+			toast.error('Thời gian thu bài phải trước thời gian kết thúc', {
+				position: 'top-right',
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				theme: 'dark',
+			});
+			return false;
+		}
+
+		if (formData.datetimeCutoff < formData.datetimeStart) {
+			toast.error('Thời gian thu bài phải sau thời gian bắt đầu', {
+				position: 'top-right',
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				theme: 'dark',
+			});
+			return false;
+		}
+		return true;
+	};
+
 	const handleConfirm = () => {
 		// Do something with the form data
 		console.log(formData);
 		setShowConfirmationDialog(false);
-
-		// axios
-		// 	.put(`lecture/update/${props.initLecture.lid}`, formData)
-		// 	.then((response) => {
-		// 		if (response.status == 201) {
-		// 			toast.success('Bài giảng đã được cập nhật thành công', {
-		// 				position: 'top-right',
-		// 				autoClose: 3000,
-		// 				hideProgressBar: false,
-		// 				closeOnClick: true,
-		// 				pauseOnHover: true,
-		// 				draggable: true,
-		// 				theme: 'dark',
-		// 			});
-		// 			props.fetchData();
-		// 			props.close();
-		// 		}
-		// 	})
-		// 	.catch((error) => {
-		// 		toast.error(error.response.data.message);
-		// 	});
+		if (checkValidTime()) {
+			axios
+				.put(`assessment/update/${props.initData.aid}`, formData)
+				.then((response) => {
+					if (response.status == 201) {
+						toast.success('Bài tập đã được cập nhật thành công', {
+							position: 'top-right',
+							autoClose: 3000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							theme: 'dark',
+						});
+						props.fetchData();
+						props.close();
+					}
+				})
+				.catch((error) => {
+					toast.error(error.response.data.message);
+				});
+		}
 	};
 
 	const handleCancel = () => {
