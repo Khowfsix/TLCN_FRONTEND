@@ -189,19 +189,20 @@ export default function Assessment() {
 						</Button>
 					</>
 				) : null}
-
-				<Button
-					variant="outlined"
-					startIcon={<UpdateOutlined />}
-					onClick={() => {
-						navigate(`/SubmitAssessment?aid=${assessmentContent.aid}`, {
-							state: {
-								numAttempt: assessmentContent.numberAttempt,
-							},
-						});
-					}}>
-					Nộp bài tập
-				</Button>
+				{localStorage.getItem('role') == 'student' ? (
+					<Button
+						variant="outlined"
+						startIcon={<UpdateOutlined />}
+						onClick={() => {
+							navigate(`/SubmitAssessment?aid=${assessmentContent.aid}`, {
+								state: {
+									numAttempt: assessmentContent.numberAttempt,
+								},
+							});
+						}}>
+						Nộp bài tập
+					</Button>
+				) : null}
 			</Stack>
 
 			<Dialog open={openDelDi} onClose={handleCloseDelDi} TransitionComponent={Transition} keepMounted aria-describedby="alert-dialog-slide-description">

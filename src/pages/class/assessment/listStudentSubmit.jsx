@@ -47,27 +47,20 @@ const ListStudentSubmit = () => {
 	};
 
 	const [listStudent, setListStudent] = useState([]);
-	const [studentInfo, setStudentInfo] = useState([]);
+	// const [studentInfo, setStudentInfo] = useState([]);
 	const [listSubmit, setListSubmit] = useState([]);
 
 	const fetchData = () => {
 		axios
-			.get(`studentJoinClass/getAll`)
+			.get(`class/getAllParticipantsByClassId/${location.state.assessmentContent.classSubject.classID}`)
 			.then((response) => {
 				if (response.status === 200 && response.data) {
-					let data = response.data.filter((item) => item.classID === location.state.assessmentContent.classSubject.classID);
-					setListStudent(data);
+					setListStudent(response.data);
 				}
 			})
 			.catch((error) => {
 				console.log(error);
 			});
-
-		axios.get(`student/getAll`).then((response) => {
-			if (response.status === 200 && response.data) {
-				setStudentInfo(response.data);
-			}
-		});
 
 		axios.get(`studentAttemptAssessment/getByAssessmentID/${location.state.assessmentContent.aid}`).then((response) => {
 			if (response.status === 200 && response.data) {
@@ -80,25 +73,40 @@ const ListStudentSubmit = () => {
 		fetchData();
 	}, [params]);
 
+	console.log(listStudent);
+
 	return (
 		<Stack>
 			<Typography variant="h4">Danh sách học viên nộp bài</Typography>
 			<Box>
 				<List>
 					{listStudent.map((student, index) => (
-						<Accordion key={student.sjcid} expanded={expanded === student.sjcid} onChange={handleChange(student.sjcid)}>
+						<Accordion key={student.id} expanded={expanded === student.id} onChange={handleChange(student.id)}>
 							<AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-								{studentInfo.filter((info) => info.stid === student.studentID).length > 0 && (
-									<Typography>{`${student.studentID} - ${studentInfo.filter((item) => item.stid === student.studentID)[0].name}`}</Typography>
-								)}
+								<Typography>{`${student.id} - ${student.name}`}</Typography>
 							</AccordionSummary>
-							{listSubmit.filter((item) => item.assessmentID === location.state.assessmentContent.aid && item.studentID === student.studentID).length > 0 ? (
+							{listSubmit.filter((item) => item.assessmentID === location.state.assessmentContent.aid && item.studentID === student.id).length > 0 ? (
 								<AccordionDetails
 									sx={{ display: 'flex', justifyContent: 'center' }}
 									onClick={() => {
-										navigate('/SubmitById', { state: { assessment: location.state.assessmentContent, studentid: student.studentID } });
+										// navigate('/SubmitById', { state: { assessment: location.state.assessmentContent, studentid: student.studentID } });
 									}}>
-									Đã nộp bài
+									{listSubmit
+										.filter((item) => item.assessmentID === location.state.assessmentContent.aid && item.studentID === student.id)
+										.map((item) => {
+											return (
+												<ListItem key={item.saaid}>
+													<ListItemText
+														onClick={() => {
+															if (item.grade == -1) {
+																navigate(`/SubmitById?studentId=${student.id}&assessmentId=${location.state.assessmentContent.aid}&submissionId=${item.saaid}`);
+															}
+														}}>
+														ID: {item.saaid} - Grade: {item.grade}
+													</ListItemText>
+												</ListItem>
+											);
+										})}
 								</AccordionDetails>
 							) : (
 								<AccordionDetails>Chưa nộp bài</AccordionDetails>
