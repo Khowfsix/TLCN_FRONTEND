@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 
 import axios from '../../../apis/axiosConfig';
 import { Box, Button, Dialog, Typography } from '@material-ui/core';
@@ -22,6 +22,7 @@ import EditAssessment from '../../../components/class/assessment/editAssessment.
 
 export default function Assessment() {
 	const [params] = useSearchParams();
+	const location = useLocation();
 	const navigate = useNavigate();
 	const [assessmentContent, setAssessmentContent] = useState(null);
 
@@ -167,12 +168,34 @@ export default function Assessment() {
 				<Typography variant="h5"></Typography>
 			</Box>
 
-			<Stack direction="row" spacing={2} sx={{ justifyContent: 'center', alignItems: 'center', justifyItems: 'center', marginTop: '20px' }}>
+			<Stack direction="row" spacing={2} sx={{ justifyContent: 'center', alignItems: 'center', justifyItems: 'center', marginTop: '20px', gap: '20px' }}>
 				<Button variant="outlined" startIcon={<DeleteForeverOutlined />} onClick={handleOpenDelDi}>
 					Xóa bài tập
 				</Button>
 				<Button variant="outlined" startIcon={<UpdateOutlined />} onClick={handleOpenUpdDi}>
 					Chính sửa bài tập
+				</Button>
+				<Button
+					variant="outlined"
+					startIcon={<UpdateOutlined />}
+					onClick={() => {
+						navigate(`/SubmitAssessment?aid=${assessmentContent.aid}`, {
+							state: {
+								numAttempt: assessmentContent.numberAttempt,
+							},
+						});
+					}}>
+					Nộp bài tập
+				</Button>
+				<Button
+					variant="outlined"
+					startIcon={<UpdateOutlined />}
+					onClick={() => {
+						navigate(`/ListStudentSubmit?aid=${assessmentContent.aid}`, {
+							state: { classID: location.state.classID },
+						});
+					}}>
+					Chấm bài tập
 				</Button>
 			</Stack>
 

@@ -26,6 +26,16 @@ import ListBlog from './pages/blog/listBlog';
 
 import MyProfile from './pages/account/myProfile';
 
+import ListStudentSubmit from './pages/class/assessment/listStudentSubmit';
+import SubmitAssessment from './pages/class/assessment/submitAssessment';
+import SubmitById from './pages/class/assessment/submitById';
+import DoExam from './pages/class/exam/doExam';
+import Grading from './pages/class/exam/grading';
+import ListGradeOfExam from './pages/class/exam/listGradeOfExam';
+import ListGradeOfStudentOfClass from './pages/class/listGradeOfStudentOfClass';
+import ListScore from './pages/class/listScore';
+import ListStudentOfClass from './pages/class/listStudentOfClass';
+
 function App() {
 	localStorage.setItem('testing', false);
 
@@ -57,6 +67,16 @@ function App() {
 							<Route path="addSomething" element={<AddSomething />} />
 
 							<Route path="account/myProfile" element={<MyProfile />} />
+
+							<Route path="ListStudentSubmit" element={<ListStudentSubmit />} />
+							<Route path="SubmitAssessment" element={<SubmitAssessment />} />
+							<Route path="SubmitById" element={<SubmitById />} />
+							<Route path="Grading" element={<Grading />} />
+							<Route path="DoExam" element={<DoExam />} />
+							<Route path="ListGradeOfExam" element={<ListGradeOfExam />} />
+							<Route path="ListGradeOfStudentOfClass" element={<ListGradeOfStudentOfClass />} />
+							<Route path="ListScore" element={<ListScore />} />
+							<Route path="ListStudentOfClass" element={<ListStudentOfClass />} />
 						</Route>
 
 						{/* admin and lecturer role */}

@@ -149,7 +149,7 @@ export default function Exam() {
 				</Typography>
 				<Typography variant="subtitle1">
 					<Typography variant="overline">Phương thức tính điểm: </Typography>
-					{examContent && listGradeMethod.find((item) => item.gid == examContent.gradeMethod).name}
+					{examContent && listGradeMethod && listGradeMethod.find((item) => item.gid == examContent.gradeMethod).name}
 				</Typography>
 			</Box>
 
@@ -169,7 +169,7 @@ export default function Exam() {
 						console.log(examContent);
 						navigate(`/class/exam/edit?eid=${params.get('eid')}`, { state: { initData: examContent } });
 					}}>
-					Chính sửa bài tập
+					Chính sửa bài kiểm tra
 				</Button>
 			</Stack>
 

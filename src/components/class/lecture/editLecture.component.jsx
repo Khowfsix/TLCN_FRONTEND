@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
 
-import { EditorState, ContentState, convertToRaw } from 'draft-js';
+import { EditorState, ContentState, convertToRaw, convertFromHTML } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -18,7 +18,8 @@ const EditLecture = (props) => {
 	});
 
 	const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-	const [editorState, setEditorState] = useState(() => EditorState.createWithContent(ContentState.createFromText(formData && formData.content)));
+	const blocksFromHTML = convertFromHTML(formData.content);
+	const [editorState, setEditorState] = useState(() => EditorState.createWithContent(ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap)));
 
 	const getHtml = () => {
 		const contentState = editorState.getCurrentContent();

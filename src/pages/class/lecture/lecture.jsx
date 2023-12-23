@@ -35,7 +35,7 @@ export default function Lecture() {
 	};
 
 	const handleOpenUpdDi = () => {
-		setOpenUpdDi(true);
+		setOpenUpdDi(!openUpdDi);
 	};
 
 	const handleCloseUpdDi = () => {

@@ -91,9 +91,9 @@ export const EditExam = () => {
 
 		listCorrects.map((correct) => {
 			if (correct.correct.length < 2) {
-				listQuestions.filter((question) => question.questionId === correct.questionId)[0].type = 'Checkboxes';
-			} else {
 				listQuestions.filter((question) => question.questionId === correct.questionId)[0].type = 'Short Answer';
+			} else {
+				listQuestions.filter((question) => question.questionId === correct.questionId)[0].type = 'Checkboxes';
 			}
 		});
 
@@ -112,39 +112,23 @@ export const EditExam = () => {
 		console.log(formData);
 		if (checkValidTime()) {
 			axios
-				.post(`/exam/create`, formData)
+				.put(`exam/update/${location.state.initData.eid}`, formData)
 				.then((response) => {
-					if (response.status === 201) {
-						let data = {
-							type: 'Exam',
-							ID: response.data.eid,
-							position: -1,
-						};
-						axios
-							.put(`classSubject/addContentClassSubject/${response.data.classSubject}`, data)
-							.then((response1) => {
-								if (response1.status === 200) {
-									toast.success(`Đã tạo bài kiểm tra ${response.data && response.data.title}`, {
-										position: 'top-right',
-										autoClose: 3000,
-										hideProgressBar: false,
-										closeOnClick: true,
-										pauseOnHover: true,
-										draggable: true,
-										theme: 'dark',
-									});
-									navigate(`/class?cid=${location.state.classId}`);
-								}
-							})
-							.catch((error) => {
-								// Handle the error
-								console.error(error);
-							});
+					if (response.status == 201) {
+						toast.success('Bài kiểm tra đã được cập nhật thành công', {
+							position: 'top-right',
+							autoClose: 3000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							theme: 'dark',
+						});
+						navigate(`/exam?eid=${location.state.initData.eid}`);
 					}
 				})
 				.catch((error) => {
-					// Handle the error
-					console.error(error);
+					toast.error(error.response.data.message);
 				});
 		}
 	};
@@ -241,7 +225,7 @@ export const EditExam = () => {
 					</Box>
 
 					<Button type="submit" variant="contained" color="primary" style={{ marginTop: '20px' }}>
-						Thêm bài kiểm tra
+						Lưu bài kiểm tra
 					</Button>
 				</form>
 			</Box>

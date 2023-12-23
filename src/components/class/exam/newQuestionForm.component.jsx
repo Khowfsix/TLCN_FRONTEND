@@ -96,7 +96,6 @@ const ListQuestionsForm = ({ listQuestions, listCorrects, setListQuestions, setL
 							/>
 
 							<Box sx={{ display: 'flex', flexDirection: 'column', marginTop: '16px' }}>
-								{console.log(question)}
 								{question.choices &&
 									question.choices.map((answer, index) => (
 										<Card key={index} sx={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
