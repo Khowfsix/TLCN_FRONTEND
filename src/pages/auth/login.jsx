@@ -438,7 +438,7 @@ export default function Login() {
 												textDecoration: 'underline',
 												cursor: 'pointer',
 											}}>
-											Quên pass rồi à con gà?{' '}
+											Bạn quên mật khẩu ư?{' '}
 										</Typography>
 									</Box>
 								</Grid>
@@ -486,14 +486,14 @@ export default function Login() {
 											fontSize: '.9em',
 										}}>
 										<Typography variant="small" sx={{ color: 'black' }}>
-											Bạn đếu có tài khoản ư?{' '}
+											Bạn có tài khoản chưa?{' '}
 											<Typography
 												// component={Link}
 												// to="/register"
 												onClick={handleClickSignUp}
 												variant="small"
 												sx={{ cursor: 'pointer', textDecoration: 'underline', color: 'black' }}>
-												Đúng vậy
+												Chưa có ạ!!!
 											</Typography>
 										</Typography>
 									</Grid>

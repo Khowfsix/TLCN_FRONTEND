@@ -152,14 +152,16 @@ export default function Lecture() {
 				<div dangerouslySetInnerHTML={{ __html: lectureContent && lectureContent.content }} />
 			</Box>
 
-			<Stack direction="row" spacing={2}>
-				<Button variant="outlined" startIcon={<DeleteForeverOutlined />} onClick={handleOpenDelDi}>
-					Xóa bài giảng
-				</Button>
-				<Button variant="outlined" startIcon={<UpdateOutlined />} onClick={handleOpenUpdDi}>
-					Chính sửa bài giảng
-				</Button>
-			</Stack>
+			{localStorage.getItem('role') == 'lecturer' ? (
+				<Stack direction="row" spacing={2}>
+					<Button variant="outlined" startIcon={<DeleteForeverOutlined />} onClick={handleOpenDelDi}>
+						Xóa bài giảng
+					</Button>
+					<Button variant="outlined" startIcon={<UpdateOutlined />} onClick={handleOpenUpdDi}>
+						Chính sửa bài giảng
+					</Button>
+				</Stack>
+			) : null}
 
 			<Dialog open={openDelDi} onClose={handleCloseDelDi} TransitionComponent={Transition} keepMounted aria-describedby="alert-dialog-slide-description">
 				<DialogTitle>Xóa bài giảng</DialogTitle>

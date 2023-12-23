@@ -197,16 +197,17 @@ export default function WeekCard(props) {
 							</Grid>
 						</Grid>
 					</Box>
-
-					<Box sx={{ paddingBottom: 2 }}>
-						<ButtonGroup color="secondary" aria-label="medium secondary button group">
-							<ButtonGroup color="primary" aria-label="small secondary button group">
-								<Button onClick={() => handleAddTopic(week.key)}>Thêm nội dung</Button>
-								<Button onClick={handleOpenUpdDi}>Chỉnh sửa</Button>
-								<Button onClick={handleOpenDelDi}>Xóa chủ để</Button>
+					{localStorage.getItem('role') == 'lecturer' ? (
+						<Box sx={{ paddingBottom: 2 }}>
+							<ButtonGroup color="secondary" aria-label="medium secondary button group">
+								<ButtonGroup color="primary" aria-label="small secondary button group">
+									<Button onClick={() => handleAddTopic(week.key)}>Thêm nội dung</Button>
+									<Button onClick={handleOpenUpdDi}>Chỉnh sửa</Button>
+									<Button onClick={handleOpenDelDi}>Xóa chủ để</Button>
+								</ButtonGroup>
 							</ButtonGroup>
-						</ButtonGroup>
-					</Box>
+						</Box>
+					) : null}
 				</Card>
 			</Box>
 

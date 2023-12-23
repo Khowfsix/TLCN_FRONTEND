@@ -16,7 +16,7 @@ const SubmitAssessment = () => {
 	const navigate = useNavigate();
 
 	const [textValue, setTextValue] = useState('');
-	const [title, setTitle] = useState('');
+	const [link, setLink] = useState('');
 	const [numAttempt, setNumAttempt] = useState(location.state.numAttempt);
 	const [numRemain, setNumRemain] = useState(1);
 
@@ -43,15 +43,20 @@ const SubmitAssessment = () => {
 		let data = {
 			studentID: localStorage.getItem('roleUserId'),
 			assessmentID: params.get('aid'),
-			submition: {
-				content: textValue,
-				type: 'content',
-				title: title,
-			},
+			submition: [
+				{
+					type: 'content',
+					value: textValue,
+				},
+				{
+					type: 'link',
+					value: link,
+				},
+			],
 			grade: -1,
 		};
 		axios
-			.post(`studentAttemptAssessment/create`)
+			.post(`studentAttemptAssessment/create`, data)
 			.then((response) => {
 				if (response.status === 201) {
 					toast.success(`Đã nộp bài tập`, {
@@ -102,7 +107,7 @@ const SubmitAssessment = () => {
 			</Typography>
 			{numRemain > 0 && (
 				<form onSubmit={handleSubmit} style={{ gap: '20px', display: 'flex', flexDirection: 'column' }}>
-					<TextField label="Tiêu đề" value={title} onChange={(e) => setTitle(e.target.value)} />
+					<TextField label="Link" value={link} onChange={(e) => setLink(e.target.value)} />
 
 					<Editor
 						editorState={editorState}

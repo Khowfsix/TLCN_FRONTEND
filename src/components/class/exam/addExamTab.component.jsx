@@ -207,7 +207,7 @@ export const AddExamTab = () => {
 							inputProps={{ min: 1 }}
 						/>
 
-						<TextField
+						{/* <TextField
 							variant="outlined"
 							name="timeAttempt"
 							type="number"
@@ -216,7 +216,7 @@ export const AddExamTab = () => {
 							onChange={handleChange}
 							required
 							inputProps={{ min: 15, max: 200, step: 15 }}
-						/>
+						/> */}
 
 						<Typography variant="h6" marginTop={'20px'}>
 							Phương thức chấm điểm

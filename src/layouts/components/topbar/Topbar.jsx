@@ -220,7 +220,7 @@ export default function TopBar() {
 							{/* <MenuIcon /> */}
 						</IconButton>
 						<Typography onClick={() => navigate('/Home')} variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
-							P-P Learning web
+							DEVFORFUTURE
 						</Typography>
 						{/* <Search>
 							<SearchIconWrapper>

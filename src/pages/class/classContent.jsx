@@ -132,9 +132,11 @@ const ClassContent = React.memo(() => {
 						bottom: 16,
 						right: 16,
 					}}>
-					<Fab onClick={handleOpenAddDi} color="primary" aria-label="add something">
-						<AddSharp />
-					</Fab>
+					{localStorage.getItem('role') == 'lecturer' ? (
+						<Fab onClick={handleOpenAddDi} color="primary" aria-label="add something">
+							<AddSharp />
+						</Fab>
+					) : null}
 				</Box>
 			</Box>
 

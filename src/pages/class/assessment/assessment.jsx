@@ -169,12 +169,27 @@ export default function Assessment() {
 			</Box>
 
 			<Stack direction="row" spacing={2} sx={{ justifyContent: 'center', alignItems: 'center', justifyItems: 'center', marginTop: '20px', gap: '20px' }}>
-				<Button variant="outlined" startIcon={<DeleteForeverOutlined />} onClick={handleOpenDelDi}>
-					Xóa bài tập
-				</Button>
-				<Button variant="outlined" startIcon={<UpdateOutlined />} onClick={handleOpenUpdDi}>
-					Chính sửa bài tập
-				</Button>
+				{localStorage.getItem('role') == 'lecturer' ? (
+					<>
+						<Button variant="outlined" startIcon={<DeleteForeverOutlined />} onClick={handleOpenDelDi}>
+							Xóa bài tập
+						</Button>
+						<Button variant="outlined" startIcon={<UpdateOutlined />} onClick={handleOpenUpdDi}>
+							Chính sửa bài tập
+						</Button>
+						<Button
+							variant="outlined"
+							startIcon={<UpdateOutlined />}
+							onClick={() => {
+								navigate(`/ListStudentSubmit?aid=${assessmentContent.aid}`, {
+									state: { assessmentContent: assessmentContent },
+								});
+							}}>
+							Chấm bài tập
+						</Button>
+					</>
+				) : null}
+
 				<Button
 					variant="outlined"
 					startIcon={<UpdateOutlined />}
@@ -186,16 +201,6 @@ export default function Assessment() {
 						});
 					}}>
 					Nộp bài tập
-				</Button>
-				<Button
-					variant="outlined"
-					startIcon={<UpdateOutlined />}
-					onClick={() => {
-						navigate(`/ListStudentSubmit?aid=${assessmentContent.aid}`, {
-							state: { classID: location.state.classID },
-						});
-					}}>
-					Chấm bài tập
 				</Button>
 			</Stack>
 

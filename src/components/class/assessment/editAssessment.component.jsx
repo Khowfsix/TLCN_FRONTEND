@@ -54,14 +54,9 @@ const EditAssessment = (props) => {
 		setFormData((prevFormData) => ({
 			...prevFormData,
 			[event.target.name]: event.target.value,
-			content: [
-				{
-					type: 'link',
-					value: link,
-				},
-				{ type: 'content', value: getHtml() },
-			],
 		}));
+
+		console.log(formData);
 	};
 
 	const handleChange_1 = (event) => {
@@ -71,6 +66,17 @@ const EditAssessment = (props) => {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		setShowConfirmationDialog(true);
+		setFormData((prevFormData) => ({
+			...prevFormData,
+			[event.target.name]: event.target.value,
+			content: [
+				{
+					type: 'link',
+					value: link,
+				},
+				{ type: 'content', value: content },
+			],
+		}));
 	};
 
 	const checkValidTime = () => {
@@ -115,8 +121,8 @@ const EditAssessment = (props) => {
 	};
 
 	const handleConfirm = () => {
-		// Do something with the form data
 		console.log(formData);
+
 		setShowConfirmationDialog(false);
 		if (checkValidTime()) {
 			axios

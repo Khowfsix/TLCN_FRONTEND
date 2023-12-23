@@ -1,24 +1,27 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { List, ListItem, ListItemText, Typography } from '@mui/material';
 
 const SubmitById = () => {
-	const { studentId } = useParams();
-	const student = students.find((student) => student.id === parseInt(studentId));
+	const [params] = useSearchParams();
+	const location = useLocation();
+	const navigate = useNavigate();
+
+	const { assessment, studentid } = location.state;
+	const [listSubmit, setListSubmit] = useState([]);
+	// const
 
 	return (
-		<div>
-			<Typography variant="h4" gutterBottom>
-				Danh sách bài nộp của {student.name}
-			</Typography>
+		<>
+			<Typography variant="h4">Danh sách các bài nộp của học viên - {studentid}</Typography>
 			<List>
-				{student.submissions.map((submission, index) => (
-					<ListItem key={index}>
-						<ListItemText primary={submission} />
+				{assessment.map((item) => (
+					<ListItem key={item.aid} onClick={() => navigate(`/class/assessment/submit/${studentid}/${item.aid}`)}>
+						<ListItemText primary={item.title} />
 					</ListItem>
 				))}
 			</List>
-		</div>
+		</>
 	);
 };
 

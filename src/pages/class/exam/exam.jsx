@@ -9,6 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import { Stack } from '@mui/material';
+import { AddBusinessTwoTone } from '@mui/icons-material';
 
 import { DeleteForeverOutlined } from '@material-ui/icons';
 import { UpdateOutlined } from '@material-ui/icons';
@@ -70,7 +71,7 @@ export default function Exam() {
 						axios
 							.delete(`/exam/delete/${params.get('eid')}`)
 							.then(() => {
-								toast.success('Đã xóa bài tập', {
+								toast.success('Đã xóa bài kiểm tra', {
 									position: 'top-right',
 									autoClose: 3000,
 									hideProgressBar: false,
@@ -139,42 +140,51 @@ export default function Exam() {
 					<Typography variant="overline">Thời gian kết thúc: </Typography>
 					{examContent && formatedDateTime(examContent.datetimeEnd)}
 				</Typography>
-				<Typography variant="subtitle1">
+				{/* <Typography variant="subtitle1">
 					<Typography variant="overline">Thời gian làm bài: </Typography>
 					{examContent && examContent.timeAttempt} phút
-				</Typography>
+				</Typography> */}
 				<Typography variant="subtitle1">
 					<Typography variant="overline">Số lần làm bài cho phép: </Typography>
 					{examContent && examContent.numberAttempt}
 				</Typography>
 				<Typography variant="subtitle1">
 					<Typography variant="overline">Phương thức tính điểm: </Typography>
-					{examContent && listGradeMethod && listGradeMethod.find((item) => item.gid == examContent.gradeMethod).name}
+					{examContent && listGradeMethod.length > 0 && listGradeMethod.find((item) => item.gid == examContent.gradeMethod).name}
 				</Typography>
 			</Box>
 
 			<Typography sx={{ marginTop: '20px' }} variant="h4">
 				Làm bài kiểm tra:
 			</Typography>
-			<Button variant="outlined">Làm bài</Button>
-
-			<Stack direction="row" spacing={2} sx={{ justifyContent: 'center', alignItems: 'center', justifyItems: 'center', marginTop: '20px' }}>
-				<Button variant="outlined" startIcon={<DeleteForeverOutlined />} onClick={handleOpenDelDi}>
-					Xóa bài tập
-				</Button>
-				<Button
-					variant="outlined"
-					startIcon={<UpdateOutlined />}
-					onClick={() => {
-						console.log(examContent);
-						navigate(`/class/exam/edit?eid=${params.get('eid')}`, { state: { initData: examContent } });
-					}}>
-					Chính sửa bài kiểm tra
-				</Button>
-			</Stack>
+			<Button
+				variant="outlined"
+				startIcon={<AddBusinessTwoTone />}
+				sx={{ marginTop: '20px' }}
+				onClick={() => {
+					navigate(`/doExam?eid=${params.get('eid')}`, { state: { initData: examContent } });
+				}}>
+				Làm bài
+			</Button>
+			{localStorage.getItem('role') == 'lecturer' ? (
+				<Stack direction="row" spacing={2} sx={{ justifyContent: 'center', alignItems: 'center', justifyItems: 'center', marginTop: '20px' }}>
+					<Button variant="outlined" startIcon={<DeleteForeverOutlined />} onClick={handleOpenDelDi}>
+						Xóa bài kiểm tra
+					</Button>
+					<Button
+						variant="outlined"
+						startIcon={<UpdateOutlined />}
+						onClick={() => {
+							console.log(examContent);
+							navigate(`/class/exam/edit?eid=${params.get('eid')}`, { state: { initData: examContent } });
+						}}>
+						Chính sửa bài kiểm tra
+					</Button>
+				</Stack>
+			) : null}
 
 			<Dialog open={openDelDi} onClose={handleCloseDelDi} TransitionComponent={Transition} keepMounted aria-describedby="alert-dialog-slide-description">
-				<DialogTitle>Xóa bài tập</DialogTitle>
+				<DialogTitle>Xóa bài kiểm tra</DialogTitle>
 				<DialogContent>
 					<DialogContentText>Chắc chưa bro :))) muốn xóa thật à</DialogContentText>
 				</DialogContent>
