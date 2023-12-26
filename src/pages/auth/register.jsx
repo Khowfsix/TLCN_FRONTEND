@@ -1,19 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate /* , Link */ } from 'react-router-dom';
-// import { useDispatch, useSelector } from 'react-redux';
-import {
-	Grid,
-	TextField,
-	Button,
-	Typography,
-	/* Link, */
-	Box,
-	Container,
-	InputAdornment,
-	createTheme,
-	IconButton,
-	Stack,
-} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Grid, TextField, Button, Typography, Box, Container, InputAdornment, createTheme, IconButton, Stack } from '@mui/material';
 
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
@@ -24,7 +11,6 @@ import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import { MailOutline } from '@mui/icons-material';
-// import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import HomeIcon from '@mui/icons-material/Home';
 
 import CircularProgress from '@mui/material/CircularProgress';
@@ -59,50 +45,6 @@ const Register = () => {
 
 	const [errorSnackbar, setErrorSnackbar] = useState(false);
 	const [successSnackbar, setSuccessSnackbar] = useState(false);
-	const [currentIndex, setCurrentIndex] = useState(0);
-
-	// const dispatch = useDispatch();
-
-	// const newError = useSelector((state) => state.error);
-
-	// useEffect(() => {
-	// 	const intervalId = setInterval(() => {
-	// 		if (currentIndex === images.length - 1) {
-	// 			setCurrentIndex(0);
-	// 		} else {
-	// 			setCurrentIndex(currentIndex + 1);
-	// 		}
-	// 	}, 15000);
-
-	// 	return () => clearInterval(intervalId);
-	// }, [currentIndex]);
-
-	// useEffect(() => {
-	// 	if (newError.status === 'no') {
-	// 		setLoading(false);
-	// 		setSuccessSnackbar(true);
-	// 		setTimeout(() => {
-	// 			// dispatch({
-	// 			// 	type: 'error/setError',
-	// 			// 	payload: { status: 'idle', message: '' },
-	// 			// });
-	// 			navigate('/login');
-	// 		}, 1000);
-	// 	}
-	// 	if (newError.status === 'yes') {
-	// 		setLoading(false);
-	// 		setErrorSnackbar(true);
-	// 		//setUsername("");
-	// 		//setEmail("");
-	// 		setTimeout(() => {
-	// 			setErrorSnackbar(false);
-	// 			// dispatch({
-	// 			// 	type: 'error/setError',
-	// 			// 	payload: { status: 'idle', message: '' },
-	// 			// });
-	// 		}, 5000);
-	// 	}
-	// }, [newError]);
 
 	const handleFullNameChange = (event) => {
 		let value = event.target.value;
@@ -153,18 +95,10 @@ const Register = () => {
 	};
 
 	const handleClickHome = () => {
-		// dispatch({
-		// 	type: 'error/setError',
-		// 	payload: { status: 'idle', message: '' },
-		// });
 		navigate('/home');
 	};
 
 	const handleClickSignIn = () => {
-		// dispatch({
-		// 	type: 'error/setError',
-		// 	payload: { status: 'idle', message: '' },
-		// });
 		navigate('/login');
 	};
 
@@ -172,15 +106,6 @@ const Register = () => {
 		event.preventDefault();
 		if (validFullName && fullName != '' && validUsername && username != '' && validEmail && email != '' && validPassword && password != '') {
 			setLoading(true);
-			// dispatch({
-			// 	type: 'saga/userRegister',
-			// 	payload: {
-			// 		fullName: fullName,
-			// 		username: username,
-			// 		email: email,
-			// 		password: password,
-			// 	},
-			// });
 		} else {
 			if (!validFullName || fullName == '') {
 				setValidFullName(false);
@@ -208,7 +133,7 @@ const Register = () => {
 				backgroundSize: 'cover',
 				backgroundRepeat: 'no-repeat',
 				width: '100vw',
-				// height: '100vh',
+				height: '100vh',
 				display: 'flex',
 				justifyContent: 'center',
 				alignItems: 'center',

@@ -110,6 +110,12 @@ export default function TopBar() {
 		axios
 			.get(`/auth/logout/${localStorage.getItem('accessToken')}`)
 			.then((res) => {
+				// localStorage.removeItem('accessToken');
+				// localStorage.removeItem('role');
+				// localStorage.removeItem('roleUserId');
+				// localStorage.removeItem('userId');
+				// localStorage.removeItem('exp');
+
 				localStorage.clear();
 
 				navigate('/login');
@@ -243,9 +249,9 @@ export default function TopBar() {
 						{/* <Box sx={{ flexGrow: 1 }} /> */}
 						<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 							<IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-								{/* <Badge badgeContent={17} color="error">
+								<Badge badgeContent={17} color="error">
 									<NotificationsIcon />
-								</Badge> */}
+								</Badge>
 							</IconButton>
 							<IconButton size="large" edge="end" aria-label="account of current user" aria-controls={menuId} aria-haspopup="true" onClick={handleProfileMenuOpen} color="inherit">
 								<AccountCircle />

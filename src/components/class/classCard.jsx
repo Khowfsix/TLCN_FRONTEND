@@ -5,16 +5,15 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-// import { Link } from '@material-ui/core';
 
 import { useNavigate } from 'react-router-dom';
 
-export default function CardClass(props) {
+const CardClass = React.memo((props) => {
 	const navigate = useNavigate();
 
 	return (
-		<Card sx={{ maxWidth: 345 }}>
-			<CardMedia sx={{ height: 140 }} image="https://source.unsplash.com/random" title="green iguana" />
+		<Card sx={{ width: 400, maxWidth: 600 }}>
+			<CardMedia sx={{ height: 140 }} image="https://source.unsplash.com/random" title="green iguana" loading="lazy" />
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div" color={'black'}>
 					{props.class && props.class.className}
@@ -35,4 +34,6 @@ export default function CardClass(props) {
 			</CardActions>
 		</Card>
 	);
-}
+});
+
+export default CardClass;

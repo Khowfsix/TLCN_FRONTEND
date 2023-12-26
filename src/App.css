@@ -1,41 +1,12 @@
-* {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-}
-
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-}
-
-ol,
-ul {
-	list-style: none;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 #root {
 	margin: 0;
 	padding: 0;
 	border: none;
 	text-align: center;
-	max-width: 100dvw;
-	width: 90vw;
-	overflow: hidden;
+	max-width: 100vw;
+	width: 100vw;
 }

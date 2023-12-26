@@ -9,25 +9,27 @@ import ListQuestionsForm from './newQuestionForm.component';
 import { toast } from 'react-toastify';
 import axios from '../../../apis/axiosConfig';
 
-export const AddExamTab = () => {
+export const EditExam = () => {
 	const [params] = useSearchParams();
 	const location = useLocation();
 	const navigate = useNavigate();
 
 	const [formData, setFormData] = useState({
-		title: '',
-		question: [],
-		correct: [],
+		title: location.state.initData.title,
+		question: location.state.initData.question,
+		correct: location.state.initData.correct,
 		datetimeStart: null,
 		datetimeEnd: null,
-		numberAttempt: 1,
-		gradeMethod: null,
-		classSubject: params.get('subject'),
-		timeAttempt: 45,
+		numberAttempt: location.state.initData.numberAttempt,
+		gradeMethod: location.state.initData.gradeMethod,
+		classSubject: location.state.initData.classSubject,
+		timeAttempt: location.state.initData.timeAttempt,
+		isHidden: location.state.initData.isHidden,
+		isDeleted: location.state.initData.isDeleted,
 	});
 
-	const [listQuestions, setListQuestions] = useState([]);
-	const [listCorrects, setListCorrects] = useState([]);
+	const [listQuestions, setListQuestions] = useState(formData.question);
+	const [listCorrects, setListCorrects] = useState(formData.correct);
 
 	const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
@@ -89,9 +91,9 @@ export const AddExamTab = () => {
 
 		listCorrects.map((correct) => {
 			if (correct.correct.length < 2) {
-				listQuestions.filter((question) => question.questionId === correct.questionId)[0].type = 'Checkboxes';
-			} else {
 				listQuestions.filter((question) => question.questionId === correct.questionId)[0].type = 'Short Answer';
+			} else {
+				listQuestions.filter((question) => question.questionId === correct.questionId)[0].type = 'Checkboxes';
 			}
 		});
 
@@ -110,39 +112,23 @@ export const AddExamTab = () => {
 		console.log(formData);
 		if (checkValidTime()) {
 			axios
-				.post(`/exam/create`, formData)
+				.put(`exam/update/${location.state.initData.eid}`, formData)
 				.then((response) => {
-					if (response.status === 201) {
-						let data = {
-							type: 'Exam',
-							ID: response.data.eid,
-							position: -1,
-						};
-						axios
-							.put(`classSubject/addContentClassSubject/${response.data.classSubject}`, data)
-							.then((response1) => {
-								if (response1.status === 200) {
-									toast.success(`Đã tạo bài kiểm tra ${response.data && response.data.title}`, {
-										position: 'top-right',
-										autoClose: 3000,
-										hideProgressBar: false,
-										closeOnClick: true,
-										pauseOnHover: true,
-										draggable: true,
-										theme: 'dark',
-									});
-									navigate(`/class?cid=${location.state.classId}`);
-								}
-							})
-							.catch((error) => {
-								// Handle the error
-								console.error(error);
-							});
+					if (response.status == 201) {
+						toast.success('Bài kiểm tra đã được cập nhật thành công', {
+							position: 'top-right',
+							autoClose: 3000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							theme: 'dark',
+						});
+						navigate(`/exam?eid=${location.state.initData.eid}`);
 					}
 				})
 				.catch((error) => {
-					// Handle the error
-					console.error(error);
+					toast.error(error.response.data.message);
 				});
 		}
 	};
@@ -171,11 +157,11 @@ export const AddExamTab = () => {
 
 	return (
 		<>
-			<Typography variant="h3" marginTop={'20px'}>
-				Thêm bài kiểm tra
-			</Typography>
 			<Box>
-				<form onSubmit={handleSubmit}>
+				<form onSubmit={handleSubmit} style={{ flexDirection: 'column', gap: '30px' }}>
+					<Typography variant="h3" marginTop={'20px'}>
+						Sửa bài kiểm tra
+					</Typography>
 					<Box sx={{ display: 'flex', flexDirection: 'column', gap: '30px', marginTop: '20px' }}>
 						<TextField variant="standard" name="title" label="Tiêu đề" value={formData.title} onChange={handleChange} required />
 
@@ -239,7 +225,7 @@ export const AddExamTab = () => {
 					</Box>
 
 					<Button type="submit" variant="contained" color="primary" style={{ marginTop: '20px' }}>
-						Thêm bài kiểm tra
+						Lưu bài kiểm tra
 					</Button>
 				</form>
 			</Box>

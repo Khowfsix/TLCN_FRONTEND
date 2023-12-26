@@ -72,19 +72,17 @@ export default function Assessment() {
 						// delete this topic
 						axios
 							.delete(`/assessment/delete/${params.get('aid')}`)
-							.then((r) => {
-								if (r.status == 200) {
-									toast.success('Đã xóa bài tập', {
-										position: 'top-right',
-										autoClose: 3000,
-										hideProgressBar: false,
-										closeOnClick: true,
-										pauseOnHover: true,
-										draggable: true,
-										progress: undefined,
-										theme: 'dark',
-									});
-								}
+							.then(() => {
+								toast.success('Đã xóa bài tập', {
+									position: 'top-right',
+									autoClose: 3000,
+									hideProgressBar: false,
+									closeOnClick: true,
+									pauseOnHover: true,
+									draggable: true,
+									progress: undefined,
+									theme: 'dark',
+								});
 								navigate(`/class?cid=${classSubject.classID}`);
 							})
 							.catch((err) => {

@@ -6,35 +6,36 @@ import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 
 // import moment from 'moment';
 
-import { EditorState, ContentState, convertToRaw } from 'draft-js';
+import { EditorState, ContentState, convertToRaw, convertFromHTML } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 import { toast } from 'react-toastify';
 import axios from '../../../apis/axiosConfig';
+import Transition from '../../../utils/transition';
 
-export const AddAssessmentTab = () => {
-	const [params] = useSearchParams();
-	const location = useLocation();
-	const navigate = useNavigate();
-
-	const [link, setLink] = useState(null);
-	const [content, setContent] = useState(null);
-
+const EditAssessment = (props) => {
 	const [formData, setFormData] = useState({
-		title: '',
-		content: null,
-		datetimeStart: Date.now(),
-		datetimeEnd: Date.now(),
-		datetimeCutoff: Date.now(),
-		numberAttempt: 1,
-		classSubject: params.get('subject'),
+		aid: props.initData.aid,
+		title: props.initData.title,
+		content: props.initData.content,
+		datetimeStart: null,
+		datetimeEnd: null,
+		datetimeCutoff: null,
+		numberAttempt: props.initData.numberAttempt,
+		classSubject: props.initData.classSubject,
+		isHidden: false,
+		isDeleted: false,
 	});
 
-	const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
+	const [link, setLink] = useState(formData.content ? formData.content.filter((item) => item.type === 'link')[0].value : null);
+	const [content, setContent] = useState(formData.content ? formData.content.filter((item) => item.type === 'content')[0].value : null);
 
-	const [editorState, setEditorState] = useState(() => EditorState.createWithContent(ContentState.createFromText('')));
+	const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
+	//get editor state from html
+	const blocksFromHTML = convertFromHTML(content);
+	const [editorState, setEditorState] = useState(() => EditorState.createWithContent(ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap)));
 
 	const getHtml = () => {
 		const contentState = editorState.getCurrentContent();
@@ -54,6 +55,8 @@ export const AddAssessmentTab = () => {
 			...prevFormData,
 			[event.target.name]: event.target.value,
 		}));
+
+		console.log(formData);
 	};
 
 	const handleChange_1 = (event) => {
@@ -63,12 +66,14 @@ export const AddAssessmentTab = () => {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		setShowConfirmationDialog(true);
-
 		setFormData((prevFormData) => ({
 			...prevFormData,
-			numberAttempt: Number(prevFormData.numberAttempt),
+			[event.target.name]: event.target.value,
 			content: [
-				{ type: 'link', value: link },
+				{
+					type: 'link',
+					value: link,
+				},
 				{ type: 'content', value: content },
 			],
 		}));
@@ -116,44 +121,29 @@ export const AddAssessmentTab = () => {
 	};
 
 	const handleConfirm = () => {
-		// Do something with the form data
-		setShowConfirmationDialog(false);
+		console.log(formData);
 
+		setShowConfirmationDialog(false);
 		if (checkValidTime()) {
 			axios
-				.post(`/assessment/create`, formData)
+				.put(`assessment/update/${props.initData.aid}`, formData)
 				.then((response) => {
-					if (response.status === 201) {
-						let data = {
-							type: 'Assessment',
-							ID: response.data.aid,
-							position: -1,
-						};
-						axios
-							.put(`classSubject/addContentClassSubject/${response.data.classSubject}`, data)
-							.then((response1) => {
-								if (response1.status === 200) {
-									toast.success(`Đã tạo bài tập ${response.data && response.data.title}`, {
-										position: 'top-right',
-										autoClose: 3000,
-										hideProgressBar: false,
-										closeOnClick: true,
-										pauseOnHover: true,
-										draggable: true,
-										theme: 'dark',
-									});
-									navigate(`/class?cid=${location.state.classId}`);
-								}
-							})
-							.catch((error) => {
-								// Handle the error
-								console.error(error);
-							});
+					if (response.status == 201) {
+						toast.success('Bài tập đã được cập nhật thành công', {
+							position: 'top-right',
+							autoClose: 3000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							theme: 'dark',
+						});
+						props.fetchData();
+						props.close();
 					}
 				})
 				.catch((error) => {
-					// Handle the error
-					console.error(error);
+					toast.error(error.response.data.message);
 				});
 		}
 	};
@@ -170,7 +160,7 @@ export const AddAssessmentTab = () => {
 	};
 
 	return (
-		<>
+		<Box sx={{ marginTop: '20px' }}>
 			<Typography variant="h3" marginTop={'20px'}>
 				Thêm bài tập
 			</Typography>
@@ -185,7 +175,6 @@ export const AddAssessmentTab = () => {
 								label="Thời gian bắt đầu"
 								value={formData.datetimeStart}
 								onChange={(value) => handleDatetimeChange('datetimeStart', value)}
-								// referenceDate={moment().toDate()}
 								renderInput={(params) => <TextField {...params} />}
 							/>
 							<DateTimePicker
@@ -231,27 +220,27 @@ export const AddAssessmentTab = () => {
 						/>
 					</Box>
 					<Button type="submit" variant="contained" color="primary" style={{ marginTop: '20px' }}>
-						Thêm bài tập
+						Lưu bài tập
 					</Button>
 				</form>
 			</Box>
 
-			<Dialog open={showConfirmationDialog} onClose={handleCancel}>
+			<Dialog open={showConfirmationDialog} onClose={handleCancel} TransitionComponent={Transition} keepMounted aria-describedby="alert-dialog-slide-description">
 				<DialogTitle>Xác nhận</DialogTitle>
 				<DialogContent>
-					<Typography variant="body1">
-						Có chắc muốn thêm bài tập này không? Bạn có nghĩ là học viên có thể hoàn thành bài trong thời gian đó không <br /> Cho bài tập ít thôi, tội nghiệp tụi nhỏ :"))
-					</Typography>
+					<Typography variant="body1">Nhớ check lại nội dung, sai chính tả là quê lắm á</Typography>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleCancel} color="primary">
 						Khoan, để coi kỹ lại
 					</Button>
 					<Button onClick={handleConfirm} color="secondary" variant="outlined" autoFocus>
-						Rồi biết rồi, thêm đi
+						Rồi, chỉnh đi gái
 					</Button>
 				</DialogActions>
 			</Dialog>
-		</>
+		</Box>
 	);
 };
+
+export default EditAssessment;

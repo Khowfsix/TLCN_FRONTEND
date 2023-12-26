@@ -70,20 +70,18 @@ export default function Exam() {
 						// delete this topic
 						axios
 							.delete(`/exam/delete/${params.get('eid')}`)
-							.then((r) => {
-								if (r.status == 200) {
-									toast.success('Đã xóa bài kiểm tra', {
-										position: 'top-right',
-										autoClose: 3000,
-										hideProgressBar: false,
-										closeOnClick: true,
-										pauseOnHover: true,
-										draggable: true,
-										progress: undefined,
-										theme: 'dark',
-									});
-									navigate(`/class?cid=${classSubject.classID}`);
-								}
+							.then(() => {
+								toast.success('Đã xóa bài kiểm tra', {
+									position: 'top-right',
+									autoClose: 3000,
+									hideProgressBar: false,
+									closeOnClick: true,
+									pauseOnHover: true,
+									draggable: true,
+									progress: undefined,
+									theme: 'dark',
+								});
+								navigate(`/class?cid=${classSubject.classID}`);
 							})
 							.catch((err) => {
 								// Handle the error

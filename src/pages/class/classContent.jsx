@@ -83,6 +83,7 @@ const ClassContent = React.memo(() => {
 		axios
 			.get(`/class/getById/${params.get('cid')}`)
 			.then((response) => {
+				0;
 				setClassInfo(response.data);
 			})
 			.catch((error) => {

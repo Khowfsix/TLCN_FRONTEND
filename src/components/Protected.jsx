@@ -8,21 +8,17 @@ import useGetRole from '../hooks/useGetRole';
 const ProtectedRoute = (props) => {
 	const allowed = props.allowed;
 	const navigate = useNavigate();
-
 	const Iam = useGetRole();
 
 	if (Iam == null) {
 		useEffect(() => {
 			navigate('/login');
-		}, [Iam, navigate]);
-		return null;
-	}
-
-	if (allowed.includes(Iam[1])) {
+		}, [Iam]);
+	} else if (allowed.includes(Iam[1])) {
 		return <Outlet />;
+	} else {
+		return <Unauthorized />;
 	}
-
-	return <Unauthorized />;
 };
 
 export default ProtectedRoute;

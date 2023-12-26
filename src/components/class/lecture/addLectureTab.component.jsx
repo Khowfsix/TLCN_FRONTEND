@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { TextField, Button, Box, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
 
-import { EditorState, ContentState } from 'draft-js';
+import { EditorState, ContentState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
+import draftToHtml from 'draftjs-to-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
+import { toast } from 'react-toastify';
+import axios from '../../../apis/axiosConfig';
+
 export const AddLectureTab = () => {
+	const [params] = useSearchParams();
+	const location = useLocation();
+	const navigate = useNavigate();
+
 	const [formData, setFormData] = useState({
 		title: '',
 		link: '',
-		classSubject: '',
+		classSubject: params.get('subject'),
 		content: '',
 	});
 
@@ -17,11 +26,19 @@ export const AddLectureTab = () => {
 
 	const [editorState, setEditorState] = useState(() => EditorState.createWithContent(ContentState.createFromText('')));
 
+	const getHtml = () => {
+		const contentState = editorState.getCurrentContent();
+		const rawContentState = convertToRaw(contentState);
+		let html = draftToHtml(rawContentState);
+		html = html.replace(/\n/g, '');
+		return html;
+	};
+
 	const handleEditorStateChange = (newEditorState) => {
 		setEditorState(newEditorState);
 		setFormData((prevFormData) => ({
 			...prevFormData,
-			content: newEditorState.getCurrentContent().getPlainText(),
+			content: getHtml(),
 		}));
 	};
 
@@ -41,6 +58,40 @@ export const AddLectureTab = () => {
 		// Do something with the form data
 		console.log(formData);
 		setShowConfirmationDialog(false);
+
+		axios
+			.post(`/lecture/create`, formData)
+			.then((response) => {
+				if (response.status == 201) {
+					let dataAdd2Topic = {
+						type: 'Lecture',
+						ID: response.data.lid,
+						position: -1,
+					};
+					axios
+						.put(`classSubject/addContentClassSubject/${params.get('subject')}`, dataAdd2Topic)
+						.then((response1) => {
+							if (response1.status == 200) {
+								toast.success(`Đã tạo bài giảng ${response.data && response.data.title}`, {
+									position: 'top-right',
+									autoClose: 3000,
+									hideProgressBar: false,
+									closeOnClick: true,
+									pauseOnHover: true,
+									draggable: true,
+									theme: 'dark',
+								});
+								navigate(`/class?cid=${location.state.classId}`);
+							}
+						})
+						.catch((error) => {
+							console.log(error);
+						});
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	};
 
 	const handleCancel = () => {
@@ -55,7 +106,7 @@ export const AddLectureTab = () => {
 			<Box>
 				<form onSubmit={handleSubmit}>
 					<Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '20px' }}>
-						<TextField variant="standard" name="title" label="Tiêu đề" value={formData.title} onChange={handleChange} required />
+						<TextField variant="standard" name="title" label="Tiêu đề" value={formData.title} onChange={handleChange} required={true} />
 						<TextField variant="standard" name="link" label="Link" value={formData.link} onChange={handleChange} pattern="https?://.+" />
 						<Typography variant="h5" marginTop={'20px'}>
 							Nội dung
@@ -88,7 +139,7 @@ export const AddLectureTab = () => {
 					<Button onClick={handleCancel} color="primary">
 						Khoan, để coi kỹ lại
 					</Button>
-					<Button onClick={handleConfirm} color="secondary" variant="outlined" autoFocus>
+					<Button onClick={() => handleConfirm()} color="secondary" variant="outlined" autoFocus>
 						Rồi, thêm đi gái
 					</Button>
 				</DialogActions>

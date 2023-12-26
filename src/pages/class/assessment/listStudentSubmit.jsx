@@ -86,7 +86,11 @@ const ListStudentSubmit = () => {
 								<Typography>{`${student.id} - ${student.name}`}</Typography>
 							</AccordionSummary>
 							{listSubmit.filter((item) => item.assessmentID === location.state.assessmentContent.aid && item.studentID === student.id).length > 0 ? (
-								<AccordionDetails sx={{ display: 'flex', justifyContent: 'center' }}>
+								<AccordionDetails
+									sx={{ display: 'flex', justifyContent: 'center' }}
+									onClick={() => {
+										// navigate('/SubmitById', { state: { assessment: location.state.assessmentContent, studentid: student.studentID } });
+									}}>
 									{listSubmit
 										.filter((item) => item.assessmentID === location.state.assessmentContent.aid && item.studentID === student.id)
 										.map((item) => {

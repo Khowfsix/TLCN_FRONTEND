@@ -3,9 +3,10 @@ import CardCourse from '../../components/course/cardCourse';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Masonry from '@mui/lab/Masonry';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import axios from '../../apis/axiosConfig';
+import theme from './../../theme';
 
 // const Item = styled(Paper)(({ theme }) => ({
 // 	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -17,19 +18,24 @@ import axios from '../../apis/axiosConfig';
 
 function listCourses() {
 	const [coursesList, setCourseList] = useState([]);
+	const token = localStorage.getItem('accessToken');
 
 	useEffect(() => {
-		axios
-			.get(`/course/getAll`)
-			.then((response) => {
-				console.log(response.data);
-				setCourseList(response.data);
-			})
-			.catch((error) => {
-				// Handle the error
-				console.error(error);
-			});
-	}, []);
+		if (localStorage.getItem('listCourses') && localStorage.getItem('listCourses') !== 'null') {
+			setCourseList(JSON.parse(localStorage.getItem('listCourses')));
+		} else {
+			axios
+				.get(`/course/getAll`)
+				.then((response) => {
+					setCourseList(response.data);
+					localStorage.setItem('listCourses', JSON.stringify(response.data));
+				})
+				.catch((error) => {
+					// Handle the error
+					console.error(error);
+				});
+		}
+	}, [token]);
 
 	return (
 		<Box
@@ -38,13 +44,16 @@ function listCourses() {
 				justifyContent: 'center',
 				alignItems: 'center',
 			}}>
+			<Typography variant="h2" sx={{ textAlign: 'center', marginBottom: '50px' }}>
+				Danh sách các khóa học
+			</Typography>
 			<Masonry columns={4} spacing={2}>
-				{coursesList.map((course) => {
-					console.log(course.isDeleted);
-					if (course.isDeleted === false) {
-						return <CardCourse key={course.cid} course={course}></CardCourse>;
-					}
-				})}
+				{coursesList &&
+					coursesList.map((course) => {
+						if (course.isDeleted === false) {
+							return <CardCourse key={course.cid} course={course}></CardCourse>;
+						}
+					})}
 			</Masonry>
 		</Box>
 	);

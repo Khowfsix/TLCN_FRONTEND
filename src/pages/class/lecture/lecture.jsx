@@ -69,20 +69,18 @@ export default function Lecture() {
 						// delete this topic
 						axios
 							.delete(`/lecture/delete/${params.get('lid')}`)
-							.then((r) => {
-								if (r.status == 200) {
-									toast.success('Đã xóa bài giảng', {
-										position: 'top-right',
-										autoClose: 3000,
-										hideProgressBar: false,
-										closeOnClick: true,
-										pauseOnHover: true,
-										draggable: true,
-										progress: undefined,
-										theme: 'dark',
-									});
-									navigate(`/class?cid=${classSubject.classID}`);
-								}
+							.then(() => {
+								toast.success('Đã xóa bài giảng', {
+									position: 'top-right',
+									autoClose: 3000,
+									hideProgressBar: false,
+									closeOnClick: true,
+									pauseOnHover: true,
+									draggable: true,
+									progress: undefined,
+									theme: 'dark',
+								});
+								navigate(`/class?cid=${classSubject.classID}`);
 							})
 							.catch((err) => {
 								// Handle the error
