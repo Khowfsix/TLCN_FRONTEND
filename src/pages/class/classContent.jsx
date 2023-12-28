@@ -109,11 +109,13 @@ const ClassContent = React.memo(() => {
 	return (
 		<>
 			<Box
-				sx={{
-					position: 'fixed',
-					display: 'flex',
-					flexDirection: 'column',
-				}}>
+				sx={
+					{
+						// position: 'fixed',
+						// display: 'flex',
+						// flexDirection: 'column',
+					}
+				}>
 				<Typography variant="h3">{classInfo && classInfo.className}</Typography>
 				<Box sx={{ flexGrow: 1 }}>
 					<Box>
