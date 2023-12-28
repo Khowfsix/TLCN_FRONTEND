@@ -189,7 +189,7 @@ export default function Assessment() {
 						</Button>
 					</>
 				) : null}
-				{localStorage.getItem('role') == 'student' ? (
+				{localStorage.getItem('role') == 'student' > 0 && assessmentContent.datetimeCutoff > Date.now() ? (
 					<Button
 						variant="outlined"
 						startIcon={<UpdateOutlined />}
