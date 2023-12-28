@@ -14,6 +14,10 @@ import { MailOutline } from '@mui/icons-material';
 import HomeIcon from '@mui/icons-material/Home';
 
 import CircularProgress from '@mui/material/CircularProgress';
+import { toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+import sha256 from 'crypto-js/sha256';
+import axios from '../../apis/axiosConfig';
 
 const theme = createTheme({
 	palette: {
@@ -106,6 +110,29 @@ const Register = () => {
 		event.preventDefault();
 		if (validFullName && fullName != '' && validUsername && username != '' && validEmail && email != '' && validPassword && password != '') {
 			setLoading(true);
+
+			let passwordHash = sha256(password).toString();
+			axios
+				.post('account/register', {
+					username: username,
+					passwordHash: passwordHash,
+					email: email,
+				})
+				.then((response) => {
+					if (response.status === 201) {
+						toast.success('Đăng ký thành công', {
+							position: 'top-right',
+							autoClose: 3000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							progress: undefined,
+							theme: 'dark',
+						});
+						navigate('/login');
+					}
+				});
 		} else {
 			if (!validFullName || fullName == '') {
 				setValidFullName(false);
@@ -124,6 +151,7 @@ const Register = () => {
 				setPassword('');
 			}
 		}
+		setLoading(false);
 	};
 
 	return (
