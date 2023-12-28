@@ -3,9 +3,9 @@ import { Box, Typography, Container } from '@material-ui/core';
 export default function Home() {
 	return (
 		<Container className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
-			<Box className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
+			{/* <Box className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
 				<img className="object-cover object-center rounded" alt="hero" src="src/assets/home.jpg" style={{ width: '400px', height: 'auto', borderRadius: '50%' }} />
-			</Box>
+			</Box> */}
 			<Box className="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
 				<Typography variant="h1" className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
 					DEVFORFUTURE
@@ -27,6 +27,8 @@ export default function Home() {
 					<br />
 					Bạn sẽ được học thông qua các bài giảng video chất lượng cao, bài tập thực hành, và dự án thực tế.
 				</Typography>
+
+				<Typography>Sản phẩm phục vụ cho mục đích học tập</Typography>
 			</Box>
 		</Container>
 	);
